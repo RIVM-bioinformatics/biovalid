@@ -1,0 +1,7 @@
+##gff-version 3
+#!gff-spec-version 1.21
+#!processor NCBI annotwriter
+##sequence-region AF316820.1 1 1152
+##species https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=147362
+AF316820.1	Genbank	region	1	1152	.	+	.	ID=AF316820.1:1..1152;Dbxref=taxon:147362;country=Greece: southern;gbkey=Src;mol_type=genomic DNA;note=H3N2%3B similar to influenza A virus (A/Sydney/5/97 (H3N2));old-name=Influenza A virus (A/Athens/16/98 (H3N2));strain=A/Athens/16/98
+AF316820.1	Genbank	CDS	1	1133	.	+	2	ID=cds-AAG49338.1;Dbxref=NCBI_GP:AAG49338.1;Name=AAG49338.1;Note=HA1 segment;gbkey=CDS;partial=true;product=truncated hemagglutinin;protein_id=AAG49338.1;start_range=.,1

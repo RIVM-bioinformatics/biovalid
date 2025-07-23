@@ -1,0 +1,74 @@
+[build-system]
+requires = ["hatchling >= 1.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "biovalid"
+version = "0.0.1"
+authors = [
+    { name="Gino Raaijmakers", email="gino.raaijmakers@rivm.nl" },
+    { name="RIVM Bioinformatics", email="ids-bioinformatics@rivm.nl" }
+]
+description = "Genomic Epidemiology platform for disease X"
+readme = "README.md"
+license = "AGPL-3.0"
+license-files = ["LICENSE"]
+keywords = ["Bioinformatics"]
+classifiers = [
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent",
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+]
+requires-python = ">=3.12"
+
+[project.urls]
+Homepage = "https://github.com/RIVM-bioinformatics/biovalid/"
+Documentation = "https://rivm-bioinformatics.github.io/biovalid/"
+
+
+[tool.mypy]
+warn_unused_configs = true
+warn_redundant_casts = true
+warn_unreachable = true
+warn_return_any = true
+warn_no_return = true
+warn_unused_ignores = true
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+warn_incomplete_stub = false
+
+[tool.pylint.format]
+max-line-length = 150
+fail-under = 9.0
+
+[tool.tox]
+requires = ["tox >= 4"]
+env_list = ["format", "lint", "3.11", "3.12", "3.13"]
+
+[tool.tox.env_run_base]
+description = "Run tests"
+deps = ["pytest"]
+commands = [
+    ["pytest", "tests/"],
+]
+
+[tool.tox.env.format]
+description = "Run code formatting"
+skip_install = true
+deps = ["black", "isort"]
+commands = [
+    ["black", "biovalid"],
+    ["isort", "biovalid"],
+]
+
+[tool.tox.env.lint]
+description = "Run linters"
+skip_install = true
+deps = ["pylint", "mypy"]
+commands = [
+    ["pylint",  "biovalid"],
+    ["mypy", "biovalid"],
+]

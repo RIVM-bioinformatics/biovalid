@@ -1,0 +1,59 @@
+LOCUS       KP747648                1158 bp    DNA     linear   PLN 30-DEC-2015
+DEFINITION  Nicotiana benthamiana promoter and 5' UTR-like (H1N1) gene,
+            promoter region.
+ACCESSION   KP747648
+VERSION     KP747648.1
+KEYWORDS    .
+SOURCE      Nicotiana benthamiana
+  ORGANISM  Nicotiana benthamiana
+            Eukaryota; Viridiplantae; Streptophyta; Embryophyta; Tracheophyta;
+            Spermatophyta; Magnoliopsida; eudicotyledons; Gunneridae;
+            Pentapetalae; asterids; lamiids; Solanales; Solanaceae;
+            Nicotianoideae; Nicotianeae; Nicotiana.
+REFERENCE   1  (bases 1 to 1158)
+  AUTHORS   Niu,F., Cheng,W., Chen,B. and Jiang,Y.
+  TITLE     Cloning of ROS-related genes from N. benthamiana and identification
+            of upstream of transcription factors
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 1158)
+  AUTHORS   Niu,F., Cheng,W., Chen,B. and Jiang,Y.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (05-FEB-2015) College of Life Sciences, Northwest A&F
+            University, No. 22, Xinong Rd, Yangling, Shaanxi 712100, China
+COMMENT     ##Assembly-Data-START##
+            Assembly Method       :: DNASTAR v. Seqman V5.00
+            Sequencing Technology :: Sanger dideoxy sequencing
+            ##Assembly-Data-END##
+FEATURES             Location/Qualifiers
+     source          1..1158
+                     /organism="Nicotiana benthamiana"
+                     /mol_type="genomic DNA"
+                     /db_xref="taxon:4100"
+     gene            <1..>1158
+                     /gene="H1N1"
+     misc_feature    <1..>1158
+                     /gene="H1N1"
+                     /note="contains promoter and 5' UTR"
+ORIGIN      
+        1 aaccacgtac acaagatttc aacatttata tgtgtcaaca tgagactttt catcacctaa
+       61 ttatatcaat ataataccta ttgagtatta gatattgacc cttacaacat ccgacatcta
+      121 tttcattcct ctgaaatata agttgtatta tttttatccg agtggttagg ttggaaaata
+      181 ataaaatgct taagaaataa acttaagagg aaaggaaaca taaaacaaat agaaaaagga
+      241 actttatttg gcttggtcca tatgcttatc atcctagctt ctctgttact atcttctttt
+      301 tcccttaact tttttttctt tttcatgtat aatcaaactt ctctcgacaa tattcttctt
+      361 tataatcata ctttattata gcaattttat tttttgctat attatattat agtatatacc
+      421 ctcttatgtg agacagcaaa aaatgtaaat gaataattaa acttgcagaa ttagatttga
+      481 aagatatttt tcatgttttt ttgcgggtca aatcattcat taagagccta gatgtactac
+      541 gtgcaacttc ttaacctttc taagactaaa tcaaggaatt gggaaagaac aaaaatacac
+      601 gtaaaactgg gattttgtac agcccattaa attagtttta tcatttgaaa ttagacaaga
+      661 ggaataatga attttagcta ttcttgttcc taaccctatc acacaaattt tctcagatcc
+      721 ctttcaaatt aatatcttct taactaaaca tcatgtatga cttatataca ccacaatatg
+      781 aattaagaag atactgaaaa attaaggaat tgttgactaa attttaagtc aaaggaccat
+      841 atcttgagtg gaaatttcta agaaatatcg tattcagtac atatatgatt actttaagta
+      901 aggtattgcc aaaacgcaac cgtgtctttt ctaacaacat aaaaacacgg cattttctac
+      961 taatcaatcc gcttttgttt accaattcta caattcaaac cctacacata tagtatacac
+     1021 attaaaccaa agactgaaac gacacctata tatattcaac tccacgtacc aaaggatact
+     1081 catctctatt attattgcat cctatacata tactaaaagg gcaaagcaat ataatctgta
+     1141 ctttattttt cttgagcc
+//
+
