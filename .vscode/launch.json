@@ -1,0 +1,61 @@
+{
+    "configurations": [
+        {
+            "name": "all",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "pytest",
+            "args": [
+                "-sv",
+                "tests/"
+            ]
+        },
+        {
+            "name": "e2e",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "pytest",
+            "args": [
+                "-sv",
+                "tests/e2e/"
+            ]
+        },
+        {
+            "name": "unit",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "pytest",
+            "args": [
+                "-sv",
+                "tests/unit/"
+            ]
+        },
+        {
+            "name": "fasta",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "pytest",
+            "args": [
+                "-sv",
+                "tests/unit/test_fasta.py"
+            ]
+        },
+        {
+            "name": "bam",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "pytest",
+            "args": [
+                "-sv",
+                "tests/unit/test_bam.py"
+            ]
+        },
+        {
+            "name": "current File",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal"
+        }
+    ]
+}
