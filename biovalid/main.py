@@ -20,16 +20,6 @@ class BioValidator:
             return [Path(p) for p in file_paths]
         return [Path(file_paths)]
 
-    def _extract_optional_args(self, optional_args: list[str] | None) -> dict:
-        """Extract optional arguments into a dictionary."""
-        args_dict = {}
-        if optional_args:
-            for i, arg in enumerate(optional_args):
-                if i % 2 == 0:
-                    key = arg.lstrip("--").replace("-", "_")
-                    value = optional_args[i + 1] if i + 1 < len(optional_args) else None
-                    args_dict[key] = value
-        return args_dict
 
     def __init__(
         self,
