@@ -14,7 +14,6 @@
 
 ## About this project
 **Biovalid** is a lightweight Python library and CLI tool for fast, robust validation of bioinformatics files such as BAM, FASTA, and FASTQ. It checks file integrity, headers, and format compliance, helping users catch common issues before downstream analysis.
-It does not import 
 
 
 ---
