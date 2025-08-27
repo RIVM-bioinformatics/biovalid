@@ -53,7 +53,7 @@ list_of_validators = [
 
 @pytest.mark.parametrize("validator_info", list_of_validators, ids=lambda v: v.validator_class.__name__)
 def test_happy(validator_info: ValidatorInfo) -> None:
-    """Test that happy FASTA files validate without error."""
+    """Test that happy BAM, FASTA, and FASTQ files validate without error."""
     for file_path in validator_info.happy_files:
         validator_info.validator_class(file_path).validate()
 
