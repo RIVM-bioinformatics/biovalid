@@ -62,7 +62,7 @@ def test_end2end() -> None:
 
 
 def test_end2end_cli() -> None:
-    """Test end-to-end validation for happy and unhappy files."""
+    """Test end-to-end validation for happy and unhappy files using the CLI interface."""
     happy_file_paths = tester.get_files_by_pattern("happy")
     unhappy_file_paths = tester.get_files_except_pattern("happy")
 
