@@ -1,7 +1,7 @@
 from argparse import ArgumentParser, Namespace
 
-from biovalid import __version__
 from biovalid.logger import validate_log_file
+from biovalid.version import __version__
 
 
 def cli_parser() -> Namespace:

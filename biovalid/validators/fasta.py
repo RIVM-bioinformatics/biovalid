@@ -15,17 +15,21 @@ class FastaValidator(BaseValidator):
     def _handle_newline(
         self,
         is_header: bool,
-        header_has_text: bool,
-        prev_line_was_header: bool,
+        is_header_text: bool,
+        is_prev_line_header: bool,
+        is_line_empty: bool,
         line_num: int,
         filename: Path,
     ) -> bool:
-        if is_header and not header_has_text:
+        if is_line_empty:
+            self.log(40, f"Empty line found at line {line_num} in file {filename}")
+
+        if is_header and not is_header_text:
             self.log(
                 40,
                 f"Header line in file {filename} is empty at line {line_num}",
             )
-        if is_header and prev_line_was_header:
+        if is_header and is_prev_line_header:
             self.log(
                 40,
                 f"Consecutive header lines found at line {line_num-1} and {line_num} in file {filename}",
@@ -83,6 +87,7 @@ class FastaValidator(BaseValidator):
             is_header = False
             is_header_text_present = False
             is_last_line_header = False
+            is_line_empty = True
 
             while True:
                 buffer = f.read(8192)
@@ -100,6 +105,7 @@ class FastaValidator(BaseValidator):
                             is_header,
                             is_header_text_present,
                             is_last_line_header,
+                            is_line_empty,
                             line_num,
                             self.filename,
                         )
@@ -107,11 +113,13 @@ class FastaValidator(BaseValidator):
                         pos_in_line = 0
                         is_header = False
                         is_header_text_present = False
+                        is_line_empty = True
                         continue
 
                     if byte == ord(">"):
                         is_header = True
                         is_header_text_present = False
+                        is_line_empty = False
                         continue
 
                     if is_header:
@@ -124,3 +132,4 @@ class FastaValidator(BaseValidator):
                     self._validate_sequence_byte(
                         byte, self.filename, line_num, pos_in_line
                     )
+                    is_line_empty = False

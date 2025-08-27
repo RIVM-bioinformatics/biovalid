@@ -1,4 +1,4 @@
-from biovalid.main import main
+from biovalid.main import run_cli
 
 if __name__ == "__main__":
-    main()
+    run_cli()

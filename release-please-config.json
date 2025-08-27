@@ -1,0 +1,54 @@
+{
+    "release-type": "python",
+    "packages": {
+        ".": {
+            "package-name": "biovalid"
+        }
+    },
+    "changelog-sections": [
+        {
+            "type": "feat",
+            "section": "Features"
+        },
+        {
+            "type": "fix",
+            "section": "Bug Fixes"
+        },
+        {
+            "type": "docs",
+            "section": "Documentation"
+        },
+        {
+            "type": "deps",
+            "section": "Dependencies"
+        },
+        {
+            "type": "test",
+            "section": "Tests"
+        },
+        {
+            "type": "ci",
+            "section": "CI/CD"
+        },
+        {
+            "type": "refactor",
+            "section": "Refactoring"
+        },
+        {
+            "type": "perf",
+            "section": "Performance"
+        },
+        {
+            "type": "build",
+            "section": "Build System"
+        },
+        {
+            "type": "chore",
+            "section": "Miscellaneous",
+            "hidden": true
+        }
+    ],
+    "extra-files": [
+        "pyproject.toml"
+    ]
+}
