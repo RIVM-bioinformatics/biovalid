@@ -8,48 +8,41 @@ from biovalid.validators.base import BaseValidator
 class FastaValidator(BaseValidator):
     def _check_first_char(self, byte: int, filename: Path) -> None:
         if byte != ord(">"):
-            self.log(
-                40, f"First character of file {filename} must be '>', found {chr(byte)}"
-            )
+            self.log(40, f"First character of file {filename} must be '>', found {chr(byte)}")
 
     def _handle_newline(
         self,
         is_header: bool,
-        header_has_text: bool,
-        prev_line_was_header: bool,
+        is_header_text: bool,
+        is_prev_line_header: bool,
+        is_line_empty: bool,
         line_num: int,
         filename: Path,
     ) -> bool:
-        if is_header and not header_has_text:
+        if is_line_empty:
+            self.log(40, f"Empty line found at line {line_num} in file {filename}")
+
+        if is_header and not is_header_text:
             self.log(
                 40,
                 f"Header line in file {filename} is empty at line {line_num}",
             )
-        if is_header and prev_line_was_header:
+        if is_header and is_prev_line_header:
             self.log(
                 40,
                 f"Consecutive header lines found at line {line_num-1} and {line_num} in file {filename}",
             )
         return is_header
 
-    def _validate_header_byte(
-        self, byte: int, filename: Path, line_num: int, pos_in_line: int
-    ) -> None:
+    def _validate_header_byte(self, byte: int, filename: Path, line_num: int, pos_in_line: int) -> None:
         if not 32 <= byte <= 126:
             self.log(
                 40,
                 f"Header line in file {filename} contains invalid character {chr(byte)} at line {line_num}, position {pos_in_line}",
             )
 
-    def _validate_sequence_byte(
-        self, byte: int, filename: Path, line_num: int, pos_in_line: int
-    ) -> None:
-        if not (
-            ord("a") <= byte <= ord("z")
-            or ord("A") <= byte <= ord("Z")
-            or byte == ord("-")
-            or byte == ord("*")
-        ):
+    def _validate_sequence_byte(self, byte: int, filename: Path, line_num: int, pos_in_line: int) -> None:
+        if not (ord("a") <= byte <= ord("z") or ord("A") <= byte <= ord("Z") or byte == ord("-") or byte == ord("*")):
             self.log(
                 40,
                 f"Invalid character {chr(byte)} in sequence at line {line_num}, position {pos_in_line} in file {filename}",
@@ -83,6 +76,7 @@ class FastaValidator(BaseValidator):
             is_header = False
             is_header_text_present = False
             is_last_line_header = False
+            is_line_empty = True
 
             while True:
                 buffer = f.read(8192)
@@ -100,6 +94,7 @@ class FastaValidator(BaseValidator):
                             is_header,
                             is_header_text_present,
                             is_last_line_header,
+                            is_line_empty,
                             line_num,
                             self.filename,
                         )
@@ -107,20 +102,24 @@ class FastaValidator(BaseValidator):
                         pos_in_line = 0
                         is_header = False
                         is_header_text_present = False
+                        is_line_empty = True
+                        continue
+
+                    # Skip carriage return characters (Windows line endings)
+                    if byte == ord("\r"):
+                        pos_in_line -= 1  # Don't count CR in position
                         continue
 
                     if byte == ord(">"):
                         is_header = True
                         is_header_text_present = False
+                        is_line_empty = False
                         continue
 
                     if is_header:
-                        self._validate_header_byte(
-                            byte, self.filename, line_num, pos_in_line
-                        )
+                        self._validate_header_byte(byte, self.filename, line_num, pos_in_line)
                         is_header_text_present = True
                         continue
 
-                    self._validate_sequence_byte(
-                        byte, self.filename, line_num, pos_in_line
-                    )
+                    self._validate_sequence_byte(byte, self.filename, line_num, pos_in_line)
+                    is_line_empty = False

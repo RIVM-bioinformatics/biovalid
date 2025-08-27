@@ -1,0 +1,86 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write  # For PyPI trusted publishing
+
+jobs:
+  # Always run tests first (on both PRs and pushes to main)
+  test:
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    name: Python ${{ matrix.python-version }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install .
+          pip install -r dev-dependencies.txt
+
+      - name: Run tests with tox
+        run: |
+          tox -e ${{ matrix.python-version }}
+
+  # Only run release-please on pushes to main (after tests pass)
+  release-please:
+    needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
+    steps:
+      - uses: googleapis/release-please-action@v4
+        id: release
+        with:
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  # Only publish if a release was created (and tests passed)
+  build-and-publish:
+    needs: [test, release-please]
+    if: ${{ needs.release-please.outputs.release_created }}
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/biovalid
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+          
+      - name: Install build dependencies
+        run: python -m pip install build --user
+        
+      - name: Build package
+        run: python -m build
+        
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1

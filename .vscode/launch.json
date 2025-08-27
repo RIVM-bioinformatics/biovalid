@@ -1,7 +1,7 @@
 {
     "configurations": [
         {
-            "name": "all",
+            "name": "test-all",
             "type": "debugpy",
             "request": "launch",
             "module": "pytest",
@@ -11,7 +11,7 @@
             ]
         },
         {
-            "name": "e2e",
+            "name": "test-e2e",
             "type": "debugpy",
             "request": "launch",
             "module": "pytest",
@@ -21,33 +21,23 @@
             ]
         },
         {
-            "name": "unit",
+            "name": "test-e2e-no-cli",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "pytest",
+            "args": [
+                "-sv",
+                "tests/e2e/test_e2e.py::test_end2end"
+            ]
+        },
+        {
+            "name": "test-unit",
             "type": "debugpy",
             "request": "launch",
             "module": "pytest",
             "args": [
                 "-sv",
                 "tests/unit/"
-            ]
-        },
-        {
-            "name": "fasta",
-            "type": "debugpy",
-            "request": "launch",
-            "module": "pytest",
-            "args": [
-                "-sv",
-                "tests/unit/test_fasta.py"
-            ]
-        },
-        {
-            "name": "bam",
-            "type": "debugpy",
-            "request": "launch",
-            "module": "pytest",
-            "args": [
-                "-sv",
-                "tests/unit/test_bam.py"
             ]
         },
         {

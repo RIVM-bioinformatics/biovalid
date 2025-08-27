@@ -33,6 +33,7 @@ class FileType(Enum):
     VCF = [".vcf"]
     SAM = [".sam"]
     BAM = [".bam"]
+    BAI = [".bai"]
     BCF = [".bcf"]
     GENBANK = [".gb", ".gbk", ".genbank"]
     PDB = [".pdb"]
