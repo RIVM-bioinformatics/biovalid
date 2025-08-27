@@ -64,7 +64,7 @@ def test_happy(validator_info: ValidatorInfo) -> None:
     ids=lambda v: v.validator_class.__name__,
 )
 def test_unhappy(validator_info: ValidatorInfo) -> None:
-    """Test that unhappy FASTA files raise a ValueError."""
+    """Test that unhappy BAM, FASTA, and FASTQ files raise a ValueError."""
     for file_path in validator_info.unhappy_files:
         with pytest.raises(ValueError):
             validator_info.validator_class(file_path).validate()
