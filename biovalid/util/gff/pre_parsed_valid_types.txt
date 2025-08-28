@@ -1,0 +1,759 @@
+SO:0000179	clone_insert_start
+SO:0000179	clone insert start
+SO:0000289	microsatellite
+SO:0000289	INSDC_feature:repeat_region
+SO:0000289	INSDC_qualifier:microsatellite
+SO:0000289	microsatellite locus
+SO:0000289	microsatellite marker
+SO:0000289	short tandem repeat
+SO:0000289	STR
+SO:0001001	cytosolic_23S_rRNA
+SO:0001001	cytosolic 23S LSU rRNA
+SO:0001001	cytosolic 23S ribosomal RNA
+SO:0001001	cytosolic 23S rRNA
+SO:0001001	cytosolic rRNA 23S
+SO:0000394	U4atac_snRNA
+SO:0000394	small nuclear RNA U4atac
+SO:0000394	snRNA U4atac
+SO:0000394	U4atac small nuclear RNA
+SO:0000394	U4atac snRNA
+SO:0000380	hammerhead_ribozyme
+SO:0000380	hammerhead ribozyme
+SO:0000380	INSDC_feature:ncRNA
+SO:0000380	INSDC_qualifier:hammerhead_ribozyme
+SO:1000005	complex_substitution
+SO:1000005	complex substitution
+SO:0001412	topologically_defined_region
+SO:0001412	topologically defined region
+SO:0000581	cap
+SO:0000307	CpG_island
+SO:0000307	CG island
+SO:0000307	CpG island
+SO:0000057	operator
+SO:0000057	operator segment
+SO:0000651	cytosolic_LSU_rRNA
+SO:0000651	cytosolic large subunit rRNA
+SO:0000651	cytosolic LSU RNA
+SO:0000651	cytosolic LSU rRNA
+SO:0001483	SNV
+SO:0001483	single nucleotide variant
+SO:0000059	nuclease_binding_site
+SO:0000059	nuclease binding site
+SO:0000830	chromosome_part
+SO:0000830	chromosomal region
+SO:0000830	chromosomal_region
+SO:0000830	chromosome part
+SO:0000412	restriction_fragment
+SO:0000412	restriction fragment
+SO:0000344	splice_enhancer
+SO:0000344	splice enhancer
+SO:0000403	U14_snoRNA
+SO:0000403	small nucleolar RNA U14
+SO:0000403	snoRNA U14
+SO:0000403	U14 small nucleolar RNA
+SO:0000403	U14 snoRNA
+SO:0000013	scRNA
+SO:0000013	INSDC_feature:ncRNA
+SO:0000013	INSDC_qualifier:scRNA
+SO:0000013	small cytoplasmic RNA
+SO:0000625	silencer
+SO:0000625	INSDC_feature:regulatory
+SO:0000625	INSDC_qualifier:silencer
+SO:0000004	interior_coding_exon
+SO:0000004	interior coding exon
+SO:0000590	SRP_RNA
+SO:0000590	7S RNA
+SO:0000590	INSDC_feature:ncRNA
+SO:0000590	INSDC_qualifier:SRP_RNA
+SO:0000590	signal recognition particle RNA
+SO:0000590	SRP RNA
+SO:0000305	modified_DNA_base
+SO:0000305	INSDC_feature:modified_base
+SO:0000305	modified base site
+SO:0000233	mature_transcript
+SO:0000233	mature transcript
+SO:0001527	peptide_localization_signal
+SO:0001527	localization signal
+SO:0001527	peptide localization signal
+SO:0000386	RNase_P_RNA
+SO:0000386	INSDC_feature:ncRNA
+SO:0000386	INSDC_qualifier:RNase_P_RNA
+SO:0000386	RNase P RNA
+SO:0001235	replicon
+SO:0000325	rRNA_large_subunit_primary_transcript
+SO:0000325	35S rRNA primary transcript
+SO:0000325	rRNA large subunit primary transcript
+SO:0000183	non_transcribed_region
+SO:0000183	non transcribed region
+SO:0000183	non-transcribed sequence
+SO:0000183	nontranscribed region
+SO:0000183	nontranscribed sequence
+SO:0000159	deletion
+SO:0000159	deleted_sequence
+SO:0000159	nucleotide deletion
+SO:0000159	nucleotide_deletion
+SO:0000442	ds_oligo
+SO:0000442	double stranded oligonucleotide
+SO:0000442	ds oligo
+SO:0000442	ds-oligonucleotide
+SO:0000688	golden_path
+SO:0000688	golden path
+SO:0000319	stop_codon
+SO:0000319	stop codon
+SO:0001056	splicing_regulatory_region
+SO:0001056	splicing regulatory region
+SO:0001019	copy_number_variation
+SO:0001019	CNP
+SO:0001019	CNV
+SO:0001019	copy number polymorphism
+SO:0001019	copy number variation
+SO:0000314	direct_repeat
+SO:0000314	direct repeat
+SO:0000314	INSDC_feature:repeat_region
+SO:0000314	INSDC_qualifier:direct
+SO:0000778	pseudogenic_tRNA
+SO:0000778	INSDC_feature:tRNA
+SO:0000778	INSDC_qualifier:pseudo
+SO:0000778	pseudogenic tRNA
+SO:0000349	protein_match
+SO:0000349	protein match
+SO:0001000	cytosolic_16S_rRNA
+SO:0001000	cytosolic 16S ribosomal RNA
+SO:0001000	cytosolic 16S rRNA
+SO:0001000	cytosolic 16S SSU RNA
+SO:0001000	cytosolic rRNA 16S
+SO:0000148	supercontig
+SO:0000148	scaffold
+SO:0000628	chromosomal_structural_element
+SO:0000628	chromosomal structural element
+SO:1000008	point_mutation
+SO:1000008	point mutation
+SO:0000178	operon
+SO:0000178	INSDC_feature:operon
+SO:0000147	exon
+SO:0000147	INSDC_feature:exon
+SO:0000702	possible_assembly_error
+SO:0000702	possible assembly error
+SO:0000163	five_prime_cis_splice_site
+SO:0000163	5' splice site
+SO:0000163	donor
+SO:0000163	donor splice site
+SO:0000163	five prime splice site
+SO:0000163	splice donor site
+SO:0000185	primary_transcript
+SO:0000185	INSDC_feature:precursor_RNA
+SO:0000185	INSDC_feature:prim_transcript
+SO:0000185	precursor RNA
+SO:0000185	primary transcript
+SO:0005836	regulatory_region
+SO:0005836	INSDC_feature:regulatory
+SO:0005836	INSDC_qualifier:other
+SO:0005836	regulatory region
+SO:0000687	deletion_junction
+SO:0000687	deletion junction
+SO:0000725	transit_peptide
+SO:0000725	INSDC_feature:transit_peptide
+SO:0000725	signal
+SO:0000725	transit
+SO:0000725	transit peptide
+SO:1001284	regulon
+SO:0000236	ORF
+SO:0000236	open reading frame
+SO:0000831	gene_member_region
+SO:0000831	gene member region
+SO:0000306	methylated_DNA_base_feature
+SO:0000306	methylated base feature
+SO:0000197	three_prime_coding_exon_coding_region
+SO:0000197	three prime exon coding region
+SO:0000353	sequence_assembly
+SO:0000353	sequence assembly
+SO:0000700	remark
+SO:0000610	polyA_sequence
+SO:0000610	polyA sequence
+SO:0000650	cytosolic_SSU_rRNA
+SO:0000650	cytosolic small subunit rRNA
+SO:0000650	cytosolic SSU ribosomal RNA
+SO:0000650	cytosolic SSU rRNA
+SO:0001236	base
+SO:0000399	U12_snRNA
+SO:0000399	small nuclear RNA U12
+SO:0000399	snRNA U12
+SO:0000399	U12 small nuclear RNA
+SO:0000399	U12 snRNA
+SO:0000374	ribozyme
+SO:0000374	INSDC_feature:ncRNA
+SO:0000374	INSDC_qualifier:ribozyme
+SO:0000655	ncRNA
+SO:0000655	INSDC_qualifier:other
+SO:0000655	known_ncrna
+SO:0000655	noncoding RNA
+SO:0001063	immature_peptide_region
+SO:0001063	immature peptide region
+SO:0000833	transcript_region
+SO:0000833	transcript region
+SO:0000368	transposable_element_insertion_site
+SO:0000368	transposable element insertion site
+SO:0000235	TF_binding_site
+SO:0000235	TF binding site
+SO:0000235	transcription factor binding site
+SO:0000593	C_D_box_snoRNA
+SO:0000593	box C/D snoRNA
+SO:0000593	C D box snoRNA
+SO:0000593	C/D box snoRNA
+SO:0000593	SNORD
+SO:1000002	substitution
+SO:0000468	golden_path_fragment
+SO:0000468	golden path fragment
+SO:0000345	EST
+SO:0000345	expressed sequence tag
+SO:0000204	five_prime_UTR
+SO:0000204	5' UTR
+SO:0000204	five prime UTR
+SO:0000204	five_prime_untranslated_region
+SO:0000204	INSDC_feature:5'UTR
+SO:0000484	three_prime_coding_exon_noncoding_region
+SO:0000484	three prime coding exon noncoding region
+SO:0000484	three_prime_exon_noncoding_region
+SO:0000413	sequence_difference
+SO:0000413	INSDC_feature:misc_difference
+SO:0000413	sequence difference
+SO:0000239	flanking_region
+SO:0000239	flanking region
+SO:0000372	enzymatic_RNA
+SO:0000372	enzymatic RNA
+SO:0001059	sequence_alteration
+SO:0001059	INSDC_feature:misc_feature
+SO:0001059	INSDC_feature:variation
+SO:0001059	INSDC_note:sequence_alteration
+SO:0001059	partially characterised change in DNA sequence
+SO:0001059	partially_characterised_change_in_DNA_sequence
+SO:0001059	sequence alteration
+SO:0001059	sequence variation
+SO:0001059	uncharacterised_change_in_nucleotide_sequence
+SO:0001683	sequence_motif
+SO:0001683	sequence motif
+SO:0000139	ribosome_entry_site
+SO:0000139	INSDC_feature:regulatory
+SO:0000139	INSDC_qualifier:ribosome_binding_site
+SO:0000139	ribosome entry site
+SO:0000336	pseudogene
+SO:0000336	INSDC_feature:gene
+SO:0000336	INSDC_qualifier:pseudo
+SO:0000336	INSDC_qualifier:unknown
+SO:0000347	nucleotide_match
+SO:0000347	nucleotide match
+SO:0000196	five_prime_coding_exon_coding_region
+SO:0000196	five prime exon coding region
+SO:0000472	tiling_path
+SO:0000472	tiling path
+SO:0000462	pseudogenic_region
+SO:0000462	pseudogenic region
+SO:0001248	assembly
+SO:0000385	RNase_MRP_RNA
+SO:0000385	INSDC_feature:ncRNA
+SO:0000385	INSDC_qualifier:RNase_MRP_RNA
+SO:0000385	RNase MRP RNA
+SO:0000337	RNAi_reagent
+SO:0000337	RNAi reagent
+SO:0000837	UTR_region
+SO:0000837	UTR region
+SO:0000673	transcript
+SO:0000673	INSDC_feature:misc_RNA
+SO:0000851	CDS_region
+SO:0000851	CDS region
+SO:0000603	group_II_intron
+SO:0000603	group II intron
+SO:0001419	cis_splice_site
+SO:0001419	cis splice site
+SO:0000114	methylated_cytosine
+SO:0000114	methylated C
+SO:0000114	methylated cytosine
+SO:0000114	methylated cytosine base
+SO:0000114	methylated cytosine residue
+SO:0000114	methylated_C
+SO:0000624	telomere
+SO:0000624	INSDC_feature:telomere
+SO:0000624	telomeric DNA
+SO:0000624	telomeric sequence
+SO:0000007	read_pair
+SO:0000007	mate pair
+SO:0000007	read-pair
+SO:0000724	oriT
+SO:0000724	INSDC_feature:oriT
+SO:0000724	origin of transfer
+SO:0000409	binding_site
+SO:0000409	binding site
+SO:0000409	binding_or_interaction_site
+SO:0000409	INSDC_feature:misc_binding
+SO:0000409	site
+SO:0000588	autocatalytically_spliced_intron
+SO:0000588	autocatalytically spliced intron
+SO:0000588	INSDC_feature:ncRNA
+SO:0000588	INSDC_qualifier:autocatalytically_spliced_intron
+SO:0000396	U6_snRNA
+SO:0000396	small nuclear RNA U6
+SO:0000396	snRNA U6
+SO:0000396	U6 small nuclear RNA
+SO:0000396	U6 snRNA
+SO:0000120	protein_coding_primary_transcript
+SO:0000120	pre mRNA
+SO:0000120	protein coding primary transcript
+SO:0000316	CDS
+SO:0000316	coding sequence
+SO:0000316	coding_sequence
+SO:0000316	INSDC_feature:CDS
+SO:0000627	insulator
+SO:0000627	INSDC_feature:regulatory
+SO:0000627	INSDC_qualifier:insulator
+SO:0000627	insulator element
+SO:0000419	mature_protein_region
+SO:0000419	chain
+SO:0000419	INSDC_feature:mat_peptide
+SO:0000419	mature peptide
+SO:0000419	mature protein region
+SO:0000602	guide_RNA
+SO:0000602	gRNA
+SO:0000602	guide RNA
+SO:0000602	INSDC_feature:ncRNA
+SO:0000602	INSDC_qualifier:guide_RNA
+SO:0000331	STS
+SO:0000331	INSDC_feature:STS
+SO:0000331	sequence tag site
+SO:0000657	repeat_region
+SO:0000657	INSDC_feature:repeat_region
+SO:0000657	INSDC_qualifier:other
+SO:0000657	repeat region
+SO:0000418	signal_peptide
+SO:0000418	INSDC_feature:sig_peptide
+SO:0000418	signal
+SO:0000418	signal peptide
+SO:0000418	signal peptide coding sequence
+SO:0000834	mature_transcript_region
+SO:0000834	mature transcript region
+SO:0005855	gene_group
+SO:0005855	gene group
+SO:0000039	match_part
+SO:0000039	match part
+SO:0000644	antisense_RNA
+SO:0000644	antisense RNA
+SO:0000644	INSDC_feature:ncRNA
+SO:0000644	INSDC_qualifier:antisense_RNA
+SO:0000652	cytosolic_5S_rRNA
+SO:0000652	cytosolic 5S LSU rRNA
+SO:0000652	cytosolic 5S ribosomal RNA
+SO:0000652	cytosolic 5S rRNA
+SO:0000652	cytosolic rRNA 5S
+SO:0000836	mRNA_region
+SO:0000836	mRNA region
+SO:0000103	clone_insert_end
+SO:0000103	clone insert end
+SO:0001654	nucleotide_to_protein_binding_site
+SO:0001654	nucleotide to protein binding site
+SO:0000200	five_prime_coding_exon
+SO:0000200	5' coding exon
+SO:0000200	five prime coding exon
+SO:0000393	U4_snRNA
+SO:0000393	small nuclear RNA U4
+SO:0000393	snRNA U4
+SO:0000393	U4 small nuclear RNA
+SO:0000393	U4 snRNA
+SO:0000141	terminator
+SO:0000141	INSDC_feature:regulatory
+SO:0000141	INSDC_qualifier:terminator
+SO:0000141	terminator sequence
+SO:0000616	transcription_end_site
+SO:0000616	transcription end site
+SO:0000662	spliceosomal_intron
+SO:0000662	spliceosomal intron
+SO:0001647	kozak_sequence
+SO:0001647	kozak consensus
+SO:0001647	kozak consensus sequence
+SO:0001647	kozak sequence
+SO:0000605	intergenic_region
+SO:0000605	intergenic region
+SO:0000454	rasiRNA
+SO:0000454	INSDC_feature:ncRNA
+SO:0000454	INSDC_qualifier:rasiRNA
+SO:0000454	repeat associated small interfering RNA
+SO:0000703	experimental_result_region
+SO:0000703	experimental result region
+SO:0001055	transcriptional_cis_regulatory_region
+SO:0001055	INSDC_feature:regulatory
+SO:0001055	INSDC_qualifier:transcriptional_cis_regulatory_region
+SO:0001055	transcription-control region
+SO:0001055	transcriptional cis regulatory region
+SO:0000253	tRNA
+SO:0000253	INSDC_feature:tRNA
+SO:0000253	INSDC_qualifier:unknown
+SO:0000253	transfer ribonucleic acid
+SO:0000253	transfer RNA
+SO:0000436	ARS
+SO:0000436	autonomously replicating sequence
+SO:0000181	translated_nucleotide_match
+SO:0000181	translated nucleotide match
+SO:0000842	gene_component_region
+SO:0000842	gene component region
+SO:0000296	origin_of_replication
+SO:0000296	INSDC_feature:rep_origin
+SO:0000296	ori
+SO:0000296	origin of replication
+SO:0000205	three_prime_UTR
+SO:0000205	INSDC_feature:3'UTR
+SO:0000205	three prime untranslated region
+SO:0000205	three prime UTR
+SO:0000110	sequence_feature
+SO:0000110	INSDC_feature:misc_feature
+SO:0000110	INSDC_note:other
+SO:0000110	INSDC_note:sequence_feature
+SO:0000110	located sequence feature
+SO:0000110	located_sequence_feature
+SO:0000110	sequence feature
+SO:0100011	cleaved_peptide_region
+SO:0100011	cleaved peptide region
+SO:0000151	clone
+SO:0000101	transposable_element
+SO:0000101	transposable element
+SO:0000101	transposon
+SO:0000695	reagent
+SO:0000701	possible_base_call_error
+SO:0000701	possible base call error
+SO:0000753	clone_insert
+SO:0000753	clone insert
+SO:0000717	reading_frame
+SO:0000717	reading frame
+SO:0000343	match
+SO:0000326	SAGE_tag
+SO:0000326	SAGE tag
+SO:0000375	cytosolic_5_8S_rRNA
+SO:0000375	cytosolic 5.8S LSU rRNA
+SO:0000375	cytosolic 5.8S ribosomal RNA
+SO:0000375	cytosolic 5.8S rRNA
+SO:0000375	cytosolic rRNA 5 8S
+SO:0000474	tiling_path_fragment
+SO:0000474	tiling path fragment
+SO:0000714	nucleotide_motif
+SO:0000714	INSDC_feature:misc_feature
+SO:0000714	INSDC_note:nucleotide_motif
+SO:0000714	nucleotide motif
+SO:0000577	centromere
+SO:0000577	INSDC_feature:centromere
+SO:0000653	cytosolic_28S_rRNA
+SO:0000653	cytosolic 28S LSU rRNA
+SO:0000653	cytosolic 28S ribosomal RNA
+SO:0000653	cytosolic 28S rRNA
+SO:0000653	cytosolic rRNA 28S
+SO:0000398	U11_snRNA
+SO:0000398	small nuclear RNA U11
+SO:0000398	snRNA U11
+SO:0000398	U11 small nuclear RNA
+SO:0000398	U11 snRNA
+SO:0001720	epigenetically_modified_region
+SO:0001720	epigenetically modified region
+SO:0000391	U1_snRNA
+SO:0000391	small nuclear RNA U1
+SO:0000391	snRNA U1
+SO:0000391	U1 small nuclear RNA
+SO:0000391	U1 snRNA
+SO:0000143	assembly_component
+SO:0000143	assembly component
+SO:0000370	small_regulatory_ncRNA
+SO:0000370	small regulatory ncRNA
+SO:0001215	coding_region_of_exon
+SO:0001215	coding region of exon
+SO:0000499	virtual_sequence
+SO:0000499	virtual sequence
+SO:0000149	contig
+SO:0000696	oligo
+SO:0000696	oligonucleotide
+SO:0000294	inverted_repeat
+SO:0000294	INSDC_feature:repeat_region
+SO:0000294	INSDC_qualifier:inverted
+SO:0000294	inverted repeat
+SO:0000294	inverted repeat sequence
+SO:0000684	nuclease_sensitive_site
+SO:0000684	nuclease sensitive site
+SO:0000113	proviral_region
+SO:0000113	proviral region
+SO:0000113	proviral sequence
+SO:0000390	telomerase_RNA
+SO:0000390	INSDC_feature:ncRNA
+SO:0000390	INSDC_qualifier:telomerase_RNA
+SO:0000390	telomerase RNA
+SO:0000161	methylated_adenine
+SO:0000161	methylated A
+SO:0000161	methylated adenine
+SO:0000161	methylated adenine base
+SO:0000161	methylated adenine residue
+SO:0000161	methylated_A
+SO:0000646	siRNA
+SO:0000646	INSDC_feature:ncRNA
+SO:0000646	INSDC_qualifier:siRNA
+SO:0000646	small interfering RNA
+SO:0000611	branch_site
+SO:0000611	branch point
+SO:0000611	branch site
+SO:0000611	branch_point
+SO:0000005	satellite_DNA
+SO:0000005	INSDC_feature:repeat_region
+SO:0000005	INSDC_qualifier:satellite
+SO:0000005	satellite DNA
+SO:0000719	ultracontig
+SO:0000719	pseudochromosome
+SO:0000719	superscaffold
+SO:0000441	ss_oligo
+SO:0000441	single strand oligo
+SO:0000441	single strand oligonucleotide
+SO:0000441	single stranded oligonucleotide
+SO:0000441	ss oligo
+SO:0000441	ss oligonucleotide
+SO:0000464	decayed_exon
+SO:0000464	decayed exon
+SO:0000727	cis_regulatory_module
+SO:0000727	cis regulatory module
+SO:0000727	CRM
+SO:0000727	TF module
+SO:0000727	transcription factor module
+SO:0000704	gene
+SO:0000704	INSDC_feature:gene
+SO:0000587	group_I_intron
+SO:0000587	group I intron
+SO:0000274	snRNA
+SO:0000274	INSDC_feature:ncRNA
+SO:0000274	INSDC_qualifier:snRNA
+SO:0000274	small nuclear RNA
+SO:0000006	PCR_product
+SO:0000006	amplicon
+SO:0000006	PCR product
+SO:0000209	rRNA_primary_transcript
+SO:0000209	ribosomal RNA primary transcript
+SO:0000209	rRNA primary transcript
+SO:0000188	intron
+SO:0000188	INSDC_feature:intron
+SO:0000140	attenuator
+SO:0000140	attenuator sequence
+SO:0000140	INSDC_feature:regulatory
+SO:0000140	INSDC_qualifier:attenuator
+SO:0000705	tandem_repeat
+SO:0000705	INSDC_feature:repeat_region
+SO:0000705	INSDC_qualifier:tandem
+SO:0000705	tandem repeat
+SO:0000275	snoRNA
+SO:0000275	INSDC_feature:ncRNA
+SO:0000275	INSDC_qualifier:snoRNA
+SO:0000275	small nucleolar RNA
+SO:0000150	read
+SO:0000112	primer
+SO:0000112	DNA primer
+SO:0000112	primer oligonucleotide
+SO:0000112	primer polynucleotide
+SO:0000112	primer sequence
+SO:0000486	five_prime_coding_exon_noncoding_region
+SO:0000486	five prime coding exon noncoding region
+SO:0000486	five_prime_exon_noncoding_region
+SO:0000551	polyA_signal_sequence
+SO:0000551	INSDC_feature:regulatory
+SO:0000551	INSDC_qualifier:polyA_signal_sequence
+SO:0000551	poly(A) signal
+SO:0000551	polyA signal sequence
+SO:0000551	polyadenylation termination signal
+SO:0001790	paired_end_fragment
+SO:0001790	paired end fragment
+SO:0000341	chromosome_band
+SO:0000341	chromosome band
+SO:0000341	cytoband
+SO:0000341	cytological band
+SO:0001409	biomaterial_region
+SO:0001409	biomaterial region
+SO:0000777	pseudogenic_rRNA
+SO:0000777	INSDC_feature:rRNA
+SO:0000777	INSDC_qualifier:pseudo
+SO:0000777	pseudogenic rRNA
+SO:0000167	promoter
+SO:0000167	INSDC_feature:regulatory
+SO:0000167	INSDC_qualifier:promoter
+SO:0000167	promoter sequence
+SO:0000324	tag
+SO:1000036	inversion
+SO:1000036	inversion
+SO:0001411	biological_region
+SO:0001411	biological region
+SO:0001411	INSDC_misc_feature
+SO:0001411	INSDC_note:biological_region
+SO:0000715	RNA_motif
+SO:0000715	RNA motif
+SO:0000198	noncoding_exon
+SO:0000198	noncoding exon
+SO:0000404	vault_RNA
+SO:0000404	INSDC_feature:ncRNA
+SO:0000404	INSDC_qualifier:vault_RNA
+SO:0000404	vault RNA
+SO:0001002	cytosolic_25S_rRNA
+SO:0001002	cytosolic 25S LSU rRNA
+SO:0001002	cytosolic 25S ribosomal RNA
+SO:0001002	cytosolic 25S rRNA
+SO:0001002	cytosolic rRNA 25S
+SO:0000699	junction
+SO:0000699	boundary
+SO:0000699	breakpoint
+SO:0000612	polypyrimidine_tract
+SO:0000612	polypyrimidine tract
+SO:0001039	integrated_mobile_genetic_element
+SO:0001039	integrated mobile genetic element
+SO:0000645	antisense_primary_transcript
+SO:0000645	antisense primary transcript
+SO:0000410	protein_binding_site
+SO:0000410	INSDC_feature:protein_bind
+SO:0000410	protein binding site
+SO:0000667	insertion
+SO:0000667	insertion
+SO:0000667	nucleotide insertion
+SO:0000667	nucleotide_insertion
+SO:0000001	region
+SO:0000001	sequence
+SO:0000852	exon_region
+SO:0000852	exon region
+SO:0000276	miRNA
+SO:0000276	INSDC_feature:ncRNA
+SO:0000276	INSDC_qualifier:miRNA
+SO:0000276	micro RNA
+SO:0000276	microRNA
+SO:0000276	small temporal RNA
+SO:0000276	stRNA
+SO:0000658	dispersed_repeat
+SO:0000658	dispersed repeat
+SO:0000658	INSDC_feature:repeat_region
+SO:0000658	INSDC_qualifier:dispersed
+SO:0000658	interspersed repeat
+variant_of	variant_of
+variant_of	accession
+variant_of	databank entry
+SO:0000340	chromosome
+SO:0000835	primary_transcript_region
+SO:0000835	primary transcript region
+SO:0000303	clip
+SO:0000360	codon
+SO:0000397	U6atac_snRNA
+SO:0000397	snRNA U6atac
+SO:0000397	U6atac small nuclear RNA
+SO:0000397	U6atac snRNA
+SO:0000689	cDNA_match
+SO:0000689	cDNA match
+SO:0000234	mRNA
+SO:0000234	INSDC_feature:mRNA
+SO:0000234	messenger RNA
+SO:0000234	protein_coding_transcript
+SO:0000366	insertion_site
+SO:0000366	insertion site
+SO:0000553	polyA_site
+SO:0000553	INSDC_feature:polyA_site
+SO:0000553	polyA cleavage site
+SO:0000553	polyA junction
+SO:0000553	polyA site
+SO:0000553	polyA_junction
+SO:0000553	polyadenylation site
+SO:0000318	start_codon
+SO:0000318	initiation codon
+SO:0000318	start codon
+SO:0000195	coding_exon
+SO:0000195	coding exon
+SO:0000330	conserved_region
+SO:0000330	conserved region
+SO:0000330	INSDC_feature:misc_feature
+SO:0000330	INSDC_note:conserved_region
+SO:0000694	SNP
+SO:0000694	single nucleotide polymorphism
+SO:0000332	coding_conserved_region
+SO:0000332	coding conserved region
+SO:0000333	exon_junction
+SO:0000333	exon junction
+SO:0000102	expressed_sequence_match
+SO:0000102	expressed sequence match
+SO:0000334	nc_conserved_region
+SO:0000334	conserved non-coding element
+SO:0000334	conserved non-coding sequence
+SO:0000334	nc conserved region
+SO:0000334	noncoding conserved region
+SO:0000164	three_prime_cis_splice_site
+SO:0000164	3' splice site
+SO:0000164	acceptor
+SO:0000164	acceptor splice site
+SO:0000164	splice acceptor site
+SO:0000164	three prime splice site
+SO:0001214	noncoding_region_of_exon
+SO:0001214	noncoding region of exon
+SO:0000203	UTR
+SO:0000203	untranslated region
+SO:0000643	minisatellite
+SO:0000643	INSDC_feature:repeat_region
+SO:0000643	INSDC_qualifier:minisatellite
+SO:0000643	VNTR
+SO:0000405	Y_RNA
+SO:0000405	INSDC_feature:ncRNA
+SO:0000405	INSDC_qualifier:Y_RNA
+SO:0000405	Y RNA
+SO:0000162	splice_site
+SO:0000162	splice site
+SO:0001420	trans_splice_site
+SO:0001420	trans splice site
+SO:0000252	rRNA
+SO:0000252	INSDC_feature:rRNA
+SO:0000252	INSDC_qualifier:unknown
+SO:0000252	ribosomal ribonucleic acid
+SO:0000252	ribosomal RNA
+SO:0000483	nc_primary_transcript
+SO:0000483	nc primary transcript
+SO:0000483	noncoding primary transcript
+SO:0000706	trans_splice_acceptor_site
+SO:0000706	3' trans splice site
+SO:0000706	trans splice acceptor site
+SO:0001410	experimental_feature
+SO:0001410	analysis feature
+SO:0001410	experimental output artefact
+SO:0001410	experimental_output_artefact
+SO:0000193	RFLP_fragment
+SO:0000193	restriction fragment length polymorphism
+SO:0000193	RFLP
+SO:0000193	RFLP fragment
+SO:0000177	cross_genome_match
+SO:0000177	cross genome match
+SO:0000315	TSS
+SO:0000315	INSDC_feature:misc_feature
+SO:0000315	INSDC_note:transcription_start_site
+SO:0000315	transcription start site
+SO:0000315	transcription_start_site
+SO:0000165	enhancer
+SO:0000165	INSDC_feature:regulatory
+SO:0000165	INSDC_qualifier:enhancer
+SO:0000392	U2_snRNA
+SO:0000392	small nuclear RNA U2
+SO:0000392	snRNA U2
+SO:0000392	U2 small nuclear RNA
+SO:0000392	U2 snRNA
+SO:0000407	cytosolic_18S_rRNA
+SO:0000407	cytosolic 18S ribosomal RNA
+SO:0000407	cytosolic 18S rRNA
+SO:0000407	cytosolic rRNA 18S
+SO:0001037	mobile_genetic_element
+SO:0001037	INSDC_feature:mobile_element
+SO:0001037	MGE
+SO:0001037	mobile genetic element
+SO:0000395	U5_snRNA
+SO:0000395	small nuclear RNA U5
+SO:0000395	snRNA U5
+SO:0000395	U5 small nuclear RNA
+SO:0000395	U5 snRNA
+SO:0000104	polypeptide
+SO:0000104	protein
+SO:0000841	spliceosomal_intron_region
+SO:0000841	spliceosomal intron region
+SO:0000730	gap
+SO:0000730	INSDC_feature:assembly_gap
+SO:0000730	INSDC_feature:gap
+SO:0000839	polypeptide_region
+SO:0000839	positional
+SO:0000839	positional polypeptide feature
+SO:0000839	region
+SO:0000839	region or site annotation
+SO:0000839	site
+SO:0000668	EST_match
+SO:0000668	EST match

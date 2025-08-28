@@ -4,7 +4,8 @@ from typing import Type
 from biovalid.arg_parser import cli_parser
 from biovalid.enum import FileType
 from biovalid.logger import setup_logging
-from biovalid.validators import BamValidator, FastaValidator, FastqValidator
+from biovalid.validators import (BamValidator, FastaValidator, FastqValidator,
+                                 GffValidator)
 from biovalid.validators.base import BaseValidator
 from biovalid.version import __version__
 
@@ -19,7 +20,6 @@ class BioValidator:
         if isinstance(file_paths, list):
             return [Path(p) for p in file_paths]
         return [Path(file_paths)]
-
 
     def __init__(
         self,
@@ -48,6 +48,7 @@ class BioValidator:
             FileType.FASTA: FastaValidator,
             FileType.FASTQ: FastqValidator,
             FileType.BAM: BamValidator,
+            FileType.GFF: GffValidator,
         }
         if file_type in file_type_dict:
             return file_type_dict[file_type]

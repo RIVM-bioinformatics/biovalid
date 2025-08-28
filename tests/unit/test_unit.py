@@ -15,7 +15,12 @@ from typing import Type
 
 import pytest
 
-from biovalid.validators import BamValidator, FastaValidator, FastqValidator
+from biovalid.validators import (
+    BamValidator,
+    FastaValidator,
+    FastqValidator,
+    GffValidator,
+)
 from biovalid.validators.base import BaseValidator
 
 
@@ -48,6 +53,7 @@ list_of_validators = [
     ValidatorInfo(FastaValidator, "fasta"),
     ValidatorInfo(FastqValidator, "fastq"),
     ValidatorInfo(BamValidator, "bam"),
+    ValidatorInfo(GffValidator, "gff"),
 ]
 
 
