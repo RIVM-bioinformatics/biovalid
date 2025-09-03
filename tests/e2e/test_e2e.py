@@ -2,7 +2,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from biovalid.main import BioValidator
+from biovalid.biovalidator import BioValidator
 
 DATAPATH = Path("tests/data")
 
@@ -19,9 +19,15 @@ class End2EndTester:
 
     def get_files_except_pattern(self, pattern: str) -> list[Path]:
         """Return a list of file paths that do not match the given pattern."""
-        return [file for file in self.data_path.glob("**/*.*") if pattern not in file.as_posix()]
+        return [
+            file
+            for file in self.data_path.glob("**/*.*")
+            if pattern not in file.as_posix()
+        ]
 
-    def run_api(self, file_path: str, optional_args: list[str] | None = None) -> bool | None:
+    def run_api(
+        self, file_path: str, optional_args: list[str] | None = None
+    ) -> bool | None:
         """Run the API for validation."""
         args_dict: dict[str, bool | str] = {}
         if optional_args:
@@ -36,7 +42,9 @@ class End2EndTester:
         validator = BioValidator(file_paths=file_path, **args_dict)  # type: ignore
         return validator.validate_files()
 
-    def run_cli(self, file_path: str, optional_args: list[str] | None = None) -> subprocess.CompletedProcess[str]:
+    def run_cli(
+        self, file_path: str, optional_args: list[str] | None = None
+    ) -> subprocess.CompletedProcess[str]:
         """Run the CLI command for validation."""
         args = [sys.executable, "-m", "biovalid", file_path]
         if optional_args:
@@ -68,8 +76,12 @@ def test_end2end_cli() -> None:
 
     for file_path in happy_file_paths:
         result = tester.run_cli(file_path.as_posix())
-        assert result.returncode == 0, f"CLI validation failed for {file_path}: {result.stderr}"
+        assert (
+            result.returncode == 0
+        ), f"CLI validation failed for {file_path}: {result.stderr}"
 
     for file_path in unhappy_file_paths:
         result = tester.run_cli(file_path.as_posix())
-        assert result.returncode != 0, f"CLI validation should fail for {file_path}, but it passed: {result.stdout}"
+        assert (
+            result.returncode != 0
+        ), f"CLI validation should fail for {file_path}, but it passed: {result.stdout}"

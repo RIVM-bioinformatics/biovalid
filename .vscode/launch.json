@@ -41,6 +41,35 @@
             ]
         },
         {
+            "name": "test-fasta",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "pytest",
+            "args": [
+                "-sv",
+                "tests/unit/test_fasta.py"
+            ]
+        },
+        {
+            "name": "tool-pylint",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "pylint",
+            "args": [
+                ".",
+                "--ignore=.tox"
+            ]
+        },
+        {
+            "name": "tool-mypy",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "mypy",
+            "args": [
+                ".",
+            ]
+        },
+        {
             "name": "current File",
             "type": "debugpy",
             "request": "launch",

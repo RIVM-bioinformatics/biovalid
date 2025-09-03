@@ -45,15 +45,7 @@ class BamValidator(BaseValidator):
         if not is_compressed:
             self.log(
                 40,
-                f"File {self.filename} is not compressed with BGZF, "
-                "it may still be a valid BAM file, but it is probably truncated.",
-            )
-
-        if file_magic_num != MagicBytes.BGZF.value:
-            self.log(
-                40,
-                f"File {self.filename} is not a valid BGZF compressed BAM file, "
-                f"the magic number is incorrect: {file_magic_num!r}",
+                f"File {self.filename} is not compressed with BGZF, it may still be a valid BAM file, but it is probably truncated.",
             )
 
         # gzip.decompress needs the entire BGZF block,

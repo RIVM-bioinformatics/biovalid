@@ -17,7 +17,7 @@ class FastqValidator(BaseValidator):
                 if not sequence or not quality or not plus_line:
                     self.log(
                         40,
-                        f"Incomplete FASTQ record at line {line_num} in {self.filename}",
+                        f"File {self.filename} contains an incomplete FASTQ record at line {line_num}",
                     )
 
                 # dont strip at once because it might throw an error if a line is empty (e.g. last line)
@@ -29,30 +29,30 @@ class FastqValidator(BaseValidator):
                 if not header.startswith("@"):
                     self.log(
                         40,
-                        f"Invalid header line at line {line_num + 1} in {self.filename}: {header}",
+                        f"File {self.filename} contains an invalid header line at line {line_num + 1}: {header}",
                     )
 
                 if not all(c in "ACGTNacgtn-.*" for c in sequence):
                     self.log(
                         40,
-                        f"Invalid characters in sequence line at line {line_num + 2} in {self.filename}: {sequence}",
+                        f"File {self.filename} contains invalid characters in sequence line at line {line_num + 2}: {sequence}",
                     )
 
                 if plus_line != "+":
                     self.log(
                         40,
-                        f"Invalid plus line at line {line_num + 3} in {self.filename}: {plus_line}",
+                        f"File {self.filename} contains an invalid plus line at line {line_num + 3}: {plus_line}",
                     )
 
                 if len(quality) != len(sequence):
                     self.log(
                         40,
-                        f"Quality line length does not match sequence length at line {line_num + 4} in {self.filename}: {quality}",
+                        f"File {self.filename} contains an invalid quality line length at line {line_num + 4}: {quality}",
                     )
 
                 if not all(33 <= ord(c) <= 126 for c in quality):
                     self.log(
                         40,
-                        f"Invalid characters in quality line at line {line_num + 4} in {self.filename}: {quality}",
+                        f"File {self.filename} contains invalid characters in quality line at line {line_num + 4}: {quality}",
                     )
                 line_num += 4

@@ -9,7 +9,8 @@ class FastaValidator(BaseValidator):
     def _check_first_char(self, byte: int, filename: Path) -> None:
         if byte != ord(">"):
             self.log(
-                40, f"First character of file {filename} must be '>', found {chr(byte)}"
+                40,
+                f"File {filename} contains an invalid first character: {chr(byte)}. This must be '>'.",
             )
 
     def _handle_newline(
@@ -22,17 +23,17 @@ class FastaValidator(BaseValidator):
         filename: Path,
     ) -> bool:
         if is_line_empty:
-            self.log(40, f"Empty line found at line {line_num} in file {filename}")
+            self.log(40, f"File {filename} contains an empty line at line {line_num}")
 
         if is_header and not is_header_text:
             self.log(
                 40,
-                f"Header line in file {filename} is empty at line {line_num}",
+                f"File {filename} contains an empty header line at line {line_num}",
             )
         if is_header and is_prev_line_header:
             self.log(
                 40,
-                f"Consecutive header lines found at line {line_num-1} and {line_num} in file {filename}",
+                f"File {filename} contains consecutive header lines at line {line_num-1} and {line_num}",
             )
         return is_header
 
@@ -42,7 +43,7 @@ class FastaValidator(BaseValidator):
         if not 32 <= byte <= 126:
             self.log(
                 40,
-                f"Header line in file {filename} contains invalid character {chr(byte)} at line {line_num}, position {pos_in_line}",
+                f"File {filename} contains invalid character {chr(byte)} at line {line_num}, position {pos_in_line} in header",
             )
 
     def _validate_sequence_byte(
@@ -56,7 +57,7 @@ class FastaValidator(BaseValidator):
         ):
             self.log(
                 40,
-                f"Invalid character {chr(byte)} in sequence at line {line_num}, position {pos_in_line} in file {filename}",
+                f"File {filename} contains invalid character {chr(byte)} in sequence at line {line_num}, position {pos_in_line}",
             )
 
     def validate(self) -> None:
