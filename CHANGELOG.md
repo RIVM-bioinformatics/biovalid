@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0](https://github.com/RIVM-bioinformatics/biovalid/compare/biovalid-v0.2.0...biovalid-v0.3.0) (2025-09-03)
+
+
+### Features
+
+* add .bai support ([e03987b](https://github.com/RIVM-bioinformatics/biovalid/commit/e03987b2223928bbf51025b41027fffe19e5f7df))
+* added GFF and BAI checking to biovalid ([52e1968](https://github.com/RIVM-bioinformatics/biovalid/commit/52e19682558390a1ddd8e283bbc65ba6cb8f0758))
+* added GFF checking to biovalid ([99486fa](https://github.com/RIVM-bioinformatics/biovalid/commit/99486fa24cc6620c1a4aff1fa0d0e6cc7b460024))
+
+
+### CI/CD
+
+* renamed file in workflow ([3281b59](https://github.com/RIVM-bioinformatics/biovalid/commit/3281b59764730fba77dc8b0d0de7fe0b73dcc45e))
+
 ## [0.2.0](https://github.com/RIVM-bioinformatics/biovalid/compare/biovalid-v0.1.0...biovalid-v0.2.0) (2025-08-27)
 
 
