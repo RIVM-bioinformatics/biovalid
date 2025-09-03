@@ -1,7 +1,7 @@
 """
 Unit tests for bioinformatics file validators.
 
-This module contains generic unit tests for the BAM, FASTA, and FASTQ file validators
+This module contains generic unit tests for the BAM, FASTA, FASTQ and GFF file validators
 in the biovalid package. It checks that files matching the "happy" pattern are validated
 successfully, and that files not matching the pattern raise a ValueError.
 
@@ -15,7 +15,13 @@ from typing import Type
 
 import pytest
 
-from biovalid.validators import BamValidator, FastaValidator, FastqValidator
+from biovalid.validators import (
+    BaiValidator,
+    BamValidator,
+    FastaValidator,
+    FastqValidator,
+    GffValidator,
+)
 from biovalid.validators.base import BaseValidator
 
 
@@ -41,17 +47,25 @@ class ValidatorInfo:
     def __init__(self, validator_class: Type[BaseValidator], filetype: str):
         self.validator_class = validator_class
         self.happy_files = list(Path(f"tests/data/{filetype}").glob("*happy*.*"))
-        self.unhappy_files = [f for f in Path(f"tests/data/{filetype}").glob("*.*") if "happy" not in f.name]
+        self.unhappy_files = [
+            f
+            for f in Path(f"tests/data/{filetype}").glob("*.*")
+            if "happy" not in f.name
+        ]
 
 
 list_of_validators = [
     ValidatorInfo(FastaValidator, "fasta"),
     ValidatorInfo(FastqValidator, "fastq"),
     ValidatorInfo(BamValidator, "bam"),
+    ValidatorInfo(GffValidator, "gff"),
+    ValidatorInfo(BaiValidator, "bai"),
 ]
 
 
-@pytest.mark.parametrize("validator_info", list_of_validators, ids=lambda v: v.validator_class.__name__)
+@pytest.mark.parametrize(
+    "validator_info", list_of_validators, ids=lambda v: v.validator_class.__name__
+)
 def test_happy(validator_info: ValidatorInfo) -> None:
     """Test that happy BAM, FASTA, and FASTQ files validate without error."""
     for file_path in validator_info.happy_files:

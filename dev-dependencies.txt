@@ -1,5 +1,0 @@
-pytest
-tox
-pylint
-isort
-black
