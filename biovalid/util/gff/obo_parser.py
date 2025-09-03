@@ -20,8 +20,9 @@ GFF3 Specification: https://github.com/The-Sequence-Ontology/Specifications/blob
 import re
 from pathlib import Path
 
-SO_ONTOLOGIES_PATH = Path("biovalid/util/gff/so_ontologies.obo").resolve()
-PRE_PARSED_TYPES_PATH = Path("biovalid/util/gff/pre_parsed_valid_types.txt").resolve()
+MODULE_DIR = Path(__file__).parent.resolve()
+SO_ONTOLOGIES_PATH = MODULE_DIR / "so_ontologies.obo"
+PRE_PARSED_TYPES_PATH = MODULE_DIR / "pre_parsed_valid_types.txt"
 
 
 class OboTerm:
@@ -144,9 +145,7 @@ def filter_types(obo_path: Path) -> list[tuple[str, str]]:
     return valid_types
 
 
-def write_out_valid_types(
-    valid_types: list[tuple[str, str]], output_path: Path
-) -> None:
+def write_out_valid_types(valid_types: list[tuple[str, str]], output_path: Path) -> None:
     """
     Writes valid SO types to a file in tab-separated format.
 

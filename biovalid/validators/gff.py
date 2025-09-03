@@ -56,9 +56,7 @@ class GffValidator(BaseValidator):
         self._check_data_lines(lines)
 
     def _check_header_lines(self, lines: list[str]) -> None:
-        first_data_idx = next(
-            (i for i, line in enumerate(lines) if not line.startswith("#")), len(lines)
-        )
+        first_data_idx = next((i for i, line in enumerate(lines) if not line.startswith("#")), len(lines))
 
         for i, line in enumerate(lines[first_data_idx:], start=first_data_idx):
             if line.startswith("#"):
@@ -92,14 +90,10 @@ class GffValidator(BaseValidator):
         valid_types = get_valid_types()
 
         self._check_type(columns[GffColumns.TYPE.value], valid_types)
-        self._check_start_end(
-            columns[GffColumns.START.value], columns[GffColumns.END.value]
-        )
+        self._check_start_end(columns[GffColumns.START.value], columns[GffColumns.END.value])
         self._check_score(columns[GffColumns.SCORE.value])
         self._check_strand(columns[GffColumns.STRAND.value])
-        self._check_phase(
-            columns[GffColumns.PHASE.value], columns[GffColumns.TYPE.value]
-        )
+        self._check_phase(columns[GffColumns.PHASE.value], columns[GffColumns.TYPE.value])
         self._check_attributes(columns[GffColumns.ATTRIBUTES.value])
 
     def _check_seqid(self, seqid: str) -> None:
@@ -172,8 +166,6 @@ class GffValidator(BaseValidator):
             )
 
     def _is_float(self, s: str) -> bool:
-        if s == ".":
-            return True
         parts = s.split(".")
         if len(parts) == 1:
             return parts[0].isdigit()
