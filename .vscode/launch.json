@@ -41,6 +41,26 @@
             ]
         },
         {
+            "name": "test-path_standardizer",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "pytest",
+            "args": [
+                "-sv",
+                "tests/unit/test_path_standardizer.py"
+            ]
+        },
+        {
+            "name": "test-logger",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "pytest",
+            "args": [
+                "-sv",
+                "tests/unit/test_logger.py"
+            ]
+        },
+        {
             "name": "test-fasta",
             "type": "debugpy",
             "request": "launch",

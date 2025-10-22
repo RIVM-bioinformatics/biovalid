@@ -18,6 +18,14 @@ def cli_parser() -> Namespace:
     )
 
     parser.add_argument(
+        "--recursive",
+        "-r",
+        action="store_true",
+        default=False,
+        help="Recursively validate all files in a directory.",
+    )
+
+    parser.add_argument(
         "--bool-mode",
         "-b",
         action="store_true",

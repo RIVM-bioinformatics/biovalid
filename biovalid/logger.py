@@ -12,7 +12,7 @@ FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 DATEFMT = "%Y-%m-%d %H:%M:%S"
 
 
-def setup_logging(verbose: bool = False, log_file: str | None = None) -> logging.Logger:
+def setup_logging(verbose: bool = False, log_file: Path | str | None = None) -> logging.Logger:
     """
     Set up logging for the biovalid project.
 
@@ -57,11 +57,13 @@ def setup_logging(verbose: bool = False, log_file: str | None = None) -> logging
     return logger
 
 
-def validate_log_file(log_file: str | None) -> None:
+def validate_log_file(log_file: str | None) -> str | None:
     """
     Validates the log file path.
     Args:
         log_file (str | None): Path to the log file.
+    Returns:
+        str | None: The validated log file path.
     Raises:
         ValueError: If the log file path is not valid.
     """
@@ -71,3 +73,31 @@ def validate_log_file(log_file: str | None) -> None:
             raise ValueError(f"Log file directory {log_path.parent} does not exist.")
         if not log_path.parent.is_dir():
             raise ValueError(f"Log file path {log_path.parent} is not a directory.")
+        return log_file
+    return None
+
+
+def log_function(logger: logging.Logger, level: int, message: str) -> None:
+    """
+    Log a message at the specified logging level.
+    Will raise a ValueError if the level is ERROR.
+
+    Parameters
+    ----------
+    level : int
+        The logging level.
+        (10 for DEBUG, 20 for INFO, 30 for WARNING, 40 for ERROR)
+    message : str
+        The message to log.
+    """
+    if level == 10:
+        logger.debug(message)
+    elif level == 20:
+        logger.info(message)
+    elif level == 30:
+        logger.warning(message)
+    elif level == 40:
+        logger.error(message)
+        raise ValueError(message)
+    else:
+        logger.info(message)
