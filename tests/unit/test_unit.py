@@ -21,6 +21,7 @@ from biovalid.validators import (
     FastaValidator,
     FastqValidator,
     GffValidator,
+    VcfValidator,
 )
 from biovalid.validators.base import BaseValidator
 
@@ -47,11 +48,7 @@ class ValidatorInfo:
     def __init__(self, validator_class: Type[BaseValidator], filetype: str):
         self.validator_class = validator_class
         self.happy_files = list(Path(f"tests/data/{filetype}").glob("*happy*.*"))
-        self.unhappy_files = [
-            f
-            for f in Path(f"tests/data/{filetype}").glob("*.*")
-            if "happy" not in f.name
-        ]
+        self.unhappy_files = [f for f in Path(f"tests/data/{filetype}").glob("*.*") if "happy" not in f.name]
 
 
 list_of_validators = [
@@ -60,12 +57,11 @@ list_of_validators = [
     ValidatorInfo(BamValidator, "bam"),
     ValidatorInfo(GffValidator, "gff"),
     ValidatorInfo(BaiValidator, "bai"),
+    ValidatorInfo(VcfValidator, "vcf"),
 ]
 
 
-@pytest.mark.parametrize(
-    "validator_info", list_of_validators, ids=lambda v: v.validator_class.__name__
-)
+@pytest.mark.parametrize("validator_info", list_of_validators, ids=lambda v: v.validator_class.__name__)
 def test_happy(validator_info: ValidatorInfo) -> None:
     """Test that happy BAM, FASTA, and FASTQ files validate without error."""
     for file_path in validator_info.happy_files:
@@ -81,4 +77,5 @@ def test_unhappy(validator_info: ValidatorInfo) -> None:
     """Test that unhappy BAM, FASTA, and FASTQ files raise a ValueError."""
     for file_path in validator_info.unhappy_files:
         with pytest.raises(ValueError):
+            print(file_path)
             validator_info.validator_class(file_path).validate()

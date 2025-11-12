@@ -1,3 +1,10 @@
+"""
+Validation function for GFF3 files.
+See: https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md for the GFF3 file format specification.
+This function checks if the GFF3 file has a valid header, column structure, and ontology terms.
+It does not check the biological correctness of the annotation.
+"""
+
 import re
 from enum import Enum
 
@@ -7,6 +14,8 @@ from biovalid.validators.base import BaseValidator
 
 
 class GffColumns(Enum):
+    """Standard GFF3 column indices."""
+
     SEQID = 0
     SOURCE = 1
     TYPE = 2
@@ -29,6 +38,8 @@ class GffColumns(Enum):
 
 
 class Attributes(Enum):
+    """Standard GFF3 attribute keys."""
+
     ID = "ID"
     NAME = "Name"
     ALIAS = "Alias"

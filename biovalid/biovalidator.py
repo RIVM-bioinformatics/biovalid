@@ -10,6 +10,7 @@ from biovalid.validators import (
     FastaValidator,
     FastqValidator,
     GffValidator,
+    VcfValidator,
 )
 from biovalid.validators.base import BaseValidator
 from biovalid.version import __version__
@@ -85,6 +86,7 @@ class BioValidator:
             FileType.BAM: BamValidator,
             FileType.BAI: BaiValidator,
             FileType.GFF: GffValidator,
+            FileType.VCF: VcfValidator,
         }
         if file_type in file_type_dict:
             return file_type_dict[file_type]
