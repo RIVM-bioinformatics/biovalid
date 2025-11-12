@@ -102,6 +102,7 @@ class BioValidator:
                 validator.general_validation()
                 if validator_class != BaseValidator:
                     validator.validate()
+            self.log(20, "All files validated successfully.")
             return None
 
         try:
@@ -111,7 +112,9 @@ class BioValidator:
                 validator.general_validation()
                 if validator_class != BaseValidator:
                     validator.validate()
+                self.log(20, "All files validated successfully.")
         except ValueError:
+            self.log(20, "Validation failed.")
             return False
         return True
 

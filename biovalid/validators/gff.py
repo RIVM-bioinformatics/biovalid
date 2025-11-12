@@ -90,7 +90,8 @@ class GffValidator(BaseValidator):
             elif len(columns) > GffColumns.number_of_columns():
                 self.log(
                     40,
-                    f"File {self.filename} contains an invalid number of columns in line {i+1}: {line.strip()}, it should be 9: {GffColumns.to_list()}",
+                    f"File {self.filename} contains an invalid number of columns in line {i+1}:"
+                    f" {line.strip()}, it should be 9: {GffColumns.to_list()}",
                 )
 
             self.validate_columns(columns)
@@ -146,7 +147,8 @@ class GffValidator(BaseValidator):
             assert isinstance(replacement, dict)
             self.log(
                 30,
-                f"File {self.filename} contains a deprecated SO term: {feature_type}. Consider replacing with '{replacement['so_name']}' ({replacement['so_id']}).",
+                f"File {self.filename} contains a deprecated SO term: {feature_type}. "
+                f"Consider replacing with '{replacement['so_name']}' ({replacement['so_id']}).",
             )
             return
 

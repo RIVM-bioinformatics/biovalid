@@ -319,7 +319,8 @@ class VcfValidator(BaseValidator):
     def validate_info(self, value: str, line_number: int, info_fields: dict[str, InfoField]) -> None:
         """
         Validate info column.
-        From the VCF specification: (String, no whitespace, semicolons, or equals-signs permitted; commas are permitted only as delimiters for lists of values).
+        From the VCF specification: (String, no whitespace, semicolons, or equals-signs permitted;
+        commas are permitted only as delimiters for lists of values).
         """
 
         if not value:
