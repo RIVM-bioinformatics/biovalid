@@ -10,7 +10,7 @@ import os
 from logging import Logger
 from pathlib import Path
 
-from biovalid.logger import setup_logging
+from biovalid.logger import log_function, setup_logging
 
 
 class BaseValidator:
@@ -34,27 +34,8 @@ class BaseValidator:
             self.logger = logger
 
     def log(self, level: int, message: str) -> None:
-        """
-        Log a message at the specified logging level.
-        Will raise a ValueError if the level is ERROR.
-
-        Parameters
-        ----------
-        level : int
-            The logging level.
-            (10 for DEBUG, 20 for INFO, 30 for WARNING, 40 for ERROR)
-        message : str
-            The message to log.
-        """
-        if level == 10:
-            self.logger.debug(message)
-        elif level == 20:
-            self.logger.info(message)
-        elif level == 30:
-            self.logger.warning(message)
-        elif level == 40:
-            self.logger.error(message)
-            raise ValueError(message)
+        """Log a message with the specified severity level."""
+        log_function(self.logger, level, message)
 
     def general_validation(self) -> None:
         """

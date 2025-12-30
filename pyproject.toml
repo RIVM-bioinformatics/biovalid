@@ -29,7 +29,7 @@ Homepage = "https://github.com/RIVM-bioinformatics/biovalid/"
 Documentation = "https://rivm-bioinformatics.github.io/biovalid/"
 
 [project.scripts]
-biovalid = "biovalid.main:run_cli"
+biovalid = "biovalid.biovalidator:run_cli"
 
 
 [tool.mypy]
@@ -63,8 +63,8 @@ description = "Run code formatting"
 skip_install = true
 deps = ["black", "isort"]
 commands = [
-    ["black", "biovalid"],
-    ["isort", "biovalid"],
+    ["black", "--line-length", "150", "biovalid"],
+    ["isort", "--profile", "black", "biovalid"],
 ]
 
 [tool.tox.env.lint]

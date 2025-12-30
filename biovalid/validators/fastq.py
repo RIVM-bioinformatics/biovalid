@@ -1,3 +1,10 @@
+"""
+Validation function for FASTQ files.
+See: https://en.wikipedia.org/wiki/FASTQ_format for the FASTQ file format specification.
+This function checks if the FASTQ file has valid record structure, sequence, and quality lines.
+It does not check the biological correctness of the sequences.
+"""
+
 from biovalid.validators.base import BaseValidator
 
 

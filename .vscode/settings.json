@@ -3,5 +3,17 @@
         "tests"
     ],
     "python.testing.unittestEnabled": false,
-    "python.testing.pytestEnabled": true
+    "python.testing.pytestEnabled": true,
+    "isort.args": [
+        "--float-to-top",
+        "--profile",
+        "black"
+    ],
+    "black-formatter.args": [
+        "--line-length",
+        "150",
+    ],
+    "pylint.args": [
+        "--max-line-length=150",
+    ]
 }

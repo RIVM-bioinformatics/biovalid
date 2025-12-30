@@ -37,6 +37,8 @@ class FileType(Enum):
     BCF = [".bcf"]
     GENBANK = [".gb", ".gbk", ".genbank"]
     PDB = [".pdb"]
+    UNKNOWN = ["UNKNOWN"]
+    # normally you dont add annotations to enums, but mypy complains otherwise
 
     @classmethod
     def is_compressed(cls, path: Path) -> bool:
@@ -54,7 +56,7 @@ class FileType(Enum):
         for file_type in cls:
             if ext in file_type.value:
                 return file_type
-        raise ValueError(f"Unknown file type for extension: {ext}")
+        return FileType.UNKNOWN
 
 
 class MagicBytes(Enum):

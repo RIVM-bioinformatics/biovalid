@@ -21,6 +21,5 @@ class BaiValidator(BaseValidator):
         if file_magic_num != MagicBytes.BAI.value:
             self.log(
                 40,
-                f"File {self.filename} is not a valid BAI file, "
-                f"the magic number is incorrect: {file_magic_num!r}",
+                f"File {self.filename} is not a valid BAI file, " f"the magic number is incorrect: {file_magic_num!r}",
             )
