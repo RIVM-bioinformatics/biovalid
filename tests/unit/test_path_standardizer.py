@@ -39,7 +39,7 @@ def test_convert_file_paths_to_paths() -> None:
         return temp_dir, file1, file2, file3, sub_dir, file4, file5
 
     temp_dir, file1, _file2, file3, _sub_dir, file4, _file5 = create_test_cases()
-    validator = BioValidator(file_paths=[], recursive=False)
+    validator = BioValidator()
 
     result = validator.convert_file_paths_to_paths(file1.as_posix(), recursive=False)
     assert result == [file1]

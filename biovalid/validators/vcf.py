@@ -8,8 +8,7 @@ It does not check the biological correctness of the variants.
 import re
 from string import ascii_letters
 
-from biovalid.validators.base import BaseValidator
-from biovalid.validators.vcf_models import (
+from biovalid.util.vcf.vcf_models import (
     AltField,
     AltTypes,
     FilterField,
@@ -17,6 +16,7 @@ from biovalid.validators.vcf_models import (
     InfoField,
     VCFHeaders,
 )
+from biovalid.validators.base import BaseValidator
 
 
 class VcfValidator(BaseValidator):
@@ -68,8 +68,8 @@ class VcfValidator(BaseValidator):
     def _parse_key_value_pairs(self, content: str) -> dict[str, str]:
         """Helper method to parse key=value pairs from a VCF header content string."""
         res: dict[str, str] = {}
-        REGEX_PATTERN = r"""(?:[^,'"]|"(?:\\.|[^"])*"|'(?:\\.|[^'])*')+"""  # Handles commas inside quotes
-        for part in re.findall(REGEX_PATTERN, content):
+        regex_pattern = r"""(?:[^,'"]|"(?:\\.|[^"])*"|'(?:\\.|[^'])*')+"""  # Handles commas inside quotes
+        for part in re.findall(regex_pattern, content):
             key, value = part.split("=", 1)
             res[key.strip()] = value.strip().replace('"', "").replace("'", "")
         return res
@@ -156,7 +156,7 @@ class VcfValidator(BaseValidator):
         include_format: bool = True,
     ) -> None:
         """Validate VCF data lines."""
-        info_fields, filter_fields, format_fields, alt_info = info
+        info_fields, filter_fields, format_fields, _alt_info = info
 
         # Process data lines
         for data_row in data_matrix:
@@ -353,7 +353,7 @@ class VcfValidator(BaseValidator):
         valid_format_keys = set(format_fields.keys())
         format_keys = value.split(":")
         for key in format_keys:
-            key = key.strip().upper()
+            key = key.strip()
             if key not in valid_format_keys:
                 self.log(40, f"VCF line {line_number}: FORMAT contains unknown key '{key}'. All FORMAT keys must be defined in the header.")
 
