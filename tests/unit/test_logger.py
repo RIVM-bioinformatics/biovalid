@@ -78,7 +78,8 @@ def test_cli_log_functionality(
 
     # have to do it in parts because of different formatting in different environments
     # (e.g., Windows vs Linux line endings, timestamps, etc)
-    expected_parts = ["WARNING", "tests/data/gff/gff3_happy3.gff", "invalid number of columns", "line 2", "Padded the missing columns"]
+    # dont use that paths variable in the comparison (slashes etc)
+    expected_parts = ["WARNING", "invalid number of columns", "line 2", "Padded the missing columns"]
 
     output_text = result.stdout + result.stderr
     for part in expected_parts:
