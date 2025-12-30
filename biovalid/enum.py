@@ -37,7 +37,7 @@ class FileType(Enum):
     BCF = [".bcf"]
     GENBANK = [".gb", ".gbk", ".genbank"]
     PDB = [".pdb"]
-    UNKNOWN: list[str] = []  # type: ignore[misc]
+    UNKNOWN = ["UNKNOWN"]
     # normally you dont add annotations to enums, but mypy complains otherwise
 
     @classmethod

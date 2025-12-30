@@ -10,6 +10,7 @@ from biovalid.validators import (
     FastaValidator,
     FastqValidator,
     GffValidator,
+    VcfValidator,
 )
 from biovalid.validators.base import BaseValidator
 from biovalid.version import __version__
@@ -52,8 +53,6 @@ class BioValidator:
 
     def __init__(
         self,
-        file_paths: list[str | Path] | str | Path,
-        recursive: bool = False,
         bool_mode: bool = False,
         verbose: bool = False,
         log_file: Path | str | None = None,
@@ -63,8 +62,6 @@ class BioValidator:
         if version:
             print(f"BioValidator version {__version__}")
             return
-
-        self.file_paths = self.convert_file_paths_to_paths(file_paths, recursive)
 
         self.bool_mode = bool_mode
         self.verbose = verbose
@@ -85,31 +82,40 @@ class BioValidator:
             FileType.BAM: BamValidator,
             FileType.BAI: BaiValidator,
             FileType.GFF: GffValidator,
+            FileType.VCF: VcfValidator,
         }
         if file_type in file_type_dict:
             return file_type_dict[file_type]
 
         return BaseValidator
 
-    def validate_files(self) -> None | bool:
+    def validate_files(self, paths: list[str | Path] | str | Path, recursive: bool = False) -> bool:
         """Validate a list of file paths."""
+        clean_paths = self.convert_file_paths_to_paths(paths, recursive=recursive)
+
         if not self.bool_mode:
-            for path in self.file_paths:
-                validator_class = self.pick_validator(path)
-                validator = validator_class(path, self.logger)
-                validator.general_validation()
-                if validator_class != BaseValidator:
-                    validator.validate()
-            return None
+            try:
+                for path in clean_paths:
+                    validator_class = self.pick_validator(path)
+                    validator = validator_class(path, self.logger)
+                    validator.general_validation()
+                    if validator_class != BaseValidator:
+                        validator.validate()
+                self.log(20, "All files validated successfully.")
+            except ValueError as e:
+                self.log(20, f"Validation failed: {e}")
+                raise e
 
         try:
-            for path in self.file_paths:
+            for path in clean_paths:
                 validator_class = self.pick_validator(path)
                 validator = validator_class(path, self.logger)
                 validator.general_validation()
                 if validator_class != BaseValidator:
                     validator.validate()
+            self.log(20, "All files validated successfully.")
         except ValueError:
+            self.log(20, "Validation failed.")
             return False
         return True
 
@@ -117,9 +123,9 @@ class BioValidator:
 def run_cli() -> None:
     """Main function to run the validation."""
     args = cli_parser()
-    validator = BioValidator(**args.__dict__)
+    validator = BioValidator(bool_mode=args.bool_mode, verbose=args.verbose, log_file=args.log_file)
     try:
-        validator.validate_files()
+        validator.validate_files(args.file_paths, recursive=args.recursive)
     except Exception as e:
         # Flush and close all handlers to ensure logs are written
         for handler in validator.logger.handlers:

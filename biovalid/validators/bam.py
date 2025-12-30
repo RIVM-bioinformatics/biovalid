@@ -15,6 +15,11 @@ from biovalid.validators.base import BaseValidator
 
 
 class BamValidator(BaseValidator):
+    """Validator for BAM files.
+    Validates the BAM file by checking the magic number and EOF marker.
+    Similar to `samtools quickcheck`.
+    """
+
     def _first_and_last_uncompressed_bgzf_bytes(self, filename: Path) -> tuple[bytes, bytes]:
         """
         Returns the first four uncompressed bytes of a BGZF compressed file.

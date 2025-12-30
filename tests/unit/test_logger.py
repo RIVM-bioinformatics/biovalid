@@ -29,7 +29,7 @@ def test_logger_initialization(log_path: Path, capsys: pytest.CaptureFixture[str
     Also checks that log messages are written to the console.
     """
 
-    validator = BioValidator(file_paths="tests/data/gff/gff3_happy3.gff", verbose=True, log_file=log_path)
+    validator = BioValidator(verbose=True, log_file=log_path)
     logger = validator.logger
 
     for handler in logger.handlers:
@@ -47,8 +47,8 @@ def test_logger_initialization(log_path: Path, capsys: pytest.CaptureFixture[str
 
 
 def test_cli_log_functionality(
-    log_path: Path,
-) -> None:  # pylint: disable=redefined-outer-name
+    log_path: Path,  # pylint: disable=redefined-outer-name
+) -> None:
     """
     Test that the CLI logging functionality works as expected.
     This includes checking that log messages are written to the specified log file

@@ -1,4 +1,9 @@
-"""Validator for FASTA files."""
+"""
+Validation function for FASTA files.
+See: https://en.wikipedia.org/wiki/FASTA_format for the FASTA file format specification.
+This function checks if the FASTA file has valid header and sequence lines, and character usage.
+It does not check the biological correctness of the sequences.
+"""
 
 from pathlib import Path
 

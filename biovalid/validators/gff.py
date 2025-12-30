@@ -1,3 +1,10 @@
+"""
+Validation function for GFF3 files.
+See: https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md for the GFF3 file format specification.
+This function checks if the GFF3 file has a valid header, column structure, and ontology terms.
+It does not check the biological correctness of the annotation.
+"""
+
 import re
 from enum import Enum
 
@@ -7,6 +14,8 @@ from biovalid.validators.base import BaseValidator
 
 
 class GffColumns(Enum):
+    """Standard GFF3 column indices."""
+
     SEQID = 0
     SOURCE = 1
     TYPE = 2
@@ -29,6 +38,8 @@ class GffColumns(Enum):
 
 
 class Attributes(Enum):
+    """Standard GFF3 attribute keys."""
+
     ID = "ID"
     NAME = "Name"
     ALIAS = "Alias"
@@ -79,7 +90,8 @@ class GffValidator(BaseValidator):
             elif len(columns) > GffColumns.number_of_columns():
                 self.log(
                     40,
-                    f"File {self.filename} contains an invalid number of columns in line {i+1}: {line.strip()}, it should be 9: {GffColumns.to_list()}",
+                    f"File {self.filename} contains an invalid number of columns in line {i+1}:"
+                    f" {line.strip()}, it should be 9: {GffColumns.to_list()}",
                 )
 
             self.validate_columns(columns)
@@ -135,7 +147,8 @@ class GffValidator(BaseValidator):
             assert isinstance(replacement, dict)
             self.log(
                 30,
-                f"File {self.filename} contains a deprecated SO term: {feature_type}. Consider replacing with '{replacement['so_name']}' ({replacement['so_id']}).",
+                f"File {self.filename} contains a deprecated SO term: {feature_type}. "
+                f"Consider replacing with '{replacement['so_name']}' ({replacement['so_id']}).",
             )
             return
 
