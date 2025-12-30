@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "biovalid"
-version = "0.3.0"
+version = "0.4.0"
 authors = [
     { name="Gino Raaijmakers", email="gino.raaijmakers@rivm.nl" },
     { name="RIVM Bioinformatics", email="ids-bioinformatics@rivm.nl" }
