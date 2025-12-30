@@ -54,9 +54,11 @@ def test_convert_file_paths_to_paths() -> None:
     assert result == [file1, file3]
 
     result = validator.convert_file_paths_to_paths(temp_dir.name, recursive=False)
-    assert result == [file3, file1]  # file2 is not a recognized type
+    assert set(result) == {file3, file1}  # file2 is not a recognized type
+    assert len(result) == 2
     result = validator.convert_file_paths_to_paths(temp_dir.name, recursive=True)
-    assert result == [file3, file1, file4]  # file4 is in subdir
+    assert set(result) == {file3, file1, file4}  # file4 is in subdir
+    assert len(result) == 3
 
     # bad input
     # type errors are ignored because we are testing invalid input
