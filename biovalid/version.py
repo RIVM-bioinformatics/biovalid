@@ -6,4 +6,4 @@ try:
     __version__ = version("biovalid")
 except ImportError:
     # Fallback if running from source without installation
-    __version__ = "0.3.0"
+    __version__ = "0.4.0"
