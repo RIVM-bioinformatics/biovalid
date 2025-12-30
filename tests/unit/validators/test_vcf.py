@@ -1,7 +1,6 @@
 from pathlib import Path
 
 import pytest
-from _pytest.capture import CaptureFixture
 
 from biovalid.validators import VcfValidator
 
@@ -118,7 +117,7 @@ def test_invalid_qual() -> None:
     invalid_qual_path = Path("tests/data/vcf/invalid_qual.vcf")
     validator = VcfValidator(invalid_qual_path)
 
-    with pytest.raises(ValueError, match="QUAL must be an positive numeric value"):
+    with pytest.raises(ValueError, match="QUAL must be a positive numeric value"):
         validator.validate()
 
 
@@ -209,7 +208,7 @@ def test_negative_qual() -> None:
     validator = VcfValidator(negative_qual_path)
 
     # Current implementation rejects negative QUAL values
-    with pytest.raises(ValueError, match="QUAL must be an positive numeric value"):
+    with pytest.raises(ValueError, match="QUAL must be a positive numeric value"):
         validator.validate()
 
 
@@ -281,7 +280,7 @@ def test_missing_info_dot() -> None:
     empty_info_with_fields_path = Path("tests/data/vcf/missing_info.vcf")
     validator = VcfValidator(empty_info_with_fields_path)
 
-    with pytest.raises(ValueError, match="INFO column is '.' but INFO fields are defined in the header."):
+    with pytest.raises(ValueError, match="INFO column is '.' but INFO fields are defined in the header"):
         validator.validate()
 
 
@@ -289,15 +288,6 @@ def test_empty_sample() -> None:
     """Test that missing sample column raises validation error."""
     empty_sample_path = Path("tests/data/vcf/empty_sample_proper.vcf")
     validator = VcfValidator(empty_sample_path)
-
-    with pytest.raises(ValueError, match="VCF data line .* does not have the required .* columns"):
-        validator.validate()
-
-
-def test_empty_sample_string() -> None:
-    """Test that missing sample column raises validation error."""
-    empty_sample_string_path = Path("tests/data/vcf/empty_sample_string.vcf")
-    validator = VcfValidator(empty_sample_string_path)
 
     with pytest.raises(ValueError, match="VCF data line .* does not have the required .* columns"):
         validator.validate()

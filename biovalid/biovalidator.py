@@ -89,19 +89,22 @@ class BioValidator:
 
         return BaseValidator
 
-    def validate_files(self, paths: list[str | Path] | str | Path, recursive: bool = False) -> None | bool:
+    def validate_files(self, paths: list[str | Path] | str | Path, recursive: bool = False) -> bool:
         """Validate a list of file paths."""
         clean_paths = self.convert_file_paths_to_paths(paths, recursive=recursive)
 
         if not self.bool_mode:
-            for path in clean_paths:
-                validator_class = self.pick_validator(path)
-                validator = validator_class(path, self.logger)
-                validator.general_validation()
-                if validator_class != BaseValidator:
-                    validator.validate()
-            self.log(20, "All files validated successfully.")
-            return None
+            try:
+                for path in clean_paths:
+                    validator_class = self.pick_validator(path)
+                    validator = validator_class(path, self.logger)
+                    validator.general_validation()
+                    if validator_class != BaseValidator:
+                        validator.validate()
+                self.log(20, "All files validated successfully.")
+            except ValueError as e:
+                self.log(20, f"Validation failed: {e}")
+                raise e
 
         try:
             for path in clean_paths:
@@ -110,7 +113,7 @@ class BioValidator:
                 validator.general_validation()
                 if validator_class != BaseValidator:
                     validator.validate()
-                self.log(20, "All files validated successfully.")
+            self.log(20, "All files validated successfully.")
         except ValueError:
             self.log(20, "Validation failed.")
             return False

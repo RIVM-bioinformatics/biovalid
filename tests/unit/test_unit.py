@@ -77,5 +77,4 @@ def test_unhappy(validator_info: ValidatorInfo) -> None:
     """Test that unhappy BAM, FASTA, and FASTQ files raise a ValueError."""
     for file_path in validator_info.unhappy_files:
         with pytest.raises(ValueError):
-            print(file_path)
             validator_info.validator_class(file_path).validate()

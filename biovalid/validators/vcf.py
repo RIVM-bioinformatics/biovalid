@@ -50,6 +50,8 @@ class VcfValidator(BaseValidator):
             for line in vcf_file:
                 line_number += 1
                 line = line.strip()
+                if not line:
+                    continue
                 if line.startswith("##"):
                     top_headers.append(line)
                 elif line.startswith("#"):
@@ -172,6 +174,11 @@ class VcfValidator(BaseValidator):
 
             clean_data_row = [col.strip() for col in data_row]
 
+            if include_format and len(clean_data_row) < 9:
+                self.log(40, f"VCF data line {line_number} missing required columns: {data_row}")
+            elif not include_format and len(clean_data_row) < 8:
+                self.log(40, f"VCF data line {line_number} missing required columns: {data_row}")
+
             # Validate each required column by index
             self.validate_chrom(clean_data_row[0], line_number)
             self.validate_pos(clean_data_row[1], line_number)
@@ -183,7 +190,9 @@ class VcfValidator(BaseValidator):
             self.validate_info(clean_data_row[7], line_number, info_fields)
             if include_format:
                 self.validate_format(clean_data_row[8], line_number, format_fields)
-            self.validate_sample_columns(clean_data_row[9:], line_number)
+                self.validate_sample_columns(clean_data_row[9:], line_number)
+            else:
+                self.validate_sample_columns(clean_data_row[8:], line_number)
 
     def validate_chrom(self, value: str, line_number: int) -> None:
         """
@@ -216,7 +225,7 @@ class VcfValidator(BaseValidator):
         if not value:
             self.log(40, f"VCF line {line_number}: ID column is empty")
 
-        # Semicolon is not allowed within the the values of the ID because it is used as the separator
+        # Semicolon is not allowed within the values of the ID because it is used as the separator
         # We only check for whitespace here
         if re.search(r"\s", value):
             self.log(40, f"VCF line {line_number}: ID contains whitespace: '{value}'")
@@ -294,9 +303,14 @@ class VcfValidator(BaseValidator):
         if value == ".":
             return
 
-        is_digit_value = value.replace(",", "").replace(".", "")  # .isdigit() does not accept commas or decimal points
-        if not is_digit_value.isdigit():
-            self.log(40, f"VCF line {line_number}: QUAL must be an positive numeric value, got '{value}'")
+        # I really dont like using exceptions for control flow but float() is the only way that is this complete
+        # think about nan, inf, -inf, 1e10, 1.5 etc.
+        try:
+            float(value)
+            if float(value) < 0:
+                self.log(40, f"VCF line {line_number}: QUAL must be a positive numeric value, got '{value}'")
+        except ValueError:
+            self.log(40, f"VCF line {line_number}: QUAL must be a positive numeric value, got '{value}'")
 
     def validate_filter(self, value: str, line_number: int, filter_fields: dict[str, FilterField]) -> None:
         """
@@ -326,7 +340,7 @@ class VcfValidator(BaseValidator):
         if not value:
             self.log(40, f"VCF line {line_number}: INFO column is empty")
         if value == "." and info_fields:
-            self.log(40, f"VCF line {line_number}: INFO column is '.' but INFO fields are defined in the header.")
+            self.log(40, f"VCF line {line_number}: INFO column is '.' but INFO fields are defined in the header")
         valid_info_keys = set(info_fields.keys()).union({"."})
         items = value.split(";")
         for item in items:
