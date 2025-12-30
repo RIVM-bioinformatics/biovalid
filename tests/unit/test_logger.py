@@ -75,8 +75,16 @@ def test_cli_log_functionality(
         "--verbose",
     ]
     result = subprocess.run(subprocess_args, capture_output=True, text=True, check=True)
-    test_message = "biovalid - WARNING - File tests/data/gff/gff3_happy3.gff contains an invalid number of columns in line 2. Padded the missing columns with placeholders."
-    assert test_message in result.stdout or test_message in result.stderr
+
+    # have to do it in parts because of different formatting in different environments
+    # (e.g., Windows vs Linux line endings, timestamps, etc)
+    expected_parts = ["WARNING", "tests/data/gff/gff3_happy3.gff", "invalid number of columns", "line 2", "Padded the missing columns"]
+
+    output_text = result.stdout + result.stderr
+    for part in expected_parts:
+        assert part in output_text, f"Expected '{part}' not found in output: {output_text}"
+
     with open(log_path, "r", encoding="utf-8") as f:
         log_contents = f.read()
-        assert test_message in log_contents
+        for part in expected_parts:
+            assert part in log_contents, f"Expected '{part}' not found in log file: {log_contents}"
