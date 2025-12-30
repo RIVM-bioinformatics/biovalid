@@ -1,3 +1,4 @@
+import gc
 import logging
 import subprocess
 from pathlib import Path
@@ -17,6 +18,7 @@ def log_path() -> Generator[Path, None, None]:
     test_log_path = Path("tests/data/test_log.log")
     yield test_log_path
     if test_log_path.exists():
+        gc.collect()  # Ensure all file handles are released, causing issues on Windows
         test_log_path.unlink()
 
 
@@ -45,6 +47,14 @@ def test_logger_initialization(log_path: Path, capsys: pytest.CaptureFixture[str
         log_contents = f.read()
         assert test_message in log_contents
 
+    # Explicitly close file handlers to prevent Windows file locking issues
+    for handler in logger.handlers:
+        if hasattr(handler, "close"):
+            handler.close()
+
+    # Remove handlers to ensure clean state
+    logger.handlers.clear()
+
 
 def test_cli_log_functionality(
     log_path: Path,  # pylint: disable=redefined-outer-name
@@ -64,7 +74,6 @@ def test_cli_log_functionality(
         str(log_path),
         "--verbose",
     ]
-    print(log_path.resolve().absolute())
     result = subprocess.run(subprocess_args, capture_output=True, text=True, check=True)
     test_message = "biovalid - WARNING - File tests/data/gff/gff3_happy3.gff contains an invalid number of columns in line 2. Padded the missing columns with placeholders."
     assert test_message in result.stdout or test_message in result.stderr
