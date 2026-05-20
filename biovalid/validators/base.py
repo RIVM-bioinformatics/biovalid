@@ -10,7 +10,7 @@ import os
 from logging import Logger
 from pathlib import Path
 
-from biovalid.logger import log_function, setup_logging
+from biovalid.logger import setup_logging
 
 
 class BaseValidator:
