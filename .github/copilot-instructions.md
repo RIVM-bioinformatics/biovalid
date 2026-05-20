@@ -18,7 +18,7 @@ Biovalid is a lightweight Python library for validating bioinformatics files (FA
 
 ### Error Handling Philosophy
 - Uses logging levels for validation results: ERROR (40) = validation failure
-- `log_function()` in `logger.py` raises `RuntimeError` on ERROR level
+- logger.error() in `logger.py` raises `RuntimeError` on ERROR level
 - Bool mode catches exceptions to return True/False instead of raising
 
 ## Key Patterns
