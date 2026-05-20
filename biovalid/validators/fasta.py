@@ -13,10 +13,7 @@ from biovalid.validators.base import BaseValidator
 class FastaValidator(BaseValidator):
     def _check_first_char(self, byte: int, filename: Path) -> None:
         if byte != ord(">"):
-            self.log(
-                40,
-                f"File {filename} contains an invalid first character: {chr(byte)}. This must be '>'.",
-            )
+            self.logger.error("File %s contains an invalid first character: %s. This must be '>'.", filename, chr(byte))
 
     def _handle_newline(
         self,
@@ -28,33 +25,21 @@ class FastaValidator(BaseValidator):
         filename: Path,
     ) -> bool:
         if is_line_empty:
-            self.log(40, f"File {filename} contains an empty line at line {line_num}")
+            self.logger.error("File %s contains an empty line at line %d", filename, line_num)
 
         if is_header and not is_header_text:
-            self.log(
-                40,
-                f"File {filename} contains an empty header line at line {line_num}",
-            )
+            self.logger.error("File %s contains an empty header line at line %d", filename, line_num)
         if is_header and is_prev_line_header:
-            self.log(
-                40,
-                f"File {filename} contains consecutive header lines at line {line_num-1} and {line_num}",
-            )
+            self.logger.error("File %s contains consecutive header lines at line %d and %d", filename, line_num - 1, line_num)
         return is_header
 
     def _validate_header_byte(self, byte: int, filename: Path, line_num: int, pos_in_line: int) -> None:
         if not 32 <= byte <= 126:
-            self.log(
-                40,
-                f"File {filename} contains invalid character {chr(byte)} at line {line_num}, position {pos_in_line} in header",
-            )
+            self.logger.error("File %s contains invalid character %s at line %d, position %d in header", filename, chr(byte), line_num, pos_in_line)
 
     def _validate_sequence_byte(self, byte: int, filename: Path, line_num: int, pos_in_line: int) -> None:
         if not (ord("a") <= byte <= ord("z") or ord("A") <= byte <= ord("Z") or byte == ord("-") or byte == ord("*")):
-            self.log(
-                40,
-                f"File {filename} contains invalid character {chr(byte)} in sequence at line {line_num}, position {pos_in_line}",
-            )
+            self.logger.error("File %s contains invalid character %s in sequence at line %d, position %d", filename, chr(byte), line_num, pos_in_line)
 
     def validate(self) -> None:
         """
@@ -71,11 +56,11 @@ class FastaValidator(BaseValidator):
             filename (Path | str): Path to the FASTA file to validate.
 
         Raises:
-            ValueError: If any validation check fails, an error message will indicate the issue and its location in the file.
+            RuntimeError: If any validation check fails, an error message will indicate the issue and its location in the file.
 
         Example:
             >>> validate_fasta("example.fasta")
-            This will raise a ValueError if the file does not conform to FASTA format.
+            This will raise a RuntimeError if the file does not conform to FASTA format.
         """
         with open(self.filename, "rb") as f:
 

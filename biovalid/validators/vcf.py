@@ -8,7 +8,7 @@ It does not check the biological correctness of the variants.
 import re
 from string import ascii_letters
 
-from biovalid.util.vcf.vcf_models import (
+from biovalid.domain.vcf_models import (
     AltField,
     AltTypes,
     FilterField,
@@ -30,12 +30,14 @@ class VcfValidator(BaseValidator):
             # Read and process file sequentially
             first_line = vcf_file.readline()
             if not first_line:
-                self.log(40, "VCF file is empty")
+                self.logger.error("VCF file %s is empty", self.filename)
                 return
 
             if not self._check_first_line(first_line):
-                self.log(
-                    40, f"File does not start with a valid VCF header line: {first_line.strip()}. It should start with '##fileformat=VCFv[VERSION]'"
+                self.logger.error(
+                    "File %s does not start with a valid VCF header line: %s. It should start with '##fileformat=VCFv[VERSION]'",
+                    self.filename,
+                    first_line.strip(),
                 )
                 return
 
@@ -130,20 +132,24 @@ class VcfValidator(BaseValidator):
         """Validate top-level VCF headers (##)."""
         for line in headers:
             if not line.startswith("##"):
-                self.log(40, f"Invalid top-level header line: {line}")
+                self.logger.error(
+                    "File %s contains an invalid top-level header line: %s. All top-level headers should start with '##'", self.filename, line
+                )
 
     def validate_normal_header(self, normal_header: list[str]) -> None:
         """Validate the normal column header line (#CHROM ...)."""
         if not normal_header:
-            self.log(40, "VCF file missing required column header line (should start with single #)")
+            self.logger.error("VCF file %s is missing the required column header line (should start with single #)", self.filename)
 
         if len(normal_header) < 8:
-            self.log(40, f"VCF column header has fewer than 8 required columns: {normal_header}")
+            self.logger.error("VCF file %s column header has fewer than 8 required columns: %s", self.filename, normal_header)
 
         required_headers = [header.value for header in VCFHeaders][:8]
         for i, required_header in enumerate(required_headers):
             if normal_header[i].replace("#", "") != required_header:  # Remove leading # from #CHROM
-                self.log(40, f"VCF column header mismatch at position {i+1}: expected '{required_header}', got '{normal_header[i]}'")
+                self.logger.error(
+                    f"File %s has an invalid column header at position {i+1}: expected '{required_header}', got '{normal_header[i]}'", self.filename
+                )
 
     def _get_headers(self, normal_header: list[str]) -> list[str]:
         """Helper method to get the list of standard VCF headers."""
@@ -167,17 +173,29 @@ class VcfValidator(BaseValidator):
                 continue
 
             if data_row[0].startswith("#"):
-                self.log(40, f"Unexpected header line found at line {line_number}: {data_row}, outside of the header section.")
+                self.logger.error(
+                    f"File %s contains an unexpected header line at line {line_number}: {data_row}. Header lines should only be at the top of the file.",
+                    self.filename,
+                )
 
             if len(data_row) != column_count:
-                self.log(40, f"VCF data line {line_number} does not have the required {column_count} columns: {data_row}")
+                self.logger.error(
+                    f"File %s contains a data line with {len(data_row)} columns at line {line_number}, but {column_count} columns are expected: {data_row}",
+                    self.filename,
+                )
 
             clean_data_row = [col.strip() for col in data_row]
 
             if include_format and len(clean_data_row) < 9:
-                self.log(40, f"VCF data line {line_number} missing required columns: {data_row}")
+                self.logger.error(
+                    f"File %s contains a data line with fewer than 9 columns at line {line_number}: {data_row}",
+                    self.filename,
+                )
             elif not include_format and len(clean_data_row) < 8:
-                self.log(40, f"VCF data line {line_number} missing required columns: {data_row}")
+                self.logger.error(
+                    f"File %s contains a data line with fewer than 8 columns at line {line_number}: {data_row}",
+                    self.filename,
+                )
 
             # Validate each required column by index
             self.validate_chrom(clean_data_row[0], line_number)
@@ -200,10 +218,10 @@ class VcfValidator(BaseValidator):
         From the VCF specification: (String, no whitespace permitted, Required).
         """
         if not value:
-            self.log(40, f"VCF line {line_number}: CHROM column is empty")
+            self.logger.error("File %s contains an empty CHROM column at line %d", self.filename, line_number)
 
         if re.search(r"\s", value):  # "\s" matches any whitespace character
-            self.log(40, f"VCF line {line_number}: CHROM contains whitespace characters: '{value}'")
+            self.logger.error("File %s contains whitespace characters in CHROM column at line %d: '%s'", self.filename, line_number, value)
 
     def validate_pos(self, value: str, line_number: int) -> None:
         """
@@ -211,10 +229,16 @@ class VcfValidator(BaseValidator):
         From the VCF specification: (Integer, Required).
         """
         if not value:
-            self.log(40, f"VCF line {line_number}: POS column is empty")
+            self.logger.error("File %s contains an empty POS column at line %d", self.filename, line_number)
 
         if not value.isdigit():
-            self.log(40, f"VCF line {line_number}: POS must be an integer, got '{value}' which is type {type(value)}")
+            self.logger.error(
+                "File %s contains a non-integer value in POS column at line %d: '%s', which is type %s",
+                self.filename,
+                line_number,
+                value,
+                type(value),
+            )
 
     def validate_id(self, value: str, line_number: int) -> None:
         """
@@ -223,12 +247,12 @@ class VcfValidator(BaseValidator):
         ID can be '.' for missing, or semicolon-separated list of identifiers
         """
         if not value:
-            self.log(40, f"VCF line {line_number}: ID column is empty")
+            self.logger.error("File %s contains an empty ID column at line %d", self.filename, line_number)
 
         # Semicolon is not allowed within the values of the ID because it is used as the separator
         # We only check for whitespace here
         if re.search(r"\s", value):
-            self.log(40, f"VCF line {line_number}: ID contains whitespace: '{value}'")
+            self.logger.error("File %s contains whitespace characters in ID column at line %d: '%s'", self.filename, line_number, value)
 
     def validate_ref(self, value: str, line_number: int) -> None:
         """
@@ -238,7 +262,7 @@ class VcfValidator(BaseValidator):
         Not U, also no other IUPAC codes.
         """
         if not value:
-            self.log(40, f"VCF line {line_number}: REF column is empty")
+            self.logger.error("File %s contains an empty REF column at line %d", self.filename, line_number)
         if value == ".":
             return
 
@@ -253,9 +277,9 @@ class VcfValidator(BaseValidator):
             return
         if not [c for c in invalid_chars if c not in ascii_letters + "-" + "*"]:
             # Only ambiguous bases present
-            self.log(30, f"VCF line {line_number}: REF contains ambiguous bases: '{''.join(ambiguous_chars)}' in '{value}'")
+            self.logger.warning("File %s contains ambiguous bases in REF column at line %d: '%s'", self.filename, line_number, value)
         else:
-            self.log(40, f"VCF line {line_number}: REF contains invalid base(s): '{''.join(invalid_chars)}' in '{value}'")
+            self.logger.error("File %s contains invalid base(s) in REF column at line %d: '%s'", self.filename, line_number, value)
 
     def validate_alt(self, value: str, line_number: int) -> None:
         """
@@ -264,15 +288,15 @@ class VcfValidator(BaseValidator):
         Can be '.' for no alternate, or comma-separated alleles
         """
         if not value:
-            self.log(40, f"VCF line {line_number}: ALT column is empty")
+            self.logger.error("File %s contains an empty ALT column at line %d", self.filename, line_number)
         if value == ".":
             return
         alt_alleles = value.split(",")
         if len(alt_alleles) == 0:
-            self.log(40, f"VCF line {line_number}: ALT column has no alleles specified. It should be '.' or contain at least one allele.")
+            self.logger.error("File %s contains no alleles in ALT column at line %d", self.filename, line_number)
 
         if any(not allele for allele in alt_alleles):
-            self.log(40, f"VCF line {line_number}: ALT column contains empty alleles.")
+            self.logger.error("File %s contains empty alleles in ALT column at line %d", self.filename, line_number)
 
         invalid_chars: list[str] = []
         ambiguous_chars: list[str] = []
@@ -288,9 +312,9 @@ class VcfValidator(BaseValidator):
             return
         if not [c for c in invalid_chars if c not in ascii_letters + "-" + "*"]:
             # Only ambiguous bases present
-            self.log(30, f"VCF line {line_number}: ALT contains ambiguous bases: '{''.join(ambiguous_chars)}' in '{value}'")
+            self.logger.warning("File %s contains ambiguous bases in ALT column at line %d: '%s'", self.filename, line_number, value)
         else:
-            self.log(40, f"VCF line {line_number}: ALT contains invalid base(s): '{''.join(invalid_chars)}' in '{value}'")
+            self.logger.error("File %s contains invalid base(s) in ALT column at line %d: '%s'", self.filename, line_number, value)
 
     def validate_qual(self, value: str, line_number: int) -> None:
         """
@@ -299,18 +323,18 @@ class VcfValidator(BaseValidator):
         Phred-scaled quality score or '.' if unknown
         """
         if not value:
-            self.log(40, f"VCF line {line_number}: QUAL column is empty")
+            self.logger.error("File %s contains an empty QUAL column at line %d", self.filename, line_number)
         if value == ".":
             return
 
         # I really dont like using exceptions for control flow but float() is the only way that is this complete
         # think about nan, inf, -inf, 1e10, 1.5 etc.
         try:
-            float(value)
-            if float(value) < 0:
-                self.log(40, f"VCF line {line_number}: QUAL must be a positive numeric value, got '{value}'")
+            qual_value = float(value)
+            if qual_value < 0:
+                self.logger.error("File %s contains a negative QUAL value at line %d: '%s'", self.filename, line_number, value)
         except ValueError:
-            self.log(40, f"VCF line {line_number}: QUAL must be a positive numeric value, got '{value}'")
+            self.logger.error("File %s contains a non-numeric QUAL value at line %d: '%s'", self.filename, line_number, value)
 
     def validate_filter(self, value: str, line_number: int, filter_fields: dict[str, FilterField]) -> None:
         """
@@ -318,16 +342,18 @@ class VcfValidator(BaseValidator):
         From the VCF specification: (String; no whitespace or semicolons permitted in the ID String itself).
         """
         if not value:
-            self.log(40, f"VCF line {line_number}: FILTER column is empty")
+            self.logger.error("File %s contains an empty FILTER column at line %d", self.filename, line_number)
 
         valid_filters = set(filter_fields.keys()).union({"PASS", "."})
         filters = value.split(";")
         for filt in filters:
             filt = filt.strip()
             if filt not in valid_filters:
-                self.log(
-                    40,
-                    f"VCF line {line_number}: FILTER contains unknown filter '{filt}'. All filters must be defined in the header or be 'PASS' or '.'",
+                self.logger.error(
+                    "File %s contains unknown filter '%s' in FILTER column at line %d. All filters must be defined in the header or be 'PASS' or '.'",
+                    self.filename,
+                    filt,
+                    line_number,
                 )
 
     def validate_info(self, value: str, line_number: int, info_fields: dict[str, InfoField]) -> None:
@@ -338,9 +364,9 @@ class VcfValidator(BaseValidator):
         """
 
         if not value:
-            self.log(40, f"VCF line {line_number}: INFO column is empty")
+            self.logger.error("File %s contains an empty INFO column at line %d", self.filename, line_number)
         if value == "." and info_fields:
-            self.log(40, f"VCF line {line_number}: INFO column is '.' but INFO fields are defined in the header")
+            self.logger.error("File %s contains '.' in INFO column at line %d but INFO fields are defined in the header", self.filename, line_number)
         valid_info_keys = set(info_fields.keys()).union({"."})
         items = value.split(";")
         for item in items:
@@ -351,11 +377,21 @@ class VcfValidator(BaseValidator):
                 key, _ = item.split("=", 1)
                 key = key.strip()
                 if key not in valid_info_keys:
-                    self.log(40, f"VCF line {line_number}: INFO contains unknown key '{key}'. All INFO keys must be defined in the header or be '.'")
+                    self.logger.error(
+                        "File %s contains unknown key '%s' in INFO column at line %d. All INFO keys must be defined in the header or be '.'",
+                        self.filename,
+                        key,
+                        line_number,
+                    )
             else:
                 key = item.strip()
                 if key not in valid_info_keys:
-                    self.log(40, f"VCF line {line_number}: INFO contains unknown flag '{key}'. All INFO keys must be defined in the header or be '.'")
+                    self.logger.error(
+                        "File %s contains unknown flag '%s' in INFO column at line %d. All INFO keys must be defined in the header or be '.'",
+                        self.filename,
+                        key,
+                        line_number,
+                    )
 
     def validate_format(self, value: str, line_number: int, format_fields: dict[str, FormatField]) -> None:
         """
@@ -363,16 +399,21 @@ class VcfValidator(BaseValidator):
         From the VCF specification: (colon-separated alphanumeric String).
         """
         if not value:
-            self.log(40, f"VCF line {line_number}: FORMAT column is empty")
+            self.logger.error("File %s contains an empty FORMAT column at line %d", self.filename, line_number)
         valid_format_keys = set(format_fields.keys())
         format_keys = value.split(":")
         for key in format_keys:
             key = key.strip()
             if key not in valid_format_keys:
-                self.log(40, f"VCF line {line_number}: FORMAT contains unknown key '{key}'. All FORMAT keys must be defined in the header.")
+                self.logger.error(
+                    "File %s contains unknown key '%s' in FORMAT column at line %d. All FORMAT keys must be defined in the header.",
+                    self.filename,
+                    key,
+                    line_number,
+                )
 
     def validate_sample_columns(self, values: list[str], line_number: int) -> None:
         """Validate sample data columns."""
         for i, value in enumerate(values):
             if not value:
-                self.log(40, f"VCF line {line_number}: Sample column {i+1} is empty")
+                self.logger.error("File %s contains an empty sample column at line %d, column %d", self.filename, line_number, i + 1)

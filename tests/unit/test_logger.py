@@ -38,7 +38,7 @@ def test_logger_initialization(log_path: Path, capsys: pytest.CaptureFixture[str
         handler.flush()
 
     test_message = "This is a test log message."
-    validator.log(logging.INFO, test_message)
+    validator.logger.info(test_message)
 
     captured = capsys.readouterr()
     assert test_message in captured.err

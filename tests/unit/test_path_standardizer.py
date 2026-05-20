@@ -62,16 +62,16 @@ def test_convert_file_paths_to_paths() -> None:
 
     # bad input
     # type errors are ignored because we are testing invalid input
-    with pytest.raises(ValueError):
+    with pytest.raises(RuntimeError):
         validator.convert_file_paths_to_paths([file1.as_posix(), file3, 123], recursive=False)  # type: ignore
 
-    with pytest.raises(ValueError):
+    with pytest.raises(RuntimeError):
         validator.convert_file_paths_to_paths(123, recursive=False)  # type: ignore
 
-    with pytest.raises(ValueError):
+    with pytest.raises(RuntimeError):
         validator.convert_file_paths_to_paths([123, 456], recursive=False)  # type: ignore
 
-    with pytest.raises(ValueError):
+    with pytest.raises(RuntimeError):
         validator.convert_file_paths_to_paths([file1.as_posix(), "bad_path"], recursive=False)
 
     temp_dir.cleanup()

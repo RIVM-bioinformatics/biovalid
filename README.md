@@ -3,24 +3,23 @@
     <br />
     <h2>Quick validation of bioinformatics files</h2>
     <br />
-    <img src="https://via.placeholder.com/150" alt="pipeline logo">
 </div>
 
 ## Pipeline information
 * **Author(s):**            Gino Raaijmakers
 * **Organization:**         Rijksinstituut voor Volksgezondheid en Milieu (RIVM)
-* **Department:**           Infektieziekteonderzoek, Diagnostiek en Laboratorium Surveillance (IDS), Informatiebeheer (IBR)
+* **Department:**           Infectieziekteonderzoek, Diagnostiek en Laboratorium Surveillance (IDS), Informatiebeheer (IBR)
 * **Start date:**           23 - 07 - 2025
 
 ## About this project
-**Biovalid** is a lightweight Python library and CLI tool for fast, robust validation of bioinformatics files such as BAM, FASTA, and FASTQ. It checks file integrity, headers, and format compliance, helping users catch common issues before downstream analysis.
+**Biovalid** is a lightweight Python library and CLI tool for fast, robust validation of bioinformatics files such as BAM, FASTA, and GFF. It checks file integrity, headers, and format compliance, helping users catch common issues before downstream analysis.
 
 
 ---
 
 ## Features
 
-- **File Format Support**: Validate BAM, FASTA, and FASTQ files.
+- **File Format Support**: Validate BAM/BAI, FASTA/FASTQ, VCF and GFF files.
 - **Lightweight**: No dependencies.
 - **Dual Usage**: Use as a CLI tool or import as a Python library.
 - **Customizable**: Enable verbose logging, save logs to a file, or return boolean results.
@@ -68,8 +67,8 @@ python3 -m biovalid -i /path/to/file.bam
 ```python
 from biovalid import BioValidator
 
-validator = BioValidator(file_paths="/path/to/file.bam", verbose=True)
-validator.validate_files()
+validator = BioValidator(verbose=True)
+validator.validate_files("path/to/file")
 ```
 ---
 
@@ -82,7 +81,7 @@ validator.validate_files()
 ---
 
 ## Future ideas
-* Add support for more file formats (e.g., VCF, GFF).
+* Add support for more file formats (e.g., SAM, Phylip, genbank).
 * Improve error messages and reporting.
 * Make the tool more user-friendly for external users.
 

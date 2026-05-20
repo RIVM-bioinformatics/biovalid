@@ -2,8 +2,8 @@ from pathlib import Path
 from typing import Type
 
 from biovalid.arg_parser import cli_parser
-from biovalid.enum import FileType
-from biovalid.logger import log_function, setup_logging
+from biovalid.domain.enum import FileType
+from biovalid.logger import setup_logging
 from biovalid.validators import (
     BaiValidator,
     BamValidator,
@@ -26,9 +26,9 @@ class BioValidator:
         if isinstance(file_paths, (str, Path)):
             file_paths = [file_paths]
         elif not isinstance(file_paths, list):  # pyright: ignore[reportUnnecessaryIsInstance]
-            raise ValueError("file_paths must be a string, Path, or list of strings/Paths")
+            raise RuntimeError("file_paths must be a string, Path, or list of strings/Paths")
         elif any(not isinstance(fp, (str, Path)) for fp in file_paths):  # pyright: ignore[reportUnnecessaryIsInstance]
-            raise ValueError("All elements in file_paths list must be strings or Path objects")
+            raise RuntimeError("All elements in file_paths list must be strings or Path objects")
         files: list[Path] = []
         dirs: list[Path] = []
         for fp in file_paths:
@@ -38,7 +38,7 @@ class BioValidator:
             elif p.is_dir():
                 dirs.append(p)
             else:
-                raise ValueError(f"Path {p} is neither a file nor a directory.")
+                raise RuntimeError(f"Path {p} is neither a file nor a directory.")
         # now handle directories
         for d in dirs:
             if recursive:
@@ -56,10 +56,10 @@ class BioValidator:
         bool_mode: bool = False,
         verbose: bool = False,
         log_file: Path | str | None = None,
-        version: bool = False,
+        display_version: bool = False,
     ) -> None:
-        """Initialize the BioValidator with file paths and optional arguments."""
-        if version:
+        """Initialize the BioValidator with arguments."""
+        if display_version:
             print(f"BioValidator version {__version__}")
             return
 
@@ -67,10 +67,6 @@ class BioValidator:
         self.verbose = verbose
         self.log_file = log_file
         self.logger = setup_logging(self.verbose, self.log_file)
-
-    def log(self, level: int, message: str) -> None:
-        """Log a message with the specified severity level."""
-        log_function(self.logger, level, message)
 
     def pick_validator(self, file_path: Path) -> Type[BaseValidator]:
         """Pick the appropriate validator based on the file extension."""
@@ -101,9 +97,9 @@ class BioValidator:
                     validator.general_validation()
                     if validator_class != BaseValidator:
                         validator.validate()
-                self.log(20, "All files validated successfully.")
-            except ValueError as e:
-                self.log(20, f"Validation failed: {e}")
+                self.logger.info("All files validated successfully.")
+            except RuntimeError as e:
+                self.logger.error("Validation failed: %s", e)
                 raise e
 
         try:
@@ -113,9 +109,8 @@ class BioValidator:
                 validator.general_validation()
                 if validator_class != BaseValidator:
                     validator.validate()
-            self.log(20, "All files validated successfully.")
-        except ValueError:
-            self.log(20, "Validation failed.")
+            self.logger.info("All files validated successfully.")
+        except RuntimeError:
             return False
         return True
 

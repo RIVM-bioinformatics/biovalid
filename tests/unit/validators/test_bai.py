@@ -18,7 +18,7 @@ def test_wrong_magic_number() -> None:
     """Test that a BAI file with wrong magic number raises validation error."""
     validator = BaiValidator(wrong_magic_bai_path)
 
-    with pytest.raises(ValueError, match="is not a valid BAI file, the magic number is incorrect"):
+    with pytest.raises(RuntimeError, match="is not a valid BAI file, the magic number is incorrect"):
         validator.validate()
 
 
@@ -29,7 +29,7 @@ def test_empty_file(tmp_path: Path) -> None:
 
     validator = BaiValidator(empty_bai)
 
-    with pytest.raises(ValueError, match="is not a valid BAI file, the magic number is incorrect"):
+    with pytest.raises(RuntimeError, match="is not a valid BAI file, the magic number is incorrect"):
         validator.validate()
 
 
@@ -40,5 +40,5 @@ def test_invalid_file_content(tmp_path: Path) -> None:
 
     validator = BaiValidator(invalid_bai)
 
-    with pytest.raises(ValueError, match="is not a valid BAI file, the magic number is incorrect"):
+    with pytest.raises(RuntimeError, match="is not a valid BAI file, the magic number is incorrect"):
         validator.validate()

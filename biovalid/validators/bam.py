@@ -10,7 +10,7 @@ import gzip
 import struct
 from pathlib import Path
 
-from biovalid.enum import MagicBytes
+from biovalid.domain.enum import MagicBytes
 from biovalid.validators.base import BaseValidator
 
 
@@ -46,22 +46,13 @@ class BamValidator(BaseValidator):
             file_magic_num = bam_file.read(4)
         is_compressed = file_magic_num == MagicBytes.BGZF.value
         if not is_compressed:
-            self.log(
-                40,
-                f"File {self.filename} is not compressed with BGZF, it may still be a valid BAM file, but it is probably truncated.",
-            )
+            self.logger.error("File %s is not compressed with BGZF, it may still be a valid BAM file, but it is probably truncated.", self.filename)
 
         # gzip.decompress needs the entire BGZF block,
         # but we only know if it is compressed after reading the first 4 bytes
         # so we have to open it twice if we want to accept non-compressed BAM files
         magic_num, eof_marker = self._first_and_last_uncompressed_bgzf_bytes(self.filename)
         if magic_num != MagicBytes.BAM.value:
-            self.log(
-                40,
-                f"File {self.filename} is not a valid BAM file, the magic number is incorrect: {magic_num!r}",
-            )
+            self.logger.error("File %s is not a valid BAM file, the magic number is incorrect: %s", self.filename, magic_num)
         if eof_marker != MagicBytes.BGZF_EOF.value:
-            self.log(
-                40,
-                f"File {self.filename} is not a valid BAM file, the EOF marker is incorrect: {eof_marker!r}",
-            )
+            self.logger.error("File %s is not a valid BAM file, the EOF marker is incorrect: %s", self.filename, eof_marker)

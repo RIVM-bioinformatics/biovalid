@@ -20,7 +20,7 @@ class CompressionType(Enum):
         for compression_type in cls:
             if ext == compression_type.value:
                 return compression_type
-        raise ValueError(f"Unknown compression type for extension: {ext}")
+        raise RuntimeError(f"Unknown compression type for extension: {ext}")
 
 
 class FileType(Enum):
@@ -38,7 +38,6 @@ class FileType(Enum):
     GENBANK = [".gb", ".gbk", ".genbank"]
     PDB = [".pdb"]
     UNKNOWN = ["UNKNOWN"]
-    # normally you dont add annotations to enums, but mypy complains otherwise
 
     @classmethod
     def is_compressed(cls, path: Path) -> bool:
@@ -68,3 +67,43 @@ class MagicBytes(Enum):
     BGZF = b"\x1f\x8b\x08\x04"
     BGZF_EOF = b"\x1f\x8b\x08\x04\x00\x00\x00\x00\x00\xff\x06\x00\x42\x43\x02\x00\x1b\x00\x03\x00\x00\x00\x00\x00\x00\x00\x00\x00"
     BAI = b"BAI\x01"
+
+
+class Attributes(Enum):
+    """Standard GFF3 attribute keys."""
+
+    ID = "ID"
+    NAME = "Name"
+    ALIAS = "Alias"
+    PARENT = "Parent"
+    TARGET = "Target"
+    GAP = "Gap"
+    DERIVED_FROM = "Derives_from"
+    NOTE = "Note"
+    DBXREF = "Dbxref"
+    ONTOLOGY_TERM = "Ontology_term"
+    IS_CIRCULAR = "Is_circular"
+
+
+class GffColumns(Enum):
+    """Standard GFF3 column indices."""
+
+    SEQID = 0
+    SOURCE = 1
+    TYPE = 2
+    START = 3
+    END = 4
+    SCORE = 5
+    STRAND = 6
+    PHASE = 7
+    ATTRIBUTES = 8
+
+    @classmethod
+    def to_list(cls) -> list[str]:
+        """Returns a list of column names."""
+        return [member.name for member in cls]
+
+    @classmethod
+    def number_of_columns(cls) -> int:
+        """Returns the number of GFF columns."""
+        return len(cls)
