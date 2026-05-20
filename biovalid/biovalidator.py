@@ -68,6 +68,10 @@ class BioValidator:
         self.log_file = log_file
         self.logger = setup_logging(self.verbose, self.log_file)
 
+    def log(self, level: int, message: str) -> None:
+        """Log a message with the specified severity level."""
+        log_function(self.logger, level, message)
+
     def pick_validator(self, file_path: Path) -> Type[BaseValidator]:
         """Pick the appropriate validator based on the file extension."""
         file_type = FileType.from_path(file_path)

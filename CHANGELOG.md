@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0](https://github.com/RIVM-bioinformatics/biovalid/compare/biovalid-v0.3.0...biovalid-v0.4.0) (2025-12-30)
+
+
+### Features
+
+* add VCF validation and improve testing ([057962e](https://github.com/RIVM-bioinformatics/biovalid/commit/057962e862be98534b60b0d1078a461f251937af))
+
 ## [0.3.0](https://github.com/RIVM-bioinformatics/biovalid/compare/biovalid-v0.2.0...biovalid-v0.3.0) (2025-09-03)
 
 
