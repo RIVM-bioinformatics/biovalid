@@ -22,9 +22,10 @@ class FastqValidator(BaseValidator):
                 quality = f.readline()
 
                 if not sequence or not quality or not plus_line:
-                    self.log(
-                        40,
-                        f"File {self.filename} contains an incomplete FASTQ record at line {line_num}",
+                    self.logger.error(
+                        "File %s contains an incomplete FASTQ record at line %d. Each record must consist of 4 lines: header, sequence, plus line, and quality.",
+                        self.filename,
+                        line_num,
                     )
 
                 # dont strip at once because it might throw an error if a line is empty (e.g. last line)
@@ -34,32 +35,39 @@ class FastqValidator(BaseValidator):
                 quality = quality.strip()
 
                 if not header.startswith("@"):
-                    self.log(
-                        40,
-                        f"File {self.filename} contains an invalid header line at line {line_num + 1}: {header}",
+                    self.logger.error(
+                        "File %s contains an invalid header line at line %d: %s. This must start with '@'.", self.filename, line_num + 1, header
                     )
 
                 if not all(c in "ACGTNacgtn-.*" for c in sequence):
-                    self.log(
-                        40,
-                        f"File {self.filename} contains invalid characters in sequence line at line {line_num + 2}: {sequence}",
+                    self.logger.error(
+                        "File %s contains invalid characters in sequence line at line %d: %s. Valid characters are ACGTNacgtn-.*",
+                        self.filename,
+                        line_num + 2,
+                        sequence,
                     )
 
                 if plus_line != "+":
-                    self.log(
-                        40,
-                        f"File {self.filename} contains an invalid plus line at line {line_num + 3}: {plus_line}",
+                    self.logger.error(
+                        "File %s contains an invalid plus line at line %d: %s. This must be a single '+' character.",
+                        self.filename,
+                        line_num + 3,
+                        plus_line,
                     )
 
                 if len(quality) != len(sequence):
-                    self.log(
-                        40,
-                        f"File {self.filename} contains an invalid quality line length at line {line_num + 4}: {quality}",
+                    self.logger.error(
+                        "File %s contains an invalid quality line length at line %d: %s. The quality line must have the same length as the sequence line.",
+                        self.filename,
+                        line_num + 4,
+                        quality,
                     )
 
                 if not all(33 <= ord(c) <= 126 for c in quality):
-                    self.log(
-                        40,
-                        f"File {self.filename} contains invalid characters in quality line at line {line_num + 4}: {quality}",
+                    self.logger.error(
+                        "File %s contains invalid characters in quality line at line %d: %s. Valid characters are ASCII 33 to 126.",
+                        self.filename,
+                        line_num + 4,
+                        quality,
                     )
                 line_num += 4

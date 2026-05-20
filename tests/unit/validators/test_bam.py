@@ -18,7 +18,7 @@ def test_uncompressed_bam() -> None:
     """Test that an uncompressed BAM file raises validation error."""
     validator = BamValidator(uncompressed_bam_path)
 
-    with pytest.raises(ValueError, match="is not compressed with BGZF"):
+    with pytest.raises(RuntimeError, match="is not compressed with BGZF"):
         validator.validate()
 
 
@@ -30,7 +30,7 @@ def test_invalid_magic_number(tmp_path: Path) -> None:
 
     validator = BamValidator(invalid_bam)
 
-    with pytest.raises(ValueError, match="is not compressed with BGZF"):
+    with pytest.raises(RuntimeError, match="is not compressed with BGZF"):
         validator.validate()
 
 
@@ -41,5 +41,5 @@ def test_empty_file(tmp_path: Path) -> None:
 
     validator = BamValidator(empty_bam)
 
-    with pytest.raises(ValueError, match="is not compressed with BGZF"):
+    with pytest.raises(RuntimeError, match="is not compressed with BGZF"):
         validator.validate()

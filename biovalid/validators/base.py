@@ -10,7 +10,7 @@ import os
 from logging import Logger
 from pathlib import Path
 
-from biovalid.logger import log_function, setup_logging
+from biovalid.logger import setup_logging
 
 
 class BaseValidator:
@@ -33,30 +33,23 @@ class BaseValidator:
         else:
             self.logger = logger
 
-    def log(self, level: int, message: str) -> None:
-        """Log a message with the specified severity level."""
-        log_function(self.logger, level, message)
-
     def general_validation(self) -> None:
         """
         Checks the following conditions for a file:
         1. The file exists.
         2. The file is not empty.
         3. The file is readable.
-        Args:
-            file_path (Path): Path to the file to validate.
-        Raises:
-            ValueError: If the file does not exist, is empty, or is not readable.
+        If any of these conditions are not met, an error message is logged indicating the specific issue with the file.
         """
 
         if not self.filename.exists():
-            self.log(40, f"File {self.filename} does not exist.")
+            self.logger.error("File %s does not exist.", self.filename)
         if not self.filename.is_file():
-            self.log(40, f"Path {self.filename} is not a file.")
+            self.logger.error("Path %s is not a file.", self.filename)
         if self.filename.stat().st_size == 0:
-            self.log(40, f"File {self.filename} is empty.")
+            self.logger.error("File %s is empty.", self.filename)
         if not os.access(self.filename, os.R_OK):
-            self.log(40, f"File {self.filename} is not readable.")
+            self.logger.error("File %s is not readable.", self.filename)
 
     def validate(self) -> None:
         """

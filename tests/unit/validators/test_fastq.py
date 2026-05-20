@@ -29,7 +29,7 @@ def test_incomplete_record(tmp_path: Path) -> None:
 
     validator = FastqValidator(incomplete_fastq)
 
-    with pytest.raises(ValueError, match="contains an incomplete FASTQ record"):
+    with pytest.raises(RuntimeError, match="contains an incomplete FASTQ record"):
         validator.validate()
 
 
@@ -40,7 +40,7 @@ def test_invalid_header(tmp_path: Path) -> None:
 
     validator = FastqValidator(invalid_header_fastq)
 
-    with pytest.raises(ValueError, match="contains an invalid header line"):
+    with pytest.raises(RuntimeError, match="contains an invalid header line"):
         validator.validate()
 
 
@@ -51,7 +51,7 @@ def test_invalid_sequence_characters(tmp_path: Path) -> None:
 
     validator = FastqValidator(invalid_seq_fastq)
 
-    with pytest.raises(ValueError, match="contains invalid characters in sequence line"):
+    with pytest.raises(RuntimeError, match="contains invalid characters in sequence line"):
         validator.validate()
 
 
@@ -62,7 +62,7 @@ def test_invalid_plus_line(tmp_path: Path) -> None:
 
     validator = FastqValidator(invalid_plus_fastq)
 
-    with pytest.raises(ValueError, match="contains an invalid plus line"):
+    with pytest.raises(RuntimeError, match="contains an invalid plus line"):
         validator.validate()
 
 
@@ -73,7 +73,7 @@ def test_quality_length_mismatch(tmp_path: Path) -> None:
 
     validator = FastqValidator(quality_mismatch_fastq)
 
-    with pytest.raises(ValueError, match="contains an invalid quality line length"):
+    with pytest.raises(RuntimeError, match="contains an invalid quality line length"):
         validator.validate()
 
 
@@ -85,5 +85,5 @@ def test_invalid_quality_characters(tmp_path: Path) -> None:
 
     validator = FastqValidator(invalid_qual_fastq)
 
-    with pytest.raises(ValueError, match="contains invalid characters in quality line"):
+    with pytest.raises(RuntimeError, match="contains invalid characters in quality line"):
         validator.validate()

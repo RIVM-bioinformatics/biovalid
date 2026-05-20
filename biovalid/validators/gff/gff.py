@@ -6,51 +6,11 @@ It does not check the biological correctness of the annotation.
 """
 
 import re
-from enum import Enum
 
-from biovalid.util.gff.legacy_so_mapping import deprecated_so_mapping
-from biovalid.util.gff.obo_parser import get_valid_types
+from biovalid.domain.enum import GffColumns
 from biovalid.validators.base import BaseValidator
-
-
-class GffColumns(Enum):
-    """Standard GFF3 column indices."""
-
-    SEQID = 0
-    SOURCE = 1
-    TYPE = 2
-    START = 3
-    END = 4
-    SCORE = 5
-    STRAND = 6
-    PHASE = 7
-    ATTRIBUTES = 8
-
-    @classmethod
-    def to_list(cls) -> list[str]:
-        """Returns a list of column names."""
-        return [member.name for member in cls]
-
-    @classmethod
-    def number_of_columns(cls) -> int:
-        """Returns the number of GFF columns."""
-        return len(cls)
-
-
-class Attributes(Enum):
-    """Standard GFF3 attribute keys."""
-
-    ID = "ID"
-    NAME = "Name"
-    ALIAS = "Alias"
-    PARENT = "Parent"
-    TARGET = "Target"
-    GAP = "Gap"
-    DERIVED_FROM = "Derives_from"
-    NOTE = "Note"
-    DBXREF = "Dbxref"
-    ONTOLOGY_TERM = "Ontology_term"
-    IS_CIRCULAR = "Is_circular"
+from biovalid.validators.gff.legacy_so_mapping import deprecated_so_mapping
+from biovalid.validators.gff.obo_parser import get_valid_types
 
 
 class GffValidator(BaseValidator):
@@ -71,10 +31,10 @@ class GffValidator(BaseValidator):
 
         for i, line in enumerate(lines[first_data_idx:], start=first_data_idx):
             if line.startswith("#"):
-                self.log(40, f"Header line found after data has started at line {i+1}")
+                self.logger.error("Header line found after data has started at line %d", i + 1)
 
         if not any("gff-version" in line for line in lines[:first_data_idx]):
-            self.log(40, "Missing required GFF version declaration")
+            self.logger.error("Missing required GFF version declaration")
 
     def _check_data_lines(self, lines: list[str]) -> None:
         data_lines = [line for line in lines if not line.startswith("#")]
@@ -83,15 +43,18 @@ class GffValidator(BaseValidator):
             columns = line.strip().split("\t")
             if len(columns) < GffColumns.number_of_columns():
                 columns += ["."] * (GffColumns.number_of_columns() - len(columns))
-                self.log(
-                    30,
-                    f"File {self.filename} contains an invalid number of columns in line {i+1}. Padded the missing columns with placeholders.",
+                self.logger.warning(
+                    "File %s contains an invalid number of columns in line %d. Padded the missing columns with placeholders.",
+                    self.filename,
+                    i + 1,
                 )
             elif len(columns) > GffColumns.number_of_columns():
-                self.log(
-                    40,
-                    f"File {self.filename} contains an invalid number of columns in line {i+1}:"
-                    f" {line.strip()}, it should be 9: {GffColumns.to_list()}",
+                self.logger.error(
+                    "File %s contains an invalid number of columns in line %d: %s, it should be 9: %s",
+                    self.filename,
+                    i + 1,
+                    line.strip(),
+                    GffColumns.to_list(),
                 )
 
             self.validate_columns(columns)
@@ -112,9 +75,11 @@ class GffValidator(BaseValidator):
         """seqid must be in: [a-zA-Z0-9.:^*$@!+_?-|]"""
         pattern = r"^[a-zA-Z0-9.:^*$@!+_?-|]+$"
         if not re.match(pattern, seqid.strip()):
-            self.log(
-                40,
-                f"File {self.filename} contains an invalid seqid: {seqid}. Seqid must match the pattern: {pattern}",
+            self.logger.error(
+                "File %s contains an invalid seqid: %s. Seqid must match the pattern: %s",
+                self.filename,
+                seqid,
+                pattern,
             )
 
     def _check_type(self, feature_type: str, valid_types: list[str]) -> None:
@@ -145,14 +110,16 @@ class GffValidator(BaseValidator):
         if lwr_feature_type in deprecated_so_mapping:
             replacement = deprecated_so_mapping[lwr_feature_type]["replacement"]
             assert isinstance(replacement, dict)
-            self.log(
-                30,
-                f"File {self.filename} contains a deprecated SO term: {feature_type}. "
-                f"Consider replacing with '{replacement['so_name']}' ({replacement['so_id']}).",
+            self.logger.warning(
+                "File %s contains a deprecated SO term: %s. Consider replacing with '%s' (%s).",
+                self.filename,
+                feature_type,
+                replacement["so_name"],
+                replacement["so_id"],
             )
             return
 
-        self.log(40, f"File {self.filename} contains an invalid type: {feature_type}")
+        self.logger.error("File %s contains an invalid type: %s", self.filename, feature_type)
 
     def _check_start_end(self, start: str, end: str) -> None:
         """
@@ -163,19 +130,23 @@ class GffValidator(BaseValidator):
         start = start.strip()
         end = end.strip()
         if not start.isdigit():
-            self.log(
-                40,
-                f"File {self.filename} contains an invalid start: {start}. Start must be a non-negative integer.",
+            self.logger.error(
+                "File %s contains an invalid start: %s. Start must be a non-negative integer.",
+                self.filename,
+                start,
             )
         if not end.isdigit():
-            self.log(
-                40,
-                f"File {self.filename} contains an invalid end: {end}. End must be a non-negative integer.",
+            self.logger.error(
+                "File %s contains an invalid end: %s. End must be a non-negative integer.",
+                self.filename,
+                end,
             )
         if int(start) > int(end):
-            self.log(
-                40,
-                f"File {self.filename} contains an invalid start-end range: {start} > {end}. Start must be less than or equal to end.",
+            self.logger.error(
+                "File %s contains an invalid start-end range: %s > %s. Start must be less than or equal to end.",
+                self.filename,
+                start,
+                end,
             )
 
     def _is_float(self, s: str) -> bool:
@@ -189,18 +160,20 @@ class GffValidator(BaseValidator):
     def _check_score(self, score: str) -> None:
         """score must be a float or '.'"""
         if not self._is_float(score) and score.strip() != ".":
-            self.log(
-                40,
-                f"File {self.filename} contains an invalid score: {score}. Score must be a float value or a .",
+            self.logger.error(
+                "File %s contains an invalid score: %s. Score must be a float value or a .",
+                self.filename,
+                score,
             )
 
     def _check_strand(self, strand: str) -> None:
         """strand must be one of: +, -, ., ?"""
         strand = strand.strip()
         if strand not in {"+", "-", ".", "?"}:
-            self.log(
-                40,
-                f"File {self.filename} contains an invalid strand: {strand}. Strand must be one of: +, -, ., ?",
+            self.logger.error(
+                "File %s contains an invalid strand: %s. Strand must be one of: +, -, ., ?",
+                self.filename,
+                strand,
             )
 
     def _check_phase(self, phase: str, feature_type: str) -> None:
@@ -211,20 +184,21 @@ class GffValidator(BaseValidator):
         """
         if feature_type == "CDS":
             if not phase:
-                self.log(
-                    40,
-                    f"File {self.filename} contains no phase in a CDS feature. This is required for CDS features.",
+                self.logger.error(
+                    "File %s contains no phase in a CDS feature. This is required for CDS features.",
+                    self.filename,
                 )
             if phase not in {"0", "1", "2"}:
-                self.log(
-                    40,
-                    f"File {self.filename} contains an invalid phase for CDS: {phase}. Phases must be one of: 0, 1, 2.",
+                self.logger.error(
+                    "File %s contains an invalid phase for CDS: %s. Phases must be one of: 0, 1, 2.",
+                    self.filename,
+                    phase,
                 )
 
     def _check_attributes(self, attributes: str) -> None:
         """attributes must be a valid GFF attribute string."""
         if not attributes:
-            self.log(
-                40,
-                f"File {self.filename} does not contain attributes. Attributes are required.",
+            self.logger.error(
+                "File %s does not contain attributes. Attributes are required.",
+                self.filename,
             )

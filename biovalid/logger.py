@@ -7,9 +7,17 @@ It is intended to be used by both CLI and library users to ensure consistent log
 
 import logging
 from pathlib import Path
+from typing import Any
 
 FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 DATEFMT = "%Y-%m-%d %H:%M:%S"
+
+
+# I need to raise an Exception anyway, so I might as well raise it in the logger to ensure that all errors are logged before being raised.
+class RaisingLogger(logging.Logger):
+    def error(self, msg: Any, *args: object, **kwargs: Any) -> None:
+        super().error(msg, *args, **kwargs)
+        raise RuntimeError(msg % args if args else msg)
 
 
 def setup_logging(verbose: bool = False, log_file: Path | str | None = None) -> logging.Logger:
@@ -32,6 +40,7 @@ def setup_logging(verbose: bool = False, log_file: Path | str | None = None) -> 
     logging.Logger
         Configured logger instance for the biovalid project.
     """
+    logging.setLoggerClass(RaisingLogger)
     logger = logging.getLogger("biovalid")
     logger.setLevel(logging.DEBUG)
     logger.handlers.clear()
@@ -65,39 +74,13 @@ def validate_log_file(log_file: str | None) -> str | None:
     Returns:
         str | None: The validated log file path.
     Raises:
-        ValueError: If the log file path is not valid.
+        RuntimeError: If the log file path is not valid.
     """
     if log_file is not None:
         log_path = Path(log_file)
         if not log_path.parent.exists():
-            raise ValueError(f"Log file directory {log_path.parent} does not exist.")
+            raise RuntimeError(f"Log file directory {log_path.parent} does not exist.")
         if not log_path.parent.is_dir():
-            raise ValueError(f"Log file path {log_path.parent} is not a directory.")
+            raise RuntimeError(f"Log file path {log_path.parent} is not a directory.")
         return log_file
     return None
-
-
-def log_function(logger: logging.Logger, level: int, message: str) -> None:
-    """
-    Log a message at the specified logging level.
-    Will raise a ValueError if the level is ERROR.
-
-    Parameters
-    ----------
-    level : int
-        The logging level.
-        (10 for DEBUG, 20 for INFO, 30 for WARNING, 40 for ERROR)
-    message : str
-        The message to log.
-    """
-    if level == 10:
-        logger.debug(message)
-    elif level == 20:
-        logger.info(message)
-    elif level == 30:
-        logger.warning(message)
-    elif level == 40:
-        logger.error(message)
-        raise ValueError(message)
-    else:
-        logger.info(message)

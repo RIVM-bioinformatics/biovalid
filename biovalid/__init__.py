@@ -6,12 +6,12 @@ plugin-style validator architecture with no external dependencies.
 
 Basic usage:
     >>> from biovalid import BioValidator
-    >>> validator = BioValidator("data.fasta")
-    >>> validator.validate_files()
+    >>> validator = BioValidator()
+    >>> validator.validate_files("data.fasta")
 
     # For programmatic use with boolean return
-    >>> validator = BioValidator("data.fasta", bool_mode=True)
-    >>> is_valid = validator.validate_files()
+    >>> validator = BioValidator(bool_mode=True)
+    >>> is_valid = validator.validate_files("data.fasta")
 
 Supported file types:
     - FASTA/FASTQ (including compressed .gz variants)

@@ -3,7 +3,7 @@ Unit tests for bioinformatics file validators.
 
 This module contains generic unit tests for the BAM, FASTA, FASTQ and GFF file validators
 in the biovalid package. It checks that files matching the "happy" pattern are validated
-successfully, and that files not matching the pattern raise a ValueError.
+successfully, and that files not matching the pattern raise a RuntimeError.
 
 The tests are parametrized to run for each validator type using test data in
 the corresponding subdirectories of tests/data/.
@@ -74,7 +74,7 @@ def test_happy(validator_info: ValidatorInfo) -> None:
     ids=lambda v: v.validator_class.__name__,
 )
 def test_unhappy(validator_info: ValidatorInfo) -> None:
-    """Test that unhappy BAM, FASTA, and FASTQ files raise a ValueError."""
+    """Test that unhappy BAM, FASTA, and FASTQ files raise a RuntimeError."""
     for file_path in validator_info.unhappy_files:
-        with pytest.raises(ValueError):
+        with pytest.raises(RuntimeError):
             validator_info.validator_class(file_path).validate()

@@ -18,7 +18,7 @@ def test_empty_vcf_file() -> None:
     empty_vcf_path = Path("tests/data/vcf/empty.vcf")
     validator = VcfValidator(empty_vcf_path)
 
-    with pytest.raises(ValueError, match="VCF file is empty"):
+    with pytest.raises(RuntimeError, match="is empty"):
         validator.validate()
 
 
@@ -27,7 +27,7 @@ def test_invalid_first_line() -> None:
     invalid_vcf_path = Path("tests/data/vcf/invalid_first_line.vcf")
     validator = VcfValidator(invalid_vcf_path)
 
-    with pytest.raises(ValueError, match="File does not start with a valid VCF header line"):
+    with pytest.raises(RuntimeError, match="does not start with a valid VCF header line"):
         validator.validate()
 
 
@@ -36,7 +36,7 @@ def test_missing_required_columns() -> None:
     missing_cols_path = Path("tests/data/vcf/missing_required_columns.vcf")
     validator = VcfValidator(missing_cols_path)
 
-    with pytest.raises(ValueError, match="VCF column header has fewer than 8 required columns"):
+    with pytest.raises(RuntimeError, match="column header has fewer than 8 required columns"):
         validator.validate()
 
 
@@ -45,7 +45,7 @@ def test_wrong_column_headers() -> None:
     wrong_headers_path = Path("tests/data/vcf/wrong_column_headers.vcf")
     validator = VcfValidator(wrong_headers_path)
 
-    with pytest.raises(ValueError, match="VCF column header mismatch at position 1: expected 'CHROM', got '#CHR'"):
+    with pytest.raises(RuntimeError, match="invalid column header at position 1: expected 'CHROM', got '#CHR'"):
         validator.validate()
 
 
@@ -54,7 +54,7 @@ def test_chrom_with_whitespace() -> None:
     chrom_whitespace_path = Path("tests/data/vcf/chrom_with_whitespace.vcf")
     validator = VcfValidator(chrom_whitespace_path)
 
-    with pytest.raises(ValueError, match="CHROM contains whitespace characters"):
+    with pytest.raises(RuntimeError, match="whitespace characters in CHROM column"):
         validator.validate()
 
 
@@ -63,7 +63,7 @@ def test_invalid_pos() -> None:
     invalid_pos_path = Path("tests/data/vcf/invalid_pos.vcf")
     validator = VcfValidator(invalid_pos_path)
 
-    with pytest.raises(ValueError, match="POS must be an integer"):
+    with pytest.raises(RuntimeError, match="non-integer value in POS column"):
         validator.validate()
 
 
@@ -72,7 +72,7 @@ def test_id_with_whitespace() -> None:
     id_whitespace_path = Path("tests/data/vcf/id_with_whitespace.vcf")
     validator = VcfValidator(id_whitespace_path)
 
-    with pytest.raises(ValueError, match="ID contains whitespace"):
+    with pytest.raises(RuntimeError, match="whitespace characters in ID column"):
         validator.validate()
 
 
@@ -90,7 +90,7 @@ def test_invalid_ref() -> None:
     invalid_ref_path = Path("tests/data/vcf/invalid_ref.vcf")
     validator = VcfValidator(invalid_ref_path)
 
-    with pytest.raises(ValueError, match="REF contains invalid"):
+    with pytest.raises(RuntimeError, match=r"invalid base\(s\) in REF column"):
         validator.validate()
 
 
@@ -108,7 +108,7 @@ def test_invalid_alt() -> None:
     invalid_alt_path = Path("tests/data/vcf/invalid_alt.vcf")
     validator = VcfValidator(invalid_alt_path)
 
-    with pytest.raises(ValueError, match="ALT contains invalid"):
+    with pytest.raises(RuntimeError, match=r"invalid base\(s\) in ALT column"):
         validator.validate()
 
 
@@ -117,7 +117,7 @@ def test_invalid_qual() -> None:
     invalid_qual_path = Path("tests/data/vcf/invalid_qual.vcf")
     validator = VcfValidator(invalid_qual_path)
 
-    with pytest.raises(ValueError, match="QUAL must be a positive numeric value"):
+    with pytest.raises(RuntimeError, match="non-numeric QUAL value"):
         validator.validate()
 
 
@@ -126,7 +126,7 @@ def test_undefined_filter() -> None:
     undefined_filter_path = Path("tests/data/vcf/undefined_filter.vcf")
     validator = VcfValidator(undefined_filter_path)
 
-    with pytest.raises(ValueError, match="FILTER contains unknown filter"):
+    with pytest.raises(RuntimeError, match="contains unknown filter"):
         validator.validate()
 
 
@@ -135,7 +135,7 @@ def test_undefined_info() -> None:
     undefined_info_path = Path("tests/data/vcf/undefined_info.vcf")
     validator = VcfValidator(undefined_info_path)
 
-    with pytest.raises(ValueError, match="INFO contains unknown key"):
+    with pytest.raises(RuntimeError, match="contains unknown key.*INFO column"):
         validator.validate()
 
 
@@ -144,7 +144,7 @@ def test_undefined_format() -> None:
     undefined_format_path = Path("tests/data/vcf/undefined_format.vcf")
     validator = VcfValidator(undefined_format_path)
 
-    with pytest.raises(ValueError, match="FORMAT contains unknown key"):
+    with pytest.raises(RuntimeError, match="contains unknown key.*FORMAT column"):
         validator.validate()
 
 
@@ -153,7 +153,7 @@ def test_mismatched_columns() -> None:
     mismatched_cols_path = Path("tests/data/vcf/mismatched_columns.vcf")
     validator = VcfValidator(mismatched_cols_path)
 
-    with pytest.raises(ValueError, match="VCF data line .* does not have the required .* columns"):
+    with pytest.raises(RuntimeError, match="contains a data line with .* columns.*columns are expected"):
         validator.validate()
 
 
@@ -162,7 +162,7 @@ def test_empty_chrom() -> None:
     empty_chrom_path = Path("tests/data/vcf/empty_chrom.vcf")
     validator = VcfValidator(empty_chrom_path)
 
-    with pytest.raises(ValueError, match="VCF data line .* does not have the required .* columns"):
+    with pytest.raises(RuntimeError, match="contains a data line with .* columns.*columns are expected"):
         validator.validate()
 
 
@@ -171,7 +171,7 @@ def test_empty_pos() -> None:
     empty_pos_path = Path("tests/data/vcf/empty_pos.vcf")
     validator = VcfValidator(empty_pos_path)
 
-    with pytest.raises(ValueError, match="POS column is empty"):
+    with pytest.raises(RuntimeError, match="contains an empty POS column"):
         validator.validate()
 
 
@@ -180,7 +180,7 @@ def test_empty_ref() -> None:
     empty_ref_path = Path("tests/data/vcf/empty_ref.vcf")
     validator = VcfValidator(empty_ref_path)
 
-    with pytest.raises(ValueError, match="REF column is empty"):
+    with pytest.raises(RuntimeError, match="contains an empty REF column"):
         validator.validate()
 
 
@@ -198,7 +198,7 @@ def test_empty_alt_allele() -> None:
     empty_alt_path = Path("tests/data/vcf/empty_alt_allele.vcf")
     validator = VcfValidator(empty_alt_path)
 
-    with pytest.raises(ValueError, match="ALT column contains empty alleles"):
+    with pytest.raises(RuntimeError, match="contains empty alleles in ALT column"):
         validator.validate()
 
 
@@ -208,7 +208,7 @@ def test_negative_qual() -> None:
     validator = VcfValidator(negative_qual_path)
 
     # Current implementation rejects negative QUAL values
-    with pytest.raises(ValueError, match="QUAL must be a positive numeric value"):
+    with pytest.raises(RuntimeError, match="negative QUAL value"):
         validator.validate()
 
 
@@ -280,7 +280,7 @@ def test_missing_info_dot() -> None:
     empty_info_with_fields_path = Path("tests/data/vcf/missing_info.vcf")
     validator = VcfValidator(empty_info_with_fields_path)
 
-    with pytest.raises(ValueError, match="INFO column is '.' but INFO fields are defined in the header"):
+    with pytest.raises(RuntimeError, match="contains '\\.' in INFO column.*INFO fields are defined in the header"):
         validator.validate()
 
 
@@ -289,5 +289,5 @@ def test_empty_sample() -> None:
     empty_sample_path = Path("tests/data/vcf/empty_sample_proper.vcf")
     validator = VcfValidator(empty_sample_path)
 
-    with pytest.raises(ValueError, match="VCF data line .* does not have the required .* columns"):
+    with pytest.raises(RuntimeError, match="contains a data line with .* columns.*columns are expected"):
         validator.validate()
