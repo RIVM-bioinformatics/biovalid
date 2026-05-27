@@ -1,8 +1,8 @@
 # Source: synthetic (variant-calling artifact pattern)
 # Symptom: two adjacent records have identical chrom, chromStart, chromEnd; spec
 # does not forbid duplicates but downstream tools (bedtools merge, bedops) may
-# treat them as a single feature. Score field is float ('.') which triggers the
-# actual validator rejection under --spec hts (non-integer); passes under ucsc.
+# treat them as a single feature. Score field is a literal '.' (non-integer),
+# which is what the validator actually rejects on per hts-specs §1.7 / UCSC FAQ.
 Y	13142410	13142411	snp001	.	+
 Y	13142410	13142411	snp001_duplicate	.	+
 Y	13142500	13142501	snp002	.	+

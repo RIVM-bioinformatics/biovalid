@@ -1,9 +1,9 @@
 # Source: https://github.com/hoffmangroup/segway/issues/22
 #   https://genome.ucsc.edu/goldenPath/help/bigBed.html
-# Symptom: first blockSize in the blockSizes list is 0; bedToBigBed rejects
-#   with "BED blockSizes must be greater than 0, blockSize[0] = 0".
-#   This is distinct from bad/block_size_zero.bed which has a zero-size block
-#   somewhere in the middle; here the pathology is specifically that the FIRST
-#   block is zero, arising from Segway/segmentation tools that emit 0-origin
+# Symptom: first blockSize is 0, and the last block runs past chromEnd
+#   (blockStarts[-1] + blockSizes[-1] = 7999 + 2000 = 9999, span = 8000).
+#   bedToBigBed rejects on the zero-size block; biovalid rejects on the
+#   span mismatch per hts-specs §1.9 (last block must end at chromEnd).
+#   The pathology arises from Segway/segmentation tools that emit 0-origin
 #   block offsets instead of sizes.
 chr1	0	8000	seg001	1000	.	0	8000	217,95,2	3	0,2000,2000	0,4000,7999

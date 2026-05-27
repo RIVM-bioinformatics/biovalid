@@ -1,4 +1,0 @@
-# Synthetic failure case: space-separated. The hts-specs allows [ \t]+ as the field separator,
-# but this validator requires tab (see module docstring); locking that in.
-chr1 100 200
-chr1 300 400

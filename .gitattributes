@@ -2,3 +2,4 @@
 # encoding edges are part of what the validator asserts against. Treat as
 # binary so git never normalizes them (core.autocrlf, eol, etc.).
 tests/data/bed/**/*.bed binary
+tests/corpus/bed/**/*.bed binary

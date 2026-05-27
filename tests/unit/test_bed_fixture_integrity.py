@@ -31,8 +31,3 @@ def test_mixed_separators_fixture_actually_mixes() -> None:
     assert bare_lf >= 1, "mixed-separator fixture lost its bare-LF half"
 
 
-def test_trailing_tab_fixture_has_tab_before_newline() -> None:
-    data = _read("trailing_tab.bed")
-    assert b"\t\n" in data, "trailing-tab fixture lost its \\t before \\n"
-    assert data.count(b"\t\n") >= 2, "expected trailing tab on every data line"
-    assert b"\r" not in data, "fixture should be LF-only; CRLF would mask the trailing-tab pathology"

@@ -99,7 +99,7 @@ class BioValidator:
             try:
                 for path in clean_paths:
                     validator_class = self.pick_validator(path)
-                    validator = validator_class(path, self.logger, spec=self.spec, bed_tier=self.bed_tier)
+                    validator = self._build_validator(validator_class, path)
                     validator.general_validation()
                     if validator_class != BaseValidator:
                         validator.validate()
@@ -111,7 +111,7 @@ class BioValidator:
         try:
             for path in clean_paths:
                 validator_class = self.pick_validator(path)
-                validator = validator_class(path, self.logger, spec=self.spec, bed_tier=self.bed_tier)
+                validator = self._build_validator(validator_class, path)
                 validator.general_validation()
                 if validator_class != BaseValidator:
                     validator.validate()
@@ -119,6 +119,11 @@ class BioValidator:
         except RuntimeError:
             return False
         return True
+
+    def _build_validator(self, validator_class: Type[BaseValidator], path: Path) -> BaseValidator:
+        if validator_class is BedValidator:
+            return BedValidator(path, self.logger, spec=self.spec, bed_tier=self.bed_tier)
+        return validator_class(path, self.logger)
 
 
 def run_cli() -> None:

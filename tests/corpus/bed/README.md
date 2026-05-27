@@ -11,17 +11,19 @@ have been replaced by synthetic equivalents.
 
 Bucketed by validator behavior under the two `--spec` modes:
 
-- **`universal_bad/`** (48): validator rejects in both `--spec ucsc` and `--spec hts`.
+- **`universal_bad/`** (54): validator rejects in both `--spec ucsc` and `--spec hts`.
   Universal malformations: block invariants, non-integer coords, mixed line
-  separators, trailing-tab phantom columns, etc.
-- **`hts_only_bad/`** (22): passes `--spec ucsc`, rejects `--spec hts`.
+  separators, score outside 0-1000 or non-integer, non-printable bytes in
+  the name field, etc.
+- **`hts_only_bad/`** (13): passes `--spec ucsc`, rejects `--spec hts`.
   Spec deviations hts-specs prohibits but UCSC tolerates or is silent on
-  (RefSeq accession chrom names, score outside 0-1000, browser/track header
-  lines, etc.).
-- **`good/`** (30): passes in both modes. Includes spec-legal edge cases
-  (zero-length features, dot strand, BED N+M with custom columns) and
-  fixtures downstream tools reject but the spec permits (Ensembl no-chr
-  prefix, mixed chr/non-chr prefix, out-of-order records, etc.).
+  (RefSeq accession chrom names, browser/track header lines, BED10/BED11
+  files, etc.).
+- **`good/`** (33): passes in both modes. Includes spec-legal edge cases
+  (zero-length features, dot strand, BED N+M with custom columns, mixed
+  tab/space delimiters, trailing whitespace) and fixtures downstream tools
+  reject but the spec permits (Ensembl no-chr prefix, mixed chr/non-chr
+  prefix, out-of-order records, etc.).
 
 ## Browsing
 

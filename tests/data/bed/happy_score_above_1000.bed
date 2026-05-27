@@ -1,3 +1,0 @@
-# Score 1500 is above the hts-specs range 0-1000 but is valid under --spec ucsc
-# (UCSC FAQ says "between 0 and 1000" without prescribing integer or hard range).
-chr1	100	200	feature	1500	+

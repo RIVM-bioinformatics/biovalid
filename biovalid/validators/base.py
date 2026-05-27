@@ -26,10 +26,8 @@ class BaseValidator:
         Logger instance for recording validation events and errors.
     """
 
-    def __init__(self, filename: Path, logger: Logger | None = None, spec: str = "ucsc", bed_tier: str = "auto") -> None:
+    def __init__(self, filename: Path, logger: Logger | None = None) -> None:
         self.filename = filename
-        self.spec = spec
-        self.bed_tier = bed_tier
         if not logger:
             self.logger = setup_logging()
         else:

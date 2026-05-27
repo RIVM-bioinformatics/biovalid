@@ -48,11 +48,29 @@ def test_too_few_columns(tmp_path: Path) -> None:
         BedValidator(bed).validate()
 
 
-def test_bed9_plus_custom_fields_accepted(tmp_path: Path) -> None:
-    # hts-specs §1.5: BED N+M files where N is in {3-9, 12} and M is the number of
-    # custom trailing fields are valid. A 10- or 11-column file is BED9+1 / BED9+2.
+def test_bed9_plus_one_custom_field_accepted_in_ucsc(tmp_path: Path) -> None:
+    # UCSC is silent on BED10/BED11; the validator's --bed auto treats col 10 as
+    # opaque custom (BED9+1). hts-specs §1.5 prohibits BED10/BED11, exercised below.
     bed = tmp_path / "bed9_plus_1.bed"
     bed.write_text("chr1\t100\t200\tname\t500\t+\t100\t200\t0,0,0\tcustomA\n")
+    BedValidator(bed).validate()
+
+
+@pytest.mark.parametrize("ncols", [10, 11])
+def test_bed10_and_bed11_rejected_in_hts(tmp_path: Path, ncols: int) -> None:
+    # hts-specs §1.5: BED10 and BED11 are prohibited.
+    extras = ["customA", "customB"][: ncols - 9]
+    bed = tmp_path / f"bed{ncols}.bed"
+    bed.write_text("\t".join(["chr1", "100", "200", "name", "500", "+", "100", "200", "0,0,0", *extras]) + "\n")
+    with pytest.raises(RuntimeError, match="prohibits BED10 and BED11"):
+        BedValidator(bed, spec="hts").validate()
+
+
+@pytest.mark.parametrize("ncols", [10, 11])
+def test_bed10_and_bed11_accepted_in_ucsc(tmp_path: Path, ncols: int) -> None:
+    extras = ["customA", "customB"][: ncols - 9]
+    bed = tmp_path / f"bed{ncols}.bed"
+    bed.write_text("\t".join(["chr1", "100", "200", "name", "500", "+", "100", "200", "0,0,0", *extras]) + "\n")
     BedValidator(bed).validate()
 
 
@@ -94,15 +112,13 @@ def test_negative_coord_rejected(tmp_path: Path) -> None:
 @pytest.mark.parametrize(
     "chrom",
     [
-        pytest.param("chr 1", id="space"),
         pytest.param("chr-1", id="hyphen"),
         pytest.param("chr.1", id="dot"),
         pytest.param("a" * 256, id="length_over_255"),
-        pytest.param("", id="empty"),
     ],
 )
 def test_chrom_rejects_non_word_or_too_long(tmp_path: Path, chrom: str) -> None:
-    # hts-specs §1.6 Table 2: chrom matches [[:alnum:]_]{1,255}.
+    # hts-specs §1.5 Table 2: chrom matches [[:alnum:]_]{1,255}.
     # UCSC is silent on chrom character class; this is a --spec hts-only rule.
     bed = tmp_path / "chrom.bed"
     bed.write_text(f"{chrom}\t100\t200\n")
@@ -118,12 +134,32 @@ def test_chrom_with_refseq_accession_passes_in_ucsc_mode(tmp_path: Path) -> None
     BedValidator(bed).validate()  # default --spec ucsc
 
 
-def test_name_too_long(tmp_path: Path) -> None:
-    # hts-specs §1.7: name is 1 to 255 non-tab characters.
+@pytest.mark.parametrize("spec", ["ucsc", "hts"])
+def test_name_too_long(tmp_path: Path, spec: str) -> None:
+    # hts-specs §1.5 Table 2: name = [\x20-\x7e]{1,255}.
     bed = tmp_path / "name.bed"
     bed.write_text(f"chr1\t100\t200\t{'x' * 256}\n")
-    with pytest.raises(RuntimeError, match="invalid name field length"):
-        BedValidator(bed).validate()
+    with pytest.raises(RuntimeError, match="printable ASCII"):
+        BedValidator(bed, spec=spec).validate()
+
+
+@pytest.mark.parametrize(
+    "name_bytes",
+    [
+        pytest.param(b"caf\xe9", id="latin1_eacute"),
+        pytest.param(b"name\x07bell", id="control_byte_bell"),
+        pytest.param(b"name\x00nul", id="control_byte_nul"),
+    ],
+)
+@pytest.mark.parametrize("spec", ["ucsc", "hts"])
+def test_name_non_printable_ascii_rejected(tmp_path: Path, name_bytes: bytes, spec: str) -> None:
+    # hts-specs §1.5 Table 2: name = [\x20-\x7e]{1,255} (printable ASCII).
+    # UCSC is silent, but no real reader renders these meaningfully, so the hts
+    # rule is the floor in both modes.
+    bed = tmp_path / "name.bed"
+    bed.write_bytes(b"chr1\t100\t200\t" + name_bytes + b"\n")
+    with pytest.raises(RuntimeError, match="printable ASCII"):
+        BedValidator(bed, spec=spec).validate()
 
 
 def test_blank_lines_ignored(tmp_path: Path) -> None:
@@ -133,19 +169,21 @@ def test_blank_lines_ignored(tmp_path: Path) -> None:
     BedValidator(bed).validate()
 
 
-def test_score_out_of_range_hts_only(tmp_path: Path) -> None:
-    # Score range 0-1000 is per hts-specs §1.7; UCSC is silent on integer-ness and
-    # treats the range as descriptive. Real-world peak callers emit out-of-range scores.
+@pytest.mark.parametrize("spec", ["ucsc", "hts"])
+def test_score_out_of_range_rejected(tmp_path: Path, spec: str) -> None:
+    # hts-specs §1.7 and UCSC FAQ both put score in [0, 1000].
     bed = tmp_path / "score.bed"
     bed.write_text("chr1\t100\t200\tname\t1001\n")
     with pytest.raises(RuntimeError, match="outside the spec range 0-1000"):
-        BedValidator(bed, spec="hts").validate()
+        BedValidator(bed, spec=spec).validate()
 
 
-def test_score_out_of_range_passes_in_ucsc_mode(tmp_path: Path) -> None:
+@pytest.mark.parametrize("spec", ["ucsc", "hts"])
+def test_score_non_integer_rejected(tmp_path: Path, spec: str) -> None:
     bed = tmp_path / "score.bed"
-    bed.write_text("chr1\t100\t200\tname\t1500\n")
-    BedValidator(bed).validate()  # default --spec ucsc
+    bed.write_text("chr1\t100\t200\tname\t5.5\n")
+    with pytest.raises(RuntimeError, match="non-integer score"):
+        BedValidator(bed, spec=spec).validate()
 
 
 @pytest.mark.parametrize("strand", ["+", "-", "."])
@@ -193,13 +231,21 @@ def test_item_rgb_invalid(tmp_path: Path, rgb: str) -> None:
         BedValidator(bed).validate()
 
 
-def test_space_separated_file_rejected(tmp_path: Path) -> None:
-    # Deviation from hts-specs §1.3 (which allows [ \t]+): validator requires tab.
-    # Locking this in so it fails loudly rather than silently misparsing.
+@pytest.mark.parametrize("spec", ["ucsc", "hts"])
+def test_space_separated_file_accepted(tmp_path: Path, spec: str) -> None:
+    # hts-specs §1.5: field separator is "[ \t]+" (one or more space or tab).
+    # UCSC FAQ: "whitespace-delimited or tab-delimited".
     bed = tmp_path / "spaces.bed"
     bed.write_text("chr1 100 200\n")
-    with pytest.raises(RuntimeError, match="BED requires at least 3"):
-        BedValidator(bed).validate()
+    BedValidator(bed, spec=spec).validate()
+
+
+@pytest.mark.parametrize("spec", ["ucsc", "hts"])
+def test_mixed_tab_and_space_separator_accepted(tmp_path: Path, spec: str) -> None:
+    # hts-specs §1.5: [ \t]+ permits any mix of space and tab between fields.
+    bed = tmp_path / "mixed.bed"
+    bed.write_text("chr1\t100 200\n")
+    BedValidator(bed, spec=spec).validate()
 
 
 def test_chrom_named_track_not_skipped(tmp_path: Path) -> None:

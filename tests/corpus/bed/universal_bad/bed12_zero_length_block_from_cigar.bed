@@ -1,9 +1,10 @@
 # Source: https://github.com/lh3/minimap2/issues/738
-# Symptom: BED12 record produced by minimap2 splice2bed (paftools.js) where a
-#   block has blockSize=0; arises when CIGAR contains two consecutive N (intron-
-#   skip) operations separated only by an I (insertion): ...N I N... causes
-#   the insertion to be skipped without advancing the position, yielding a
-#   zero-length exon block.  Programs that process BED12 blocks reject or crash
-#   on blockSize=0 because the spec implies each block has positive length.
+# Symptom: BED12 record produced by minimap2 splice2bed (paftools.js) with a
+#   zero-length middle block; arises when CIGAR contains two consecutive N
+#   (intron-skip) operations separated only by an I (insertion): ...N I N...
+#   causes the insertion to be skipped without advancing the position. The
+#   spec does not forbid blockSize=0, but the offsets are also wrong: the
+#   last block runs past chromEnd, which hts-specs §1.9 disallows ("last
+#   block must end at chromEnd"). biovalid rejects on the span mismatch.
 chr5	140807067	140884662	read1	0	-	140807067	140884662	0	3	422,0,1242	0,75497,77595
 chr5	180549000	180730000	read2	0	+	180549000	180730000	0	3	37,0,500	0,37,180963

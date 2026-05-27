@@ -7,15 +7,27 @@ Per the UCSC FAQ and Ensembl BED page, cross-referenced with hts-specs BEDv1
   https://genome.ucsc.edu/FAQ/FAQformat.html#format1
   https://grch37.ensembl.org/info/website/upload/bed.html
   https://samtools.github.io/hts-specs/BEDv1.pdf
+
+The field separator [ \\t]+ (hts-specs §1.5) is treated as a single separator
+between fields: a run of consecutive tabs or spaces does not synthesize an
+empty field. Trailing horizontal whitespace on a line is likewise stripped
+rather than treated as a trailing empty field. Strict §1.5 admits either
+reading; we take the regex-literal one.
 """
 
 import re
+from logging import Logger
+from pathlib import Path
 
 from biovalid.validators.base import BaseValidator
 
-# §1.3: valid line separators are LF, CR, CRLF; only one kind per file.
+# §1.4: valid line separators are LF, CR, CRLF; only one kind per file.
 _LINE_SEPARATOR_RE = re.compile(rb"\r\n|\r|\n")
 _SEPARATOR_NAMES = {b"\n": "LF", b"\r\n": "CRLF", b"\r": "CR"}
+
+# §1.5: field separator is "[ \t]+" (one or more space or tab).
+# UCSC FAQ: "whitespace-delimited or tab-delimited". Same regex covers both.
+_FIELD_SEPARATOR_RE = re.compile(r"[ \t]+")
 
 # Trailing [ \t] anchors the keyword so a chrom literally named "track" is not skipped.
 _HEADER_LINE_RE = re.compile(r"^(browser|track)[ \t]")
@@ -25,9 +37,26 @@ _VALID_STRANDS = frozenset({"+", "-", "."})
 # §1.5 Table 2: chrom matches [[:alnum:]_]{1,255}; blockSizes/blockStarts are comma lists.
 _CHROM_RE = re.compile(r"^[A-Za-z0-9_]{1,255}$")
 _BLOCK_LIST_RE = re.compile(r"^[0-9]+(,[0-9]+)*,?$")
+# §1.5 Table 2: name matches printable ASCII [\x20-\x7e]{1,255}. UCSC is silent
+# but no real reader renders control bytes or non-ASCII meaningfully, so the
+# hts rule is the sensible floor in both modes.
+_NAME_RE = re.compile(r"^[\x20-\x7e]{1,255}$")
 
 
 class BedValidator(BaseValidator):
+    """Validator for BED files."""
+
+    def __init__(
+        self,
+        filename: Path,
+        logger: Logger | None = None,
+        spec: str = "ucsc",
+        bed_tier: str = "auto",
+    ) -> None:
+        super().__init__(filename, logger)
+        self.spec = spec
+        self.bed_tier = bed_tier
+
     def _hts_strict(self, msg: str, *args: object) -> None:
         """Error in --spec hts mode; silent in --spec ucsc mode."""
         if self.spec == "hts":
@@ -36,6 +65,13 @@ class BedValidator(BaseValidator):
     def _effective_n(self, ncols: int, line_num: int) -> int:
         """Resolve the BED tier N per --bed setting. Cols beyond N are opaque."""
         if self.bed_tier == "auto":
+            if ncols in (10, 11):
+                # §1.5: BED10 and BED11 are prohibited; UCSC FAQ is silent.
+                self._hts_strict(
+                    "File %s line %d has %d columns; hts-specs §1.5 prohibits BED10 and BED11 "
+                    "(valid tiers are BED3-BED9 and BED12). Use --bed N to declare BED9+M.",
+                    self.filename, line_num, ncols,
+                )
             return min(ncols, 9) if ncols < 12 else 12
         n = int(self.bed_tier)
         if ncols < n:
@@ -45,10 +81,11 @@ class BedValidator(BaseValidator):
             )
         return n
 
-    def validate(self) -> None:
-        # Chunked scan keeps memory bounded for large (multi-GB) BED files.
-        # Defer a trailing \r to the next chunk so a CRLF spanning the boundary
-        # is not miscounted as \r + \n.
+    def _check_line_separators(self) -> None:
+        # Binary pre-pass: text mode's universal-newlines collapses CR/LF/CRLF
+        # to \n, so mixed-separator detection has to happen before decoding.
+        # Defer a trailing \r so a CRLF spanning a chunk boundary is not
+        # miscounted as \r + \n. Early-exits once two separator types are seen.
         separators: set[bytes] = set()
         with open(self.filename, "rb") as f:
             leftover = b""
@@ -64,25 +101,21 @@ class BedValidator(BaseValidator):
                 separators.update(_LINE_SEPARATOR_RE.findall(leftover))
         if len(separators) > 1:
             self.logger.error(
-                "File %s mixes line separators (%s); hts-specs §1.3 requires a single consistent separator throughout the file.",
+                "File %s mixes line separators (%s); hts-specs §1.4 requires a single consistent separator throughout the file.",
                 self.filename,
                 ", ".join(sorted(_SEPARATOR_NAMES[s] for s in separators)),
             )
 
+    def validate(self) -> None:
+        self._check_line_separators()
+
         expected_columns: int | None = None
-        with open(self.filename, "r", encoding="utf-8") as f:
-            line_iter = enumerate(f, start=1)
-            while True:
-                try:
-                    line_num, raw = next(line_iter)
-                except StopIteration:
-                    break
-                except UnicodeDecodeError as e:
-                    self.logger.error(
-                        "File %s contains non-UTF-8 bytes near offset %d; BED files should be ASCII/UTF-8 per spec.",
-                        self.filename, e.start,
-                    )
-                    return
+        # latin-1 maps every byte to a codepoint, so any byte sequence decodes
+        # without error. No spec mandates an encoding, so we don't impose one;
+        # content rules (chrom charset in hts mode, numeric fields, etc.) do
+        # the real validation.
+        with open(self.filename, "r", encoding="latin-1") as f:
+            for line_num, raw in enumerate(f, start=1):
                 line = raw.rstrip("\n").rstrip("\r")
                 if not line.strip() or line.startswith("#"):
                     continue
@@ -94,12 +127,15 @@ class BedValidator(BaseValidator):
                     )
                     continue
 
-                fields = line.split("\t")
+                # §1.5: separator is [ \t]+. Strip leading/trailing horizontal
+                # whitespace so a stray leading space does not synthesize an
+                # empty first field.
+                fields = _FIELD_SEPARATOR_RE.split(line.strip(" \t"))
                 ncols = len(fields)
 
                 if ncols < _MIN_COLUMNS:
                     self.logger.error(
-                        "File %s line %d has %d tab-separated columns; BED requires at least 3.",
+                        "File %s line %d has %d fields; BED requires at least 3.",
                         self.filename, line_num, ncols,
                     )
 
@@ -133,27 +169,30 @@ class BedValidator(BaseValidator):
 
         if effective_n >= 4:
             name = fields[3]
-            if not (1 <= len(name) <= 255):
+            if not _NAME_RE.match(name):
+                # §1.5 Table 2: name is [\x20-\x7e]{1,255} (printable ASCII).
                 self.logger.error(
-                    "File %s line %d has an invalid name field length %d; must be 1-255 characters.",
-                    self.filename, line_num, len(name),
+                    "File %s line %d has a name field that does not match printable ASCII "
+                    "[\\x20-\\x7e]{1,255}.",
+                    self.filename, line_num,
                 )
 
         if effective_n >= 5:
+            # §1.7: score is an integer in [0, 1000]. UCSC FAQ score field:
+            # "between 0 and 1000". Both specs agree, so the rule is universal.
             score_str = fields[4]
             if not score_str:
                 self.logger.error("File %s line %d has empty score field.", self.filename, line_num)
-            elif self.spec == "hts":
-                if not score_str.isdigit():
-                    self.logger.error(
-                        "File %s line %d has non-integer score '%s'.",
-                        self.filename, line_num, score_str,
-                    )
-                elif int(score_str) > 1000:
-                    self.logger.error(
-                        "File %s line %d has score %s outside the spec range 0-1000.",
-                        self.filename, line_num, score_str,
-                    )
+            elif not score_str.isdigit():
+                self.logger.error(
+                    "File %s line %d has non-integer score '%s'.",
+                    self.filename, line_num, score_str,
+                )
+            elif int(score_str) > 1000:
+                self.logger.error(
+                    "File %s line %d has score %s outside the spec range 0-1000.",
+                    self.filename, line_num, score_str,
+                )
 
         if effective_n >= 6 and fields[5] not in _VALID_STRANDS:
             self.logger.error(
@@ -221,13 +260,6 @@ class BedValidator(BaseValidator):
 
         sizes_i = [self._parse_nonneg_int(s, "blockSizes entry", line_num) for s in sizes]
         starts_i = [self._parse_nonneg_int(s, "blockStarts entry", line_num) for s in starts]
-
-        for i, size in enumerate(sizes_i):
-            if size == 0:
-                self.logger.error(
-                    "File %s line %d: block %d has size 0; block sizes must be positive.",
-                    self.filename, line_num, i,
-                )
 
         if starts_i[0] != 0:
             self.logger.error(
