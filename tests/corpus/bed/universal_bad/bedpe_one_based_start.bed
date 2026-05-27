@@ -1,0 +1,10 @@
+# Source: https://github.com/vaquerizaslab/chess/issues/32
+# Symptom: BEDPE file (two-region interaction format) uses 1-based start
+#   coordinates (start=1) instead of required 0-based; arises from Hi-C
+#   analysis tools that emit BEDPE with 1-based coordinates from 1-indexed
+#   internal data structures.  A parser expecting 0-based half-open intervals
+#   will compute pair lengths off by one.
+#   Note: BEDPE is an extension of BED (6 required fields per region pair);
+#   the 0-based coordinate requirement applies to both halves.
+chr1	1	10000001	chr1	1	10000001	pair001	0	+	+
+chr9	21900001	31900001	chr9	21900001	31900001	pair002	0	+	-

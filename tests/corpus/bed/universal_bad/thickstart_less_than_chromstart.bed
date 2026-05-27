@@ -1,0 +1,11 @@
+# Source: https://github.com/igvteam/igv/issues/657
+#   https://genome.ucsc.edu/FAQ/FAQformat.html#format1
+# Symptom: thickStart is less than chromStart (i.e. outside the feature bounds
+#   on the left), or thickEnd is greater than chromEnd (outside on the right).
+#   IGV silently renders the entire feature as "thick" instead of warning.
+#   biovalid should catch this as a constraint violation: thickStart must satisfy
+#   chromStart <= thickStart <= thickEnd <= chromEnd.
+#   Distinct from thick_outside_feature.bed which tests thickEnd > chromEnd;
+#   this variant specifically tests thickStart < chromStart.
+chr1	1000	2000	feat001	0	+	800	1800	255,0,0
+chr2	5000	6000	feat002	0	-	4500	5500	0,255,0

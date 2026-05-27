@@ -1,0 +1,5 @@
+# Source: https://github.com/arq5x/bedtools2/issues/432
+# Symptom: coordinate field is a decimal float (207666.0) without scientific notation; bedtools errors "Non numeric value"
+chr1	207666.0	208000	featureA
+chr1	300000	350000.5	featureB
+chr2	1000.0	2000.0	featureC

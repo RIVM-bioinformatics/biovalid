@@ -1,0 +1,5 @@
+# Source: https://genome.ucsc.edu/FAQ/FAQformat.html#format1
+# Symptom: chromStart == chromEnd; spec explicitly allows this for insertions; naive validators may reject
+chr1	0	0	insertion_at_origin
+chr1	1000	1000	insertion_mid
+chr2	500	500	another_insertion

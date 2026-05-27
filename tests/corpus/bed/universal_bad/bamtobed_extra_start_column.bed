@@ -1,0 +1,11 @@
+# Source: https://github.com/arq5x/bedtools2/issues/962
+# Symptom: bedtools bamToBed with both -split and -tag flags produces an extra
+#   coordinate column inserted between chrom and start, giving 7 columns instead
+#   of the expected 6; col 2 holds the block start position, col 3 holds the
+#   original start again, col 4 is end, shifting name/score/strand.  Workaround
+#   is "cut -f1,3-" to remove the spurious column.  Tool bug, not user error,
+#   but the resulting file is invalid BED: 7 cols with integer in name field.
+chr1	10114	10114	10167	A00519:644:HCNM3DSXY:1:1547:20781:9580	3	-
+chr1	10114	180549	180586	A00519:644:HCNM3DSXY:1:1547:20781:9580	3	-
+chr1	10407	10407	10460	A00519:644:HCNM3DSXY:1:1547:20781:9580	2	-
+chr1	10533	10533	10620	A00519:644:HCNM3DSXY:1:2612:31078:31328	4	+

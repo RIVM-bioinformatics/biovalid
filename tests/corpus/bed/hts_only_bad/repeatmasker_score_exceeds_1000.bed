@@ -1,0 +1,13 @@
+# Source: https://github.com/galaxyproject/galaxy/issues/13004
+#   https://genome.ucsc.edu/FAQ/FAQformat.html#format1
+# Symptom: UCSC RepeatMasker BED tracks contain score values exceeding 1000
+#   (e.g. 1500, 2300, 14000); the UCSC BED spec states score must be 0-1000,
+#   but RepeatMasker uses raw alignment scores (Smith-Waterman) which are
+#   unbounded integers.  Galaxy's BED sniffer rejects such files; biovalid
+#   should flag the out-of-range score but note its real-world prevalence.
+#   Distinct from score_out_of_range.bed (that uses a simple canonical example);
+#   this file reflects the specific UCSC RepeatMasker source pattern.
+chr22	16051561	16051750	L1P4c	1500	+
+chr22	16055012	16055612	AluSx1	2300	-
+chr22	16060000	16075000	L1Hs	14000	+
+chr22	16080000	16080200	MIR3	800	-

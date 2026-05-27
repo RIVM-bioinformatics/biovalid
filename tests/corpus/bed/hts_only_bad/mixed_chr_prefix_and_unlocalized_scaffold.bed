@@ -1,0 +1,13 @@
+# Source: https://github.com/kundajelab/atac_dnase_pipelines/issues/41
+# Symptom: BED mixes chr-prefixed standard chromosomes (chr1, chr2) with
+#   unlocalized scaffold names that lack the chr prefix (GL000008.2,
+#   KI270728.1); bedtools reports "inconsistent naming convention" because
+#   it detects a mix of named styles in the same file.  Arises from merging
+#   alignments from hg38 where scaffold contigs are named without chr prefix
+#   while standard chromosomes keep it.  Downstream intersect operations
+#   silently drop reads on scaffolds.
+chr1	100	200	read001	1000	+
+chr2	50000	50100	read002	1000	-
+GL000008.2	41	88	read003	1000	+
+KI270728.1	200	350	read004	1000	-
+chr3	1000	1100	read005	999	+

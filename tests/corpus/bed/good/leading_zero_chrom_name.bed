@@ -1,0 +1,7 @@
+# Source: https://github.com/arq5x/bedtools2/issues/230
+# Symptom: chromosome name with leading zero (Chr01); bedtools warns about inconsistent naming convention
+# when intersecting with file using Chr1; tools miss all hits in these chromosomes
+Chr01	1000	2000	featureA	0	+
+Chr02	3000	4000	featureB	0	-
+Chr19	5000	6000	featureC	0	+
+scaffold_020	100	200	featureD	0	.

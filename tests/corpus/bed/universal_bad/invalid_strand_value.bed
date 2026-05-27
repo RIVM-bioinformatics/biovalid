@@ -1,0 +1,5 @@
+# Source: https://genome.ucsc.edu/FAQ/FAQformat.html#format1
+# Symptom: strand field contains invalid value; spec allows only "+", "-", or "."
+chr1	1000	2000	featureA	0	1
+chr1	3000	4000	featureB	0	F
+chr1	5000	6000	featureC	0	*

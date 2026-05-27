@@ -1,0 +1,10 @@
+# Source: https://github.com/deeptools/deepTools/issues/1140
+#   https://www.ncbi.nlm.nih.gov/assembly/GCF_000001735.3
+# Symptom: plant genome (Cannabis sativa) uses NCBI RefSeq assembly accession
+#   names (NC_044376.1 through NC_044388.1) without "chr" prefix.  These are
+#   valid BED chrom names; validators requiring "chr" prefix or rejecting dots
+#   in chrom names incorrectly reject.  deeptools accepts these natively.
+NC_044376.1	1009	2371	feature001	0	+
+NC_044376.1	1015003	1015800	feature002	0	-
+NC_044378.1	29635082	29636878	feature003	0	+
+NC_044379.1	26913548	26914154	feature004	0	.

@@ -1,0 +1,10 @@
+# Source: https://github.com/nf-core/rnaseq/issues/1215
+# Symptom: name field (col 4) contains GFF3-style key=value attribute strings
+#   (e.g. "chromosome:1" and "ID=chromosome:1;Alias=CM000663.2,chr1,NC_000001.11")
+#   emitted by GTF-to-BED converters that preserve GFF3 attributes in the name
+#   column.  RSeQC junction_saturation.py errors with "invalid literal for int()
+#   with base 10: '0.79;logic_name=cpg'" when it tries to parse a score-like
+#   column that contains a semicolon-separated attribute string.
+#   Score column here is "." (missing), causing additional parse confusion.
+1	0	248956422	chromosome:1	.	.	GRCh38	chromosome	.	ID=chromosome:1;Alias=CM000663.2,chr1,NC_000001.11
+1	11869	14409	gene:ENSG00000223972	.	+	GRCh38	gene	.	ID=gene:ENSG00000223972;Name=DDX11L1;biotype=transcribed_unprocessed_pseudogene

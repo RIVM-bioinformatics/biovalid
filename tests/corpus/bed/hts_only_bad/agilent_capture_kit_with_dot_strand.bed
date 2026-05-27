@@ -1,0 +1,14 @@
+# Source: https://github.com/hall-lab/speedseq/issues/41
+#   https://github.com/nf-core/rnaseq/issues/1063
+# Symptom: Agilent SureSelect capture kit BED with "browser position" and
+#   "track name=..." header lines, followed by data lines where the strand
+#   column contains "-" but other lines use "." for unstranded capture regions.
+#   Some data lines also have a rich name field containing pipe-delimited
+#   transcript IDs (ens|..., ref|...).  SpeedSeq variant calling fails with
+#   "Please specify a BAM file or files" because it tries to parse the track
+#   header as a region and the `int(region[1])` call fails on "name=...".
+browser position chr1:65510-65625
+track name="Covered" description="Agilent SureSelect Human All Exon V5" color=0,0,128
+chr1	65509	65625	probe001	0	-
+chr1	65831	65973	probe002	0	-
+chr1	69481	69600	ens|ENST00000335137,ref|OR4F5	0	-

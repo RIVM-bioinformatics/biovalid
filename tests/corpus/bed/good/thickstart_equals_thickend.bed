@@ -1,0 +1,5 @@
+# Source: https://genome.ucsc.edu/FAQ/FAQformat.html#format1
+# Symptom: thickStart == thickEnd; valid for non-coding features (no thick drawing region); some validators reject
+chr1	1000	5000	featureA	0	+	1000	1000	0
+chr1	10000	20000	featureB	0	-	20000	20000	0
+chrX	500	1000	featureC	100	.	750	750	0

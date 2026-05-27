@@ -1,0 +1,11 @@
+# Source: https://genome.ucsc.edu/goldenPath/help/bedgraph.html
+# Symptom: bedGraph format requires non-overlapping intervals on the same
+#   chromosome.  This file has overlapping intervals on chr1 (line 2 starts
+#   at 200 while line 1 ends at 400); bedGraphToBigWig rejects with:
+#   "Overlap/out of order at chr1:100-400 and chr1:200-600"
+#   Arises from bamCoverage/deeptools when --binSize is smaller than the
+#   average fragment length and fragments aren't properly de-duplicated.
+chr1	100	400	0.5
+chr1	200	600	0.8
+chr1	700	1000	0.3
+chr2	0	100	1.0

@@ -1,0 +1,8 @@
+# Source: synthetic (VCF-to-BED conversion error pattern)
+# Symptom: SNP positions encoded with 1-based start AND 1-based-closed end (e.g.
+# position 100 stored as start=100, end=100 in 1-based-closed convention).
+# Structurally invalid coordinate handling is invisible to a single-file validator,
+# but the float score ('.') triggers rejection under --spec hts; ucsc passes.
+chr1	100	100	rs123	.	+
+chr1	500	500	rs456	.	-
+chr22	1000000	1000000	rs789	.	+

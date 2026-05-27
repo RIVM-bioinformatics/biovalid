@@ -1,0 +1,14 @@
+# Source: https://bedops.github.io/docs/content/reference/file-management/conversion/vcf2bed.html
+#   https://github.com/bedops/bedops/issues/258
+# Symptom: chromEnd == chromStart at a non-zero position (e.g. a SNP or
+#   point mutation converted from VCF with POS=12345 becoming chromStart=12344
+#   chromEnd=12344 in 0-based BED).  bedops requires end > start for all
+#   non-zero-length records.  Tools that represent SNPs as length-1 intervals
+#   should use chromEnd = chromStart + 1.  Distinct from good/zero_length_feature.bed
+#   where start==end is explicitly valid per UCSC spec for insertions;
+#   this fixture tests a tool that emits equal coords by mistake (not as
+#   insertion convention), causing downstream "End coordinates must be greater
+#   than start coordinates" errors in bedops operations.
+chr1	12344	12344	rs123456	0	+
+chr1	55000	55000	rs789012	0	-
+chr2	100000	100000	rs345678	0	.

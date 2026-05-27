@@ -1,0 +1,6 @@
+# Source: https://github.com/bedops/bedops/issues/258
+# Symptom: start == end at non-zero position; bedops treats this as an empty set and errors with
+# "End coordinates must be greater than start coordinates"
+chr1	100	100	snpA
+chr1	200	201	featureB
+chr1	500	500	snpC

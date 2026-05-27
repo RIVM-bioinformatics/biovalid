@@ -1,0 +1,12 @@
+# Source: https://github.com/samtools/htslib/issues/1085
+# Symptom: BED6 file (or bedGraph-like) where col 4 (name) contains only
+#   integers and col 6 contains strand symbols; htslib auto-detection misreads
+#   exactly 5 or 6 columns with an integer col 4 as a FASTQ index (.fqi)
+#   instead of BED, causing tabix to fail with "FASTQ-IDX BGZF-compressed
+#   index data" and "Exec format error".  The fix is to use a non-integer or
+#   real-valued col 4 (e.g. 100.0 rather than 100).
+# Format: chrom start end name(integer) score strand
+chr21	1000	2000	100	0	+
+chr21	3000	4000	200	0	-
+chr22	5000	6000	150	0	+
+chr22	7000	8000	75	0	-

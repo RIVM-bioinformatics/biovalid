@@ -1,0 +1,13 @@
+# Source: https://github.com/igvteam/igv/issues/890
+# Symptom: name field (col 4) contains literal space characters. The validator's
+# name check (length 1-255) passes since space is a valid name character per spec
+# in a tab-separated file. Rejection under --spec hts is on the float score, not
+# on the name; downstream tools that re-split on whitespace will misparse it. (old: "strong
+#   GGGCGGGTGGGGCGGG"); parsers that tokenise on any whitespace instead of
+#   strictly on tabs split the name at the space, causing col 5 to receive
+#   the second word and col 6 (strand) to receive what was col 5.  The feature
+#   appears with no direction arrows in IGV; bedtools may shift downstream
+#   fields producing a strand field of "0.81" (a score, not a strand symbol).
+chr1	1051161	1051177	strong GGGCGGGTGGGGCGGG	0.81	+
+chr1	2100000	2100032	motif CCGCCCACCCCCGCCC	0.75	-
+chr2	500000	500020	site with spaces here	1000	+

@@ -1,0 +1,8 @@
+# Source: https://genome.ucsc.edu/FAQ/FAQformat.html#format12
+#   https://www.encodeproject.org/data-standards/terms/#narrowpeak
+# Symptom: ENCODE narrowPeak (BED6+4): standard BED6 followed by signalValue,
+# pValue, qValue, peak custom columns. Greedy parse as BED9+1 rejects because
+# the float signalValue (col 7) fails as thickStart. Passes cleanly under --bed 6.
+chr1	569779	569913	peak001	159	.	5.3086	12.74958	8.65	67
+chr1	713712	714020	peak002	43	.	1.2458	4.47123	2.33	150
+chr2	100000	100500	peak003	500	.	8.9900	20.00000	15.00	250

@@ -1,0 +1,12 @@
+# Source: https://github.com/samtools/hts-specs/issues/779
+#   https://genome.ucsc.edu/FAQ/FAQformat.html#format1
+# Symptom: chromosome name uses RefSeq/GenBank versioned accession format
+#   (NC_000001.11, NC_000023.11, NC_012920.1) including a period/dot character.
+#   The BED spec historically disallowed periods in chrom names due to MySQL
+#   split-table constraints; modern tools (bigBed, bigWig) handle dots fine.
+#   A strict validator applying the old "alphanumeric only" rule would reject
+#   these, but the hts-specs maintainers have confirmed periods should be allowed.
+#   This fixture validates that the validator accepts dots in chrom names.
+NC_000001.11	0	100	feature001	0	+
+NC_000023.11	5000	5200	feature002	255	-
+NC_012920.1	1000	16569	mitochondria001	0	.

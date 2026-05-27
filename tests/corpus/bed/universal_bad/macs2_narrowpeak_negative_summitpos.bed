@@ -1,0 +1,7 @@
+# Source: https://github.com/macs3-project/MACS/issues/617
+#   https://github.com/macs3-project/MACS/blob/master/MACS3/IO/PeakIO.py
+# Symptom: MACS2/MACS3 narrowPeak (BED6+4) where col 10 (peak summit offset)
+# is -1 meaning 'no called summit'. Validator's greedy parse rejects on col 7
+# (float signalValue treated as thickStart); pass --bed 6 to validate cleanly.
+chr1	569779	569913	MACS_peak_1	159	.	5.3086	-1	2.74958	-1
+chr1	713712	714020	MACS_peak_2	43	.	1.2458	-1	0.47123	-1

@@ -1,0 +1,6 @@
+# Source: https://genome.ucsc.edu/goldenPath/help/bigBed.html
+# Symptom: track line appears after data lines (mid-file); bedToBigBed and some validators fail on interleaved track lines
+chr1	1000	2000	featureA	0	+
+chr1	3000	4000	featureB	0	-
+track name="secondTrack" description="another track"
+chr2	1000	2000	featureC	0	+

@@ -1,0 +1,7 @@
+# Source: https://genome.ucsc.edu/goldenPath/help/bigBed.html
+# Symptom: file begins with a "track" line; this is valid BED (UCSC browser format) but bedToBigBed
+# requires it be stripped first; validators that reject track-prefixed BED are too strict
+track name="myTrack" description="Example track" useScore=1
+chr1	1000	2000	featureA	750	+
+chr1	3000	4000	featureB	500	-
+chr2	5000	6000	featureC	250	.

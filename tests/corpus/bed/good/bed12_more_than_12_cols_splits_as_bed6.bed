@@ -1,0 +1,9 @@
+# Source: https://github.com/arq5x/bedtools2/issues/332
+# Symptom: BED12 line with a 13th extra column causes fastaFromBed -split to
+#   treat the record as BED6 instead of BED12, returning the full feature span
+#   rather than just the splice-block sequences.  The extra column shifts the
+#   block-fields detection heuristic.  Valid BED+ but triggers tool defect.
+# The file is structurally valid BED12+1; the pathology is tool-side, but
+#   validators should flag "extra columns beyond BED12 may confuse parsers".
+chr19	8693946	8695688	Seq1	255	+	8693946	8695688	255,0,0	2	13,8,	0,1734,	ENSMUSG00000024650
+chr13	74310867	74311451	Seq2	255	-	74310867	74311451	255,0,0	2	4,17,	0,567,	ENSMUSG00000034152

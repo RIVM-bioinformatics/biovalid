@@ -1,0 +1,8 @@
+# Source: https://genome.ucsc.edu/FAQ/FAQformat.html#format1
+# Symptom: file contains # comment lines interspersed with data; spec allows # for comments;
+# parsers that treat # as invalid chrom name will fail
+# This is a comment line
+chr1	1000	2000	featureA	0	+
+# Another comment
+chr1	3000	4000	featureB	0	-
+chr2	5000	6000	featureC	100	.

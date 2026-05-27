@@ -1,0 +1,10 @@
+# Source: https://github.com/arq5x/bedtools2/issues/998
+#   https://github.com/arq5x/bedtools2/issues/235
+# Symptom: GFF3 file used as BED input; GFF3 has 9 columns with a different
+#   semantic layout (col 1=seqid, col 4=start [1-based], col 5=end, col 7=strand);
+#   bedtools complement receives "KN805525.1" in col 1 (ok) but "ensembl" in
+#   col 2 (not an integer start coordinate) and the attribute string in col 9.
+#   Distinct from gff_as_bed.bed (already in corpus); this is the GFF3 variant
+#   with full attribute strings in col 9.
+KN805525.1	ensembl	exon	2500	2651	.	-	.	gene_id "ENSFHEG00000014345"; gene_name "cdx1a"
+KN805525.1	ensembl	CDS	3000	3200	.	-	.	gene_id "ENSFHEG00000014345"; gene_name "cdx1a"

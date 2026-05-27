@@ -50,6 +50,23 @@ def cli_parser() -> Namespace:
     )
 
     parser.add_argument(
+        "--bed",
+        choices=("3", "4", "5", "6", "7", "8", "9", "12", "auto"),
+        default="auto",
+        help="BED tier. 'auto' (default) picks the max N for the actual column count. "
+             "An explicit N (3-9 or 12) validates cols 1-N and treats the rest as opaque "
+             "custom data (use for narrowPeak, broadPeak, bedmethyl).",
+    )
+
+    parser.add_argument(
+        "--spec",
+        choices=("ucsc", "hts"),
+        default="ucsc",
+        help="BED spec to validate against. 'ucsc' (default) follows the UCSC FAQ; "
+             "'hts' enforces the stricter hts-specs BEDv1 literal.",
+    )
+
+    parser.add_argument(
         "--version",
         action="version",
         version=f"%(prog)s {__version__}",

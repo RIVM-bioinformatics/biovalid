@@ -1,0 +1,5 @@
+# Source: https://genome.ucsc.edu/FAQ/FAQformat.html#format1
+# Symptom: only 2 columns present; BED minimum is 3 (chrom, chromStart, chromEnd)
+chr1	1000
+chr1	2000
+chr2	5000

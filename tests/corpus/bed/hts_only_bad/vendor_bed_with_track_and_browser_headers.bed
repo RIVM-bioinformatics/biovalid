@@ -1,0 +1,13 @@
+# Source: https://github.com/nf-core/rnaseq/issues/1063
+# Symptom: vendor-supplied capture kit BED (e.g. Agilent SureSelect) begins
+#   with full "browser position ..." and "track name=..." header lines before
+#   data.  RSeQC read_distribution.py treats the header lines as data records
+#   and errors.  This is distinct from track_line_in_body.bed (track line
+#   mid-file) and track_header_before_data.bed (valid single-line track header):
+#   this variant has both browser AND track lines and a verbose track= attribute
+#   block, which many tools (not UCSC) fail to recognise as a comment.
+browser position chr1:14694-14814
+track name="Covered" description="Agilent SureSelect - Genomic regions covered by probes" color=0,0,128 db=hg19
+chr1	14694	14814	exon001
+chr1	14928	15048	exon002
+chr1	15752	15948	exon003

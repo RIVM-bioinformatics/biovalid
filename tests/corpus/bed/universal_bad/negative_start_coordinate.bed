@@ -1,0 +1,5 @@
+# Source: https://github.com/daler/pybedtools/issues/343
+# Symptom: negative chromStart; BED is 0-based non-negative; arises from coordinate arithmetic (e.g. shift operations)
+chrI	-10	20	featureA	.	+
+chrI	50	80	featureB	.	+
+chr1	-1	100	featureC	0	.

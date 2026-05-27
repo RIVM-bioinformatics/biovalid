@@ -1,0 +1,11 @@
+# Source: https://genome.ucsc.edu/FAQ/FAQformat.html#format1
+#   https://github.com/arq5x/bedtools2/issues/1078
+# Symptom: some fields in a line are tab-separated while others are
+#   space-separated; this inconsistency arises when BED files are
+#   processed by awk scripts that use printf with mixed "%s\t" and "%s "
+#   format strings, or when copy-paste from documentation introduces spaces.
+#   Tools that split strictly on tabs will split the space-separated
+#   fields incorrectly; tools that split on any whitespace may produce
+#   the correct field count by accident.
+chr1	100	200 feature001	0	+
+chr1	300	400	feature002 0	-

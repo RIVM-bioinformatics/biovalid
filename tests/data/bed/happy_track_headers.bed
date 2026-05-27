@@ -1,0 +1,10 @@
+# Source: BED12 example coordinates from hts-specs BEDv1 §2.1 / UCSC FAQ.
+# https://samtools.github.io/hts-specs/BEDv1.pdf
+# https://genome.ucsc.edu/FAQ/FAQformat.html#format1
+# Public-domain illustrative content from the BED format specification.
+# Converted to tab separators (spec allows space-or-tab; this validator requires tab).
+browser position chr7:127471196-127495720
+track name="ItemRGBDemo" description="Item RGB demonstration" itemRgb="On"
+chr7	127471196	127472363	Pos1	0	+	127471196	127472363	255,0,0	1	1167,	0,
+chr7	127472363	127473530	Pos2	0	+	127472363	127473530	255,0,0	1	1167,	0,
+chr7	127473530	127474697	Pos3	0	+	127473530	127474697	255,0,0	1	1167,	0,

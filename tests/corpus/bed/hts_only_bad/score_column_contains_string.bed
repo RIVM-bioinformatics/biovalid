@@ -1,0 +1,10 @@
+# Source: https://github.com/bedops/bedops/issues/283
+# Symptom: score field (col 5) contains a non-numeric string (e.g. "test",
+#   "N/A", ".") where a number in 0-1000 is expected; bedmap --max and similar
+#   score-dependent operations produce NaN or garbage output; arises when a
+#   pipeline appends BED6 rows from a tool that uses col 5 for an ID string
+#   rather than a score.  Distinct from float_score.bed (numeric but non-integer)
+#   and from score_column_reused_as_timing.bed (float timing hint).
+chr1	866407	871286	feature001	test	+
+chr1	948942	957856	feature002	N/A	-
+chr1	1022870	1026999	feature003	score	+

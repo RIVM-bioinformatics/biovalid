@@ -1,0 +1,12 @@
+# Source: https://github.com/igvteam/igv/issues/1396
+#   https://www.encodeproject.org/data-standards/wgbs/
+# Symptom: bedMethyl format (Bismark CX report / modkit output) uses 10 columns:
+#   chrom, start, end, name(mod_code), score, strand, thickStart, thickEnd,
+#   itemRgb, coverage, percentModified (as 0-100 integer).  When treated as
+#   BED6, the extra columns (coverage, percent) shift field indices; tools
+#   expecting col 5 to be score 0-1000 receive coverage counts that exceed
+#   1000.  Distinct from bismark_methylation.bed (5-col variant).
+# Format: chrom start end name score strand thickStart thickEnd itemRgb coverage percentMod
+chr1	10000	10001	m	90	+	10000	10001	255,0,0	50	90
+chr1	10002	10003	m	0	-	10002	10003	0,0,255	10	0
+chr1	10100	10101	m	75	+	10100	10101	127,127,0	200	75

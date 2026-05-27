@@ -1,0 +1,12 @@
+# Source: https://github.com/JetBrains-Research/big/issues/33
+#   https://www.encodeproject.org/data-standards/terms/
+# Symptom: ENCODE narrowPeak format (BED6+4) contains floating-point signal
+#   values in column 7 (signalValue) such as "5.30862042004096".  When tools
+#   that handle standard BED try to parse this as the score column (col 5)
+#   or treat col 7 as an integer, they throw NumberFormatException or similar.
+#   narrowPeak is a BED extension; the signal/pvalue/qvalue columns are floats
+#   but many BED parsers that do not recognise the narrowPeak schema reject them.
+# Format: chrom chromStart chromEnd name score strand signalValue pValue qValue peak
+chr1	569779	569913	peak001	159	.	5.30862042004096	-1	2.74958	66
+chr1	713712	714020	peak002	43	.	1.24578	-1	0.47123	154
+chrX	155260468	155261612	peak003	200	.	12.9845	8.32156	5.12345	572
