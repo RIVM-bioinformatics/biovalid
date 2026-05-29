@@ -200,8 +200,9 @@ class BedValidator(BaseValidator):
                 self.filename, line_num, fields[5],
             )
 
-        if effective_n >= 8:
+        if effective_n >= 7:
             thick_start = self._parse_nonneg_int(fields[6], "thickStart", line_num)
+        if effective_n >= 8:
             thick_end = self._parse_nonneg_int(fields[7], "thickEnd", line_num)
             if thick_start < chrom_start or thick_end > chrom_end or thick_end < thick_start:
                 self.logger.error(

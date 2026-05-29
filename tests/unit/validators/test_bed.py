@@ -346,6 +346,16 @@ def test_explicit_bed_3_skips_per_field_checks(tmp_path: Path) -> None:
     BedValidator(bed, bed_tier="3").validate()
 
 
+def test_bed7_thick_start_validated(tmp_path: Path) -> None:
+    # hts-specs Table 4 lists BED7 as a valid tier (thickStart present, thickEnd
+    # absent). The range invariant requires thickEnd, but thickStart still has to
+    # be a non-negative integer on its own.
+    bed = tmp_path / "bed7_bad.bed"
+    bed.write_text("chr1\t100\t200\tname\t0\t+\tnotanint\n")
+    with pytest.raises(RuntimeError, match="non-integer thickStart"):
+        BedValidator(bed, bed_tier="7").validate()
+
+
 def test_explicit_bed_6_on_bed12_file_skips_block_validation(tmp_path: Path) -> None:
     # With --bed 6, cols 7-12 are opaque. Block invariant violations go unchecked.
     bed = tmp_path / "bed12_with_bad_blocks.bed"
