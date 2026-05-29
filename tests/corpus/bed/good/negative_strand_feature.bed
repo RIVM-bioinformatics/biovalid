@@ -1,0 +1,9 @@
+# Source: https://genome.ucsc.edu/FAQ/FAQformat.html#format1
+# Symptom: BED6 features on the negative strand; coordinates are still
+#   chromStart < chromEnd (0-based, half-open) even for reverse-strand features.
+#   A common bug in naive strand-aware tools is to swap chromStart and chromEnd
+#   when strand is "-", producing invalid (inverted) records.  This fixture
+#   confirms that strand="-" with chromStart < chromEnd is valid and correct.
+chr1	1000	2000	gene001	500	-
+chr2	5000	8000	gene002	0	-
+chrX	100000	200000	gene003	1000	-

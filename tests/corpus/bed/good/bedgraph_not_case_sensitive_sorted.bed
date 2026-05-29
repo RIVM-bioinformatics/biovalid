@@ -1,0 +1,14 @@
+# Source: https://github.com/Illumina/canvas/issues/140
+#   https://genome.ucsc.edu/goldenPath/help/bigWig.html
+# Symptom: bedGraph file (4 columns: chrom, start, end, value) is not sorted
+#   in case-sensitive lexicographic chromosome order required by bedGraphToBigWig.
+#   The UCSC tool requires: `sort -k1,1 -k2,2n` with LC_COLLATE=C.
+#   A locale-insensitive sort produces "chrM" before "chrX" on some systems
+#   but "chrX" before "chrm" on others.  The specific error is:
+#   "is not case-sensitive sorted at line N. Please use 'sort -k1,1 -k2,2n'
+#   with LC_COLLATE=C, or bedSort and try again."
+chr1	0	10000	0.5
+chr2	0	10000	0.8
+chrM	0	10000	1.0
+chrX	0	10000	0.3
+chr10	0	10000	0.6

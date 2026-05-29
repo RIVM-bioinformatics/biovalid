@@ -1,0 +1,13 @@
+# Source: https://github.com/arq5x/bedtools2/issues/1069
+#   https://genome.ucsc.edu/goldenPath/help/bigBed.html
+# Symptom: chromosomes are not in a consistent sort order; a record for
+#   "chr2" appears after records for "chr20", then "chr3" etc.  Tools that
+#   require -sorted input (bedtools intersect -sorted, bedToBigBed) error out:
+#   "Sorted input specified, but the file has the following out of order record".
+#   Arises when genomic coordinates are sorted lexicographically ("chr10" < "chr2")
+#   rather than by natural chromosome order.
+chr1	100	200	feature001	0	+
+chr10	500	600	feature002	0	+
+chr2	1000	1100	feature003	0	+
+chr20	5000	5100	feature004	0	+
+chr3	8000	8100	feature005	0	+

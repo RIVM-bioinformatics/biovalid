@@ -1,0 +1,8 @@
+# Source: https://github.com/BrooksLabUCSC/flair/issues/581
+# Symptom: blockSizes list contains a negative value; arises from a bug in
+#   long-read alignment-to-BED conversion tools when splice junctions are
+#   computed incorrectly (e.g. from a reversed or overlapping CIGAR operation).
+#   flair correct reports "Negative block sizes. This results in bogus model
+#   from collapse with no introns."  Distinct from block_size_zero.bed (zero)
+#   and blocksize_first_entry_zero_bigbed.bed (first entry zero).
+chr1	10000	11000	read001	0	+	10000	11000	0	3	200,300,-50,	0,300,700,

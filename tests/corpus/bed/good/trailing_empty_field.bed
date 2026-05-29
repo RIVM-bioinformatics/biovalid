@@ -1,0 +1,5 @@
+# Source: https://github.com/arq5x/bedtools2/issues/659
+# Symptom: each data line has a trailing tab, creating a phantom 4th column
+# (empty name field). bedtools reports 'Differing number of BED fields encountered'.
+chr1	10	100	
+chr1	1000	10000	

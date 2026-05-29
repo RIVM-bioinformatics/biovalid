@@ -1,0 +1,4 @@
+# Source: https://github.com/arq5x/bedtools2/issues/686
+# Symptom: coordinate exceeds signed 32-bit integer maximum (2147483647); caused "malformed BED entry" in bedtools getfasta
+sampleSeq	2147483640	2147483660	chunk1
+sampleSeq	2200000000	2250000000	chunk2

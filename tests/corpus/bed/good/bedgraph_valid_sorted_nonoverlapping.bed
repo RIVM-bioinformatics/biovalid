@@ -1,0 +1,12 @@
+# Source: https://genome.ucsc.edu/goldenPath/help/bedgraph.html
+# Symptom: (none -- valid fixture) bedGraph format: BED4 with float signal
+#   values in col 4, intervals sorted in case-sensitive lexicographic order
+#   (LC_COLLATE=C: chr1 < chr10 < chr2 < chrX), non-overlapping within each
+#   chromosome.  Validators that reject float values in col 4, that require
+#   chr-numeric ordering, or that flag valid non-overlapping intervals as
+#   "overlapping" are incorrect.
+chr1	100	400	3.75
+chr1	400	800	2.10
+chr10	500	1000	7.23
+chr2	200	600	1.05
+chrX	0	500	5.00

@@ -1,0 +1,13 @@
+# Source: https://github.com/arq5x/bedtools2/issues/478
+#   https://github.com/arq5x/bedtools2/issues/628
+# Symptom: Ensembl-style chromosome names without "chr" prefix (e.g. "1"
+#   instead of "chr1") mixed with a tool chain that expects UCSC-style names;
+#   bedtools reports "inconsistent naming convention" warning and intersections
+#   fail silently or produce empty output.  A distinct variant from
+#   mixed_chr_prefix.bed: here ALL records lack the prefix (pure Ensembl),
+#   which is internally consistent but fails when the reference uses UCSC names.
+1	11777	11853	read001	0	-
+1	14355	14429	read002	1	-
+1	14358	14422	read003	1	+
+X	155270560	155270600	read004	0	+
+MT	1	16569	mito001	0	+

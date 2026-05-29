@@ -1,0 +1,6 @@
+# Source: https://github.com/arq5x/bedtools2/issues/432
+# Symptom: file has column header row without leading #; tools report "non positional records" or "non numeric value"
+chrom	chromStart	chromEnd	name	score	strand
+chr14	24800000	24810000	geneA	0	.
+chr11	64610000	64620000	geneB	0	.
+chr14	24710000	24720000	geneC	0	.

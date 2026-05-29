@@ -1,0 +1,13 @@
+# Source: https://genome.ucsc.edu/FAQ/FAQformat.html#format1
+#   https://github.com/nextstrain/augur/issues/511
+#   http://genome.ucsc.edu/blog/the-ucsc-genome-browser-coordinate-counting-systems/
+# Symptom: chromStart is 1-based (starts at 1 not 0) instead of the required
+#   0-based half-open coordinate system.  This is a very common mistake when
+#   converting from GFF/GTF/VCF (1-based) to BED (0-based).  The first exon
+#   below covers bases 1-100 in 1-based terms; correct BED would be 0-100.
+#   A validator can flag chromStart == 1 with chromEnd == 100 as suspicious
+#   (the feature is exactly 99 bp, not 100 bp as the user likely intended)
+#   but cannot conclusively prove 1-based encoding without reference context.
+chr1	1	100	exon001	0	+
+chr1	201	300	exon002	0	+
+chr1	401	500	exon003	0	+

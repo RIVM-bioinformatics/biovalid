@@ -1,0 +1,18 @@
+# Source: https://github.com/GMOD/jbrowse-components/issues/5073
+# Symptom: non-UCSC tool (nhmmer) emits a BED-like file prefixed with detailed
+#   comment lines that do not follow the UCSC "track"/"browser" format; instead
+#   they use arbitrary "# key: value" metadata about the tool run.  JBrowse
+#   loads the file but shows no name labels because the comment block interferes
+#   with the name column parser.  A validator should flag that comment lines
+#   contain non-UCSC-metadata content and may confuse downstream tools.
+#					-
+#			dir:		-
+#			file:		-
+#			mode:		-
+#			nhmmer		-
+#	Gallus_gallus.tblout	--tblout	settings:		-
+#	accession	hmmfrom	name	envfrom	+
+#			3.4		-
+#-------------------	-------	-------	--------------------	------	-
+NC_006088.5	1465687	1465847	LFSINE_Vert	36.1	-
+NC_006088.5	1521282	1521350	LFSINE_Vert	19.8	-

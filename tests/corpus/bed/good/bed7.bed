@@ -1,0 +1,5 @@
+# Source: https://genome.ucsc.edu/FAQ/FAQformat.html#format1
+# Symptom: 7-column BED (BED7); valid per spec; validators that only accept BED3/6/12 will reject this
+chr1	1000	5000	featureA	0	+	1500
+chr1	10000	20000	featureB	850	-	12000
+chr2	500	1500	featureC	100	.	500

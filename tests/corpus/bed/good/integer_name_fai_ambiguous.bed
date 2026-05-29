@@ -1,0 +1,6 @@
+# Source: https://github.com/samtools/htslib/issues/1085
+# Symptom: 5- or 6-column BED with integer name field triggers htslib auto-detection as FASTA-IDX/FAI;
+# tabix then refuses to open the file with "Exec format error"
+chr21	1000	20000	500	0
+chr21	25000	40000	750	0
+chr22	1000	5000	250	0

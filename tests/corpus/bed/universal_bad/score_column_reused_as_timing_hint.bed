@@ -1,0 +1,13 @@
+# Source: https://github.com/nf-core/sarek/issues/1148
+#   https://github.com/nf-core/sarek/issues/1389
+# Symptom: GATK/Picard interval-scatter pipelines interpret the 5th column
+#   (designated "score" in BED) as a timing/weight hint for scatter interval
+#   sizing.  When this column contains elapsed-seconds values (e.g. 12.5,
+#   3600.0) from a profiled run, the scatter algorithm creates an absurd number
+#   of sub-intervals (hundreds of thousands instead of dozens), paralysing the
+#   pipeline.  Score must be an integer 0-1000; floating-point timing values
+#   are semantically invalid and operationally catastrophic in this context.
+chr1	10000	50000	target001	12.5	.
+chr1	50001	200000	target002	3600.0	.
+chr2	1000	80000	target003	0.3	.
+chr3	500000	1000000	target004	7200.1	.

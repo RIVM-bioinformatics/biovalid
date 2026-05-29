@@ -1,0 +1,7 @@
+﻿# Source: https://genome.ucsc.edu/FAQ/FAQformat.html#format1
+# Symptom: file starts with a UTF-8 Byte Order Mark (BOM: EF BB BF in hex).
+#   BOM causes the first chromosome name to be parsed as ï»¿chr1 instead
+#   of chr1, causing "inconsistent naming convention" or "chromosome not found".
+#   Arises from Excel/Notepad on Windows exporting UTF-8 with BOM.
+chr1	100	200	feature001	0	+
+chr1	300	400	feature002	0	-

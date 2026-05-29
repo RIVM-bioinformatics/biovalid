@@ -1,0 +1,9 @@
+# Source: https://genome.ucsc.edu/FAQ/FAQformat.html#format1
+#   https://github.com/igvteam/igv/issues/359
+# Symptom: name field (col 4) contains a literal tab character, which
+#   shifts subsequent columns by one position.  Arises from poorly
+#   quoted awk/Python output where the name contains a tab from a join
+#   operation.  The parser sees the field boundary at the embedded tab,
+#   so what was intended as the name becomes two fields.
+# The line below has a tab inside "gene\tname":
+chr1	1000	2000	gene	name	0	+

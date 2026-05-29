@@ -1,0 +1,9 @@
+# Source: https://genome.ucsc.edu/FAQ/FAQformat.html#format1
+# Symptom: (none -- valid fixture) pure BED3 with exactly 3 required fields
+#   and no optional columns; valid per spec which requires only chrom,
+#   chromStart, chromEnd.  Validators that require at least 4 or 6 columns,
+#   or that flag the absence of name/score/strand as an error, are incorrect.
+chr1	0	100
+chr1	200	500
+chrX	1000000	2000000
+chrM	0	16569

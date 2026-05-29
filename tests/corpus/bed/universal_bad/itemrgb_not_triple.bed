@@ -1,0 +1,11 @@
+# Source: https://genome.ucsc.edu/FAQ/FAQformat.html#format1
+#   https://github.com/igvteam/igv/issues/512
+# Symptom: itemRgb field (col 9) contains a single decimal integer (e.g. 255)
+#   instead of the required "R,G,B" comma-separated triple.  Some tools write
+#   255 meaning blue (0,0,255) or write 16711680 meaning red (255,0,0).
+#   UCSC browser silently treats single-int as invalid; IGV may render as
+#   grey or black.  Arises from Python int(color) rather than RGB formatting.
+# Format: chrom start end name score strand thickStart thickEnd itemRgb blockCount blockSizes blockStarts
+chr1	1000	2000	feat1	500	+	1200	1800	255	2	300,400	0,600
+chr1	3000	4000	feat2	750	-	3200	3800	16711680	2	200,300	0,500
+chr1	5000	6000	feat3	0	+	5000	6000	65280	1	1000	0

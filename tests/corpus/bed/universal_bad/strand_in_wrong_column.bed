@@ -1,0 +1,12 @@
+# Source: https://github.com/OpenOmics/chrom-seek/issues/131
+# Symptom: strand field (+/-) placed in column 4 (name field) instead of
+#   the required column 6; name is placed in column 5.  Arises from GTF-to-BED
+#   converters that use a non-standard column order (e.g. name, strand, extra
+#   annotation columns).  deeptools ignores strand information and produces
+#   symmetrical plots; validators accepting any string in col 4 miss this.
+#   A validator should warn when col 4 contains only "+", "-", or "." values
+#   and col 6 is absent or contains a name-like string.
+chr1	3143476	3144545	+	ENSMUSG00000102693.2	TEC
+chr1	3172239	3172348	+	ENSMUSG00000064842.3	snRNA
+chr1	3276124	3741721	-	ENSMUSG00000051951.6	protein_coding
+chr1	3322980	3323459	+	ENSMUSG00000102851.2	processed_pseudogene

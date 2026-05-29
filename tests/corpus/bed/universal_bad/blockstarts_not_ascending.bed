@@ -1,0 +1,4 @@
+# Source: https://genome.ucsc.edu/FAQ/FAQformat.html#format1
+# Symptom: blockStarts not in ascending order; UCSC spec requires blocks to be listed in genomic order
+chr1	1000	5000	featureA	0	+	1000	5000	0	3	100,200,150,	2000,500,0,
+chr1	10000	20000	featureB	0	-	10000	20000	0	2	300,200,	5000,0,

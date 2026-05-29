@@ -1,0 +1,4 @@
+# Source: https://github.com/arq5x/bedtools2/issues/981
+# Symptom: BED12 blockCount field contains a float (1.000000) instead of integer; bedtools errors "illegal number"
+chr1	2066786	2072522	feature1	1	+	2066786	2072522	0	1.000000	5736,	0,
+chr1	32672415	32672602	feature2	1	+	32672415	32672602	0	1.000000	187,	0,

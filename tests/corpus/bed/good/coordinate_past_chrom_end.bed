@@ -1,0 +1,4 @@
+# Source: https://genome.ucsc.edu/goldenPath/help/bigBed.html
+# Symptom: chromEnd coordinate exceeds chromosome length; bedToBigBed errors and recommends bedClip
+chr1	248956000	248957000	featureA	0	+
+chr1	1000	2000	featureB	0	-

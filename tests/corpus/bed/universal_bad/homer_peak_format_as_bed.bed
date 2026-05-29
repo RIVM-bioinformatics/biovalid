@@ -1,0 +1,12 @@
+# Source: https://homer.ucsd.edu/homer/ngs/peaks.html
+# Symptom: HOMER peak-calling output (*.peaks.txt) is sometimes renamed to
+#   *.bed and fed to BED tools; the HOMER format has a different column order:
+#   col1=PeakID, col2=chrom, col3=start (1-based), col4=end, col5=strand,
+#   col6=normalised_tag_count, col7=focus_ratio, col8=score.
+#   When treated as BED, col1 ("peak1") becomes chrom (not "chr*"), col2
+#   becomes start (NaN string), and the 1-based start is off by one.
+# The "#" header line is a HOMER convention, not a UCSC-BED comment.
+#	PeakID	chr	start	end	strand	Normalized Tag Count	Focus Ratio	Score
+peak1	chr1	12345	12445	+	10.23	0.85	42.0
+peak2	chr1	55000	55200	-	8.90	0.72	38.5
+peak3	chr2	100000	100500	+	15.0	0.91	60.0

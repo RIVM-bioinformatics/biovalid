@@ -1,0 +1,6 @@
+# Source: https://github.com/arq5x/bedtools2/issues/659
+# Symptom: inconsistent field count across lines (BED3 mixed with BED4); spec requires consistent column count
+chr1	10	100
+chr1	200	300	featureB
+chr1	400	500
+chr2	100	200	featureD

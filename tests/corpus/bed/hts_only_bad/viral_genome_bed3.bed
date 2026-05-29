@@ -1,0 +1,12 @@
+# Source: https://www.ncbi.nlm.nih.gov/nuccore/NC_045512.2
+#   https://genome.ucsc.edu/FAQ/FAQformat.html#format1
+# Symptom: BED3 file for a viral genome (SARS-CoV-2, NC_045512.2) with a
+#   single-segment, ~30kb chromosome; validators that only accept chr* names
+#   or enforce minimum coordinate counts for human/mouse genomes will
+#   incorrectly reject this.  chromEnd (29903) is the actual genome length.
+#   Valid: chrom name is an NCBI accession without "chr" prefix, coordinates
+#   are within the short viral genome, BED3 minimum format is used.
+NC_045512.2	0	29903
+NC_045512.2	0	265
+NC_045512.2	266	21555
+NC_045512.2	21562	25384

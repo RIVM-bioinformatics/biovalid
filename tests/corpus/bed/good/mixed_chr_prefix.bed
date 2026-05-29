@@ -1,0 +1,6 @@
+# Source: https://github.com/arq5x/bedtools2/issues/628 https://github.com/arq5x/bedtools2/issues/230
+# Symptom: inconsistent chromosome naming within a single file - some records use "chr" prefix, others use bare numbers
+chr1	1000	2000	featureA	0	+
+1	3000	4000	featureB	0	+
+chr2	5000	6000	featureC	0	-
+2	7000	8000	featureD	0	-

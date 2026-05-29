@@ -1,0 +1,5 @@
+# Source: https://genome.ucsc.edu/FAQ/FAQformat.html#format1
+# Symptom: itemRgb is the single value "0"; UCSC uses this as shorthand for "0,0,0"; validators expecting R,G,B may reject
+chr1	1000	2000	featureA	0	+	1000	2000	0
+chr1	3000	4000	featureB	0	-	3000	4000	255,0,0
+chr1	5000	6000	featureC	0	.	5000	6000	0,128,0

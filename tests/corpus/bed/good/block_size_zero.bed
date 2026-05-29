@@ -1,0 +1,3 @@
+# Source: https://github.com/arq5x/bedtools2/issues/967
+# Symptom: BED12 block with size 0; bedtools getfasta errors "cannot construct subsequence with negative offset or length < 1"
+chr1	26903513	26916720	read001	45	+	26903513	26916720	255,0,0	5	419,221,423,0,34,	0,1017,1376,7773,13173,

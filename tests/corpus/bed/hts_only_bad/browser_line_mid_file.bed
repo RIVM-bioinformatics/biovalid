@@ -1,0 +1,6 @@
+# Source: https://genome.ucsc.edu/goldenPath/help/bigBed.html
+# Symptom: "browser" directive line appears after data lines; bedToBigBed and strict parsers require
+# browser/track lines only at file header, not interleaved with data
+chr1	1000	2000	featureA	0	+
+browser position chr1:1000-5000
+chr1	3000	4000	featureB	0	-

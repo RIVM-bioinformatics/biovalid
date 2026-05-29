@@ -1,0 +1,5 @@
+# Source: https://genome.ucsc.edu/FAQ/FAQformat.html#format1
+# Symptom: score field exceeds maximum value of 1000; UCSC spec: "score between 0 and 1000"
+chr1	1000	2000	featureA	1001	+
+chr1	3000	4000	featureB	9999	.
+chr1	5000	6000	featureC	-1	-

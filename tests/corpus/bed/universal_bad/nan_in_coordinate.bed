@@ -1,0 +1,5 @@
+# Source: https://github.com/arq5x/bedtools2/issues/981
+# Symptom: coordinate field contains "NaN" (IEEE float); distinct from "NA" - NaN is a valid float parse but invalid coordinate
+chr1	1000	NaN	featureA
+chr1	2000	3000	featureB
+chr2	NaN	5000	featureC

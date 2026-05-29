@@ -1,0 +1,7 @@
+# Source: https://genome.ucsc.edu/FAQ/FAQformat.html#format1
+# Symptom: 8-column file intended as BED6+2 with custom application columns. Greedy
+# parse treats col 7 as thickStart (must be integer); rejection is correct under
+# --bed auto, file passes cleanly under --bed 6.
+chr1	1000	2000	featureA	0	+	extra_value_1	0.95
+chr1	3000	4000	featureB	500	-	extra_value_2	0.72
+chr2	5000	6000	featureC	100	.	extra_value_3	0.88

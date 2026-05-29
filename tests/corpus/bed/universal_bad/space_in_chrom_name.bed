@@ -1,0 +1,5 @@
+# Source: https://github.com/arq5x/bedtools2/issues/1021
+# Symptom: chromosome name contains a space character; space-delimited file misread as tab-delimited,
+# splitting the chrom name and shifting all column indices; "Unexpected file format. Please use tab-delimited BED"
+chr1 extra	1000	2000	featureA
+chr2 extra	3000	4000	featureB

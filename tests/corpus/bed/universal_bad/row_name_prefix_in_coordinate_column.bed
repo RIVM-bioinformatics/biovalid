@@ -1,0 +1,11 @@
+# Source: https://github.com/arq5x/bedtools2/issues/980
+# Symptom: R-style row-name prefix in first column shifts all field indices;
+#   bedtools sort throws "terminate called after throwing an instance of
+#   'std::invalid_argument'  what():  stoll" because the chromosome field is
+#   parsed as the literal row label and the coordinate fields receive strings.
+# The pattern arises when data is exported from an R data.frame with
+# row.names=TRUE (default) and write.table() without col.names=FALSE.
+             chr       pos   pos_end strand
+ cg18478105 chr20  63216297  63216299      +
+ cg09835024  chrX  24054522  24054524      +
+ cg14361672  chr9 128701656 128701658      -

@@ -1,0 +1,8 @@
+# Source: https://github.com/arq5x/bedtools2/issues/998
+#   https://github.com/arq5x/bedtools2/issues/489
+# Symptom: BED file uses Windows (CRLF, 
+) line endings;  character appears
+#   at end of each field when parsed on Linux. bedtools errors with
+#   "ERROR: illegal number 43341. Exiting..."
+chr1	100	200	feature001
+chr2	300	400	feature002

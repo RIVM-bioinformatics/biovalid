@@ -1,0 +1,10 @@
+# Source: https://genome.ucsc.edu/FAQ/FAQformat.html#format1
+#   https://github.com/arq5x/bedtools2/issues/1078
+# Symptom: BED lines have trailing whitespace (spaces or tabs) after the last
+#   field; arises from printf/echo without trimming, or copy-paste from
+#   spreadsheets.  Strict parsers count the trailing whitespace as an extra
+#   empty field, producing "too many columns" or parsing the empty string as
+#   the next expected column (e.g. thickStart becoming "").
+chr1	100	200	feat001	0	+   
+chr1	300	400	feat002	255	-	
+chr2	1000	2000	feat003	500	+  

@@ -1,0 +1,7 @@
+# Source: https://genome.ucsc.edu/FAQ/FAQformat.html#format1
+# Symptom: non-standard chromosome names (scaffold, contig, chrUn); all valid per spec;
+# validators that only accept chr[0-9XYM] patterns will incorrectly reject these
+scaffold_001	100	500	featureA	0	+
+chrUn_gl000220	200	400	featureB	0	-
+contig_42	0	1000	featureC	0	.
+NC_000001.11	1000	2000	featureD	0	+

@@ -1,0 +1,14 @@
+# Source: https://github.com/samtools/htslib/issues/1085
+# Symptom: Whole-genome bisulfite sequencing (WGBS/RRBS) CpG methylation output
+#   in a 5-6 column BED-like format where col 4 is the methylation percentage
+#   (integer 0-100) and col 5/6 are read counts.  When this file has exactly
+#   5 or 6 columns with an integer in column 4, htslib auto-detection classifies
+#   it as a FASTQ-IDX (FQI) format rather than BED, causing tabix to fail with
+#   "Exec format error".  Workaround: add a non-integer suffix (e.g. "85.0")
+#   or a 7th column.  Distinct from integer_name_fai_ambiguous.bed (which has
+#   col 4 integer from a different context); here the col 4 integer IS the
+#   expected data value (methylation %), not a spurious integer name.
+chr21	9764000	9764001	85	10	+
+chr21	9764050	9764051	60	8	+
+chr21	9764120	9764121	95	15	-
+chr21	9764200	9764201	0	5	+

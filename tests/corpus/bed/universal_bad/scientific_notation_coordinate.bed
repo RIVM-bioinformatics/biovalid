@@ -1,0 +1,4 @@
+# Source: https://github.com/arq5x/bedtools2/issues/518 https://github.com/arq5x/bedtools2/issues/1099
+# Symptom: chromEnd in scientific notation; some tools silently accept, others error "illegal number"
+chr1	185995000	1.86e+08	featureA
+chr1	100000000	1.66e+08	featureB

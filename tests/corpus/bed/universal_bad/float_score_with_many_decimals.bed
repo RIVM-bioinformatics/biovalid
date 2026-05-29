@@ -1,0 +1,12 @@
+# Source: https://github.com/arq5x/bedtools2/issues/981
+# Symptom: score field contains a float with many decimal places (0.4900000)
+#   emitted by bedtools map or coverage operations; re-feeding this output as
+#   BED input to a subsequent bedtools command causes "ERROR: illegal number
+#   '0.4900000'. Exiting..." because bedtools ParseTools.cpp str2chrPos() only
+#   accepts scientific-notation floats (e/E), not plain decimals, in position
+#   columns -- and some pipelines pipe score columns back into coordinate slots.
+# This is a distinct variant from decimal_coordinate.bed: the value is in
+#   column 5 (score), not column 2/3, and the float has trailing zeros.
+chr1	2066786	2072522	feature001	0.4900000	+
+chr1	3100000	3200000	feature002	1.000000	-
+chr2	5000000	5100000	feature003	0.0000001	+

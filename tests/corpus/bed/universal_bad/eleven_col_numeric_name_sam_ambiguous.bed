@@ -1,0 +1,5 @@
+# Source: https://github.com/daler/pybedtools/issues/363 https://github.com/daler/pybedtools/issues/370
+# Symptom: 11-column BED with numeric name field causes pybedtools to misdetect file as SAM format;
+# "By the way, that error is because SAM format is 1-based but Interval objects are zero-based"
+chr1	3787399	3787400	3787399	3787400	3787399	3787400	+	hg38	5	169
+chr1	3935209	3935210	3935209	3935210	3935209	3935210	+	hg38	5	170

@@ -1,0 +1,9 @@
+# Source: https://github.com/arq5x/bedtools2/issues/1053
+# Symptom: chromosome name field is extremely long (hundreds of characters,
+#   e.g. a composite reference ID joining dozens of accessions with "|");
+#   bedtools merge truncates the name and emits garbled coordinate output.
+#   While the BED spec does not impose a length limit on chrom names, this
+#   pattern arises from poorly formatted composite reference identifiers and
+#   causes silent data corruption in tools that use fixed internal buffers.
+ref_0:GCF900176165|GCF014646895|GCF007990775|GCF000745915|GCF003574085|GCF000423425|GCF017497985|GCF003574035|GCF000620065|GCF000024425|GCA000482765|GCF003351145|GCF000771745|GCF004307015|GCF000745065|GCF000744175|GCF000744885|GCF003336745|GCF002964845|GCF004684245|GCF000423905|GCF000381045|GCF000236585	1	100	feature001	0	+
+ref_0:GCF900176165|GCF014646895|GCF007990775|GCF000745915|GCF003574085|GCF000423425|GCF017497985|GCF003574035|GCF000620065|GCF000024425|GCA000482765|GCF003351145|GCF000771745|GCF004307015|GCF000745065|GCF000744175|GCF000744885|GCF003336745|GCF002964845|GCF004684245|GCF000423905|GCF000381045|GCF000236585	200	300	feature002	0	+

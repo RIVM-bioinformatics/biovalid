@@ -1,0 +1,11 @@
+# Source: https://genome.ucsc.edu/FAQ/FAQformat.html#format1
+#   https://github.com/arq5x/bedtools2/issues/332
+# Symptom: file has more than 12 BED columns (BED12+N "extra" columns appended
+#   by ENCODE or UCSC pipeline tools, e.g. signal p-value, fold-enrichment);
+#   bedtools fastaFromBed and bed12ToBed6 silently treat the file as BED6
+#   (ignoring block columns), losing the exon structure.  Distinct from
+#   bed12_more_than_12_cols_splits_as_bed6.bed (which focuses on the fastaFromBed
+#   bug); this fixture focuses on the ENCODE BED12+4 extended format.
+# Format: chrom start end name score strand thickStart thickEnd itemRgb blockCount blockSizes blockStarts signalValue pValue qValue peak
+chr1	100000	200000	transcript1	1000	+	110000	190000	0	3	1000,2000,1000	0,50000,99000	5.3	12.4	8.6	500
+chr2	50000	100000	transcript2	500	-	55000	95000	0	2	500,500	0,49500	2.1	5.0	3.2	250

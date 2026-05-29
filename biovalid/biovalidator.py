@@ -7,6 +7,7 @@ from biovalid.logger import setup_logging
 from biovalid.validators import (
     BaiValidator,
     BamValidator,
+    BedValidator,
     FastaValidator,
     FastqValidator,
     GffValidator,
@@ -57,6 +58,8 @@ class BioValidator:
         verbose: bool = False,
         log_file: Path | str | None = None,
         display_version: bool = False,
+        spec: str = "ucsc",
+        bed_tier: str = "auto",
     ) -> None:
         """Initialize the BioValidator with arguments."""
         if display_version:
@@ -66,6 +69,8 @@ class BioValidator:
         self.bool_mode = bool_mode
         self.verbose = verbose
         self.log_file = log_file
+        self.spec = spec
+        self.bed_tier = bed_tier
         self.logger = setup_logging(self.verbose, self.log_file)
 
     def pick_validator(self, file_path: Path) -> Type[BaseValidator]:
@@ -77,6 +82,7 @@ class BioValidator:
             FileType.FASTQ: FastqValidator,
             FileType.BAM: BamValidator,
             FileType.BAI: BaiValidator,
+            FileType.BED: BedValidator,
             FileType.GFF: GffValidator,
             FileType.VCF: VcfValidator,
         }
@@ -93,7 +99,7 @@ class BioValidator:
             try:
                 for path in clean_paths:
                     validator_class = self.pick_validator(path)
-                    validator = validator_class(path, self.logger)
+                    validator = self._build_validator(validator_class, path)
                     validator.general_validation()
                     if validator_class != BaseValidator:
                         validator.validate()
@@ -105,7 +111,7 @@ class BioValidator:
         try:
             for path in clean_paths:
                 validator_class = self.pick_validator(path)
-                validator = validator_class(path, self.logger)
+                validator = self._build_validator(validator_class, path)
                 validator.general_validation()
                 if validator_class != BaseValidator:
                     validator.validate()
@@ -114,11 +120,16 @@ class BioValidator:
             return False
         return True
 
+    def _build_validator(self, validator_class: Type[BaseValidator], path: Path) -> BaseValidator:
+        if validator_class is BedValidator:
+            return BedValidator(path, self.logger, spec=self.spec, bed_tier=self.bed_tier)
+        return validator_class(path, self.logger)
+
 
 def run_cli() -> None:
     """Main function to run the validation."""
     args = cli_parser()
-    validator = BioValidator(bool_mode=args.bool_mode, verbose=args.verbose, log_file=args.log_file)
+    validator = BioValidator(bool_mode=args.bool_mode, verbose=args.verbose, log_file=args.log_file, spec=args.spec, bed_tier=args.bed)
     try:
         validator.validate_files(args.file_paths, recursive=args.recursive)
     except Exception as e:

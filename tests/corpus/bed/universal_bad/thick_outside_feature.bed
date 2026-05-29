@@ -1,0 +1,4 @@
+# Source: https://genome.ucsc.edu/FAQ/FAQformat.html#format1
+# Symptom: thickStart is less than chromStart (500 < 1000); thick region falls outside the feature boundaries
+chr1	1000	5000	featureA	0	+	500	4500	0
+chr1	10000	15000	featureB	0	-	10000	16000	0

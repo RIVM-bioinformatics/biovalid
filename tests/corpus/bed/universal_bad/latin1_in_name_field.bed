@@ -1,0 +1,11 @@
+# Source: https://genome.ucsc.edu/FAQ/FAQformat.html#format1
+#   https://github.com/arq5x/bedtools2/issues/998
+# Symptom: name field (col 4) contains Latin-1 (ISO-8859-1) encoded bytes
+#   that are not valid UTF-8; arises from sample names in clinical databases
+#   that use ISO-8859-1 (e.g. French accented characters: eacute = 0xe9).
+#   Tools that validate fields as UTF-8 raise a decoding error; tools that
+#   pass through binary data may silently corrupt downstream JSON/XML outputs.
+#   The 0xe9 byte (e with acute in Latin-1) triggers "invalid continuation byte"
+#   in Python str.decode("utf-8").
+chr1	100	200	echantillon_témoin	0	+
+chr1	300	400	séquence_001	255	-

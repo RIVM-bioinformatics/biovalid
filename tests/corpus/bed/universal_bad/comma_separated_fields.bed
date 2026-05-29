@@ -1,0 +1,10 @@
+# Source: https://genome.ucsc.edu/FAQ/FAQformat.html#format1
+# Symptom: BED file uses comma as field delimiter instead of tab; arises from
+#   Excel export as CSV or from R write.csv() without specifying sep="\t".
+#   All parsers that split on tab will fail to parse the fields.
+#   bedtools reports "Unexpected file format. Please use tab-delimited BED".
+#   This is distinct from space-separated (space_separated.bed is in corpus)
+#   and from comma in blockSizes/blockStarts (those use comma as LIST separator).
+chr1,100,200,feature001,0,+
+chr1,300,400,feature002,255,-
+chr2,1000,2000,feature003,500,+

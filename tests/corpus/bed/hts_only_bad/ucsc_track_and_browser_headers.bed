@@ -1,0 +1,17 @@
+# Source: https://genome.ucsc.edu/FAQ/FAQformat.html#format1
+# Symptom: valid per UCSC (browser+track headers are documented optional headers);
+# invalid per hts-specs §5 which says files with browser/track lines are track
+# files, not BED files. Passes --spec ucsc, errors --spec hts. BED file with UCSC standard track/browser
+#   header lines that are spec-compliant; "browser" lines set display range,
+#   "track" line sets display properties.  Validators that reject "browser"
+#   and "track" header lines entirely are too strict; these are defined by
+#   UCSC as optional metadata for the UCSC Genome Browser.  Distinct from
+#   vendor_bed_with_track_and_browser_headers.bed (which has both simultaneously
+#   with non-standard format).
+browser position chr7:127471196-127495720
+browser hide all
+track name="ItemRGBDemo" description="Item RGB demonstration" visibility=2 itemRgb="On"
+chr7	127471196	127472363	Pos1	0	+	127471196	127472363	255,0,0
+chr7	127472363	127473530	Pos2	0	+	127472363	127473530	255,0,0
+chr7	127473530	127474697	Pos3	0	+	127473530	127474697	255,0,0
+chr7	127474697	127475864	Neg1	0	-	127474697	127475864	0,0,255

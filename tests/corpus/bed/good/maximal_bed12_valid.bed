@@ -1,0 +1,12 @@
+# Source: https://genome.ucsc.edu/FAQ/FAQformat.html#format1
+# Symptom: a fully-specified BED12 record with all fields at valid boundaries:
+#   - score = 1000 (maximum valid)
+#   - blockCount = 3
+#   - blockSizes and blockStarts correctly formatted (trailing comma)
+#   - thickStart == chromStart (entire feature is thick)
+#   - thickEnd == chromEnd (entire feature is thick)
+#   - itemRgb = "0,0,255" (valid R,G,B triplet)
+#   - first blockStart = 0 (required)
+#   - last blockStart + blockSize = chromEnd - chromStart (exactly touches end)
+#   Strict validators that reject any of these boundary values are incorrect.
+chr1	1000	2000	gene001	1000	+	1000	2000	0,0,255	3	200,300,100,	0,400,900,

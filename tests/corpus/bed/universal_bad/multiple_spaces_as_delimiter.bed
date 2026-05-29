@@ -1,0 +1,10 @@
+# Source: https://github.com/samtools/samtools/issues/142
+# Symptom: fields are separated by multiple consecutive spaces rather than
+#   exactly one space or a tab; samtools view treats each space as a delimiter,
+#   so two consecutive spaces produce an empty field between them, causing the
+#   parser to interpret the remaining fields in the wrong positions.  With
+#   double space "17 1  105", samtools count differs from the correct value.
+#   BED should use a single tab as field separator (the de facto standard,
+#   despite some legacy tools accepting whitespace).
+17  1  105
+17  200  300  feature001

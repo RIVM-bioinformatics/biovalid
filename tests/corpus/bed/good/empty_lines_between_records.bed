@@ -1,0 +1,13 @@
+# Source: https://genome.ucsc.edu/FAQ/FAQformat.html#format1
+#   https://github.com/arq5x/bedtools2/issues/813
+# Symptom: BED file contains blank lines between data records; BED spec does
+#   not define blank-line handling.  bedtools and tabix treat blank lines as
+#   malformed records (non-integer coordinate) and abort with "ERROR: illegal
+#   number ''".  Arises from awk print statements or shell concatenation that
+#   inserts a trailing newline between chromosomes.
+chr1	100	200	feat001	0	+
+chr1	300	400	feat002	255	-
+
+chr2	1000	2000	feat003	500	+
+
+chr3	5000	6000	feat004	0	-
