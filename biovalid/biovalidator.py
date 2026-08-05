@@ -1,4 +1,4 @@
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ProcessPoolExecutor, as_completed
 from pathlib import Path
 from typing import Type
 
@@ -104,7 +104,7 @@ class BioValidator:
 
     def _validate_paths_parallel(self, clean_paths: list[Path], worker_count: int) -> list[Path]:
         failed_files: list[Path] = []
-        with ThreadPoolExecutor(max_workers=worker_count) as executor:
+        with ProcessPoolExecutor(max_workers=worker_count) as executor:
             future_to_path = {executor.submit(self._validate_path, path): path for path in clean_paths}
             for future in as_completed(future_to_path):
                 try:
