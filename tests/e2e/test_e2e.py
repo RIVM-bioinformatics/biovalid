@@ -6,7 +6,7 @@ from biovalid.biovalidator import BioValidator
 
 DATAPATH = Path("tests/data")
 
-BOOLEAN_FLAGS = ["--bool-mode", "--verbose", "--version"]
+BOOLEAN_FLAGS = ["--raise", "--verbose", "--version"]
 
 
 class End2EndTester:
@@ -53,11 +53,11 @@ def test_end2end() -> None:
     unhappy_file_paths = tester.get_files_except_pattern("happy")
 
     for file_path in happy_file_paths:
-        api_result = tester.run_api(file_path.as_posix(), ["--bool-mode"])
+        api_result = tester.run_api(file_path.as_posix())
         assert api_result is True, f"API validation failed for {file_path}"
 
     for file_path in unhappy_file_paths:
-        api_result = tester.run_api(file_path.as_posix(), ["--bool-mode"])
+        api_result = tester.run_api(file_path.as_posix())
         assert api_result is False, f"API validation failed for {file_path}"
 
 

@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 
 import pytest
@@ -15,15 +16,17 @@ def test_happy_gzip_fasta() -> None:
     validator.validate()
 
 
-def test_missing_header() -> None:
-    """Test that a FASTA file without a header raises a RuntimeError."""
+def test_missing_header(caplog: pytest.LogCaptureFixture) -> None:
+    """Test that a FASTA file without a header logs validation errors."""
     validator = FastaValidator(MISSING_HEADER_PATH)
-    with pytest.raises(RuntimeError):
+    with caplog.at_level(logging.ERROR, logger="biovalid"):
         validator.validate()
+    assert any(record.levelname == "ERROR" for record in caplog.records)
 
 
-def test_missing_header_gzip_fasta() -> None:
-    """Test that an invalid gzipped FASTA file raises a RuntimeError."""
+def test_missing_header_gzip_fasta(caplog: pytest.LogCaptureFixture) -> None:
+    """Test that an invalid gzipped FASTA file logs validation errors."""
     validator = FastaValidator(MISSING_HEADER_GZ_FASTA_PATH)
-    with pytest.raises(RuntimeError):
+    with caplog.at_level(logging.ERROR, logger="biovalid"):
         validator.validate()
+    assert any(record.levelname == "ERROR" for record in caplog.records)

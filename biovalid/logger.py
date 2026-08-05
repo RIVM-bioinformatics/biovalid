@@ -7,17 +7,33 @@ It is intended to be used by both CLI and library users to ensure consistent log
 
 import logging
 from pathlib import Path
+from threading import Lock
 from typing import Any
 
 FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 DATEFMT = "%Y-%m-%d %H:%M:%S"
 
 
-# I need to raise an Exception anyway, so I might as well raise it in the logger to ensure that all errors are logged before being raised.
-class RaisingLogger(logging.Logger):
+class ValidationLogger(logging.Logger):
+    """Logger that tracks error count without raising exceptions."""
+
+    def __init__(self, name: str, level: int = logging.NOTSET) -> None:
+        super().__init__(name, level)
+        self._error_count = 0
+        self._error_count_lock = Lock()
+
     def error(self, msg: Any, *args: object, **kwargs: Any) -> None:
+        with self._error_count_lock:
+            self._error_count += 1
         super().error(msg, *args, **kwargs)
-        raise RuntimeError(msg % args if args else msg)
+
+    def get_error_count(self) -> int:
+        with self._error_count_lock:
+            return self._error_count
+
+    def reset_error_count(self) -> None:
+        with self._error_count_lock:
+            self._error_count = 0
 
 
 def setup_logging(verbose: bool = False, log_file: Path | str | None = None) -> logging.Logger:
@@ -40,10 +56,14 @@ def setup_logging(verbose: bool = False, log_file: Path | str | None = None) -> 
     logging.Logger
         Configured logger instance for the biovalid project.
     """
-    logging.setLoggerClass(RaisingLogger)
+    logging.setLoggerClass(ValidationLogger)
     logger = logging.getLogger("biovalid")
+    if not isinstance(logger, ValidationLogger):
+        raise RuntimeError("Logger 'biovalid' is not configured as ValidationLogger")
+
     logger.setLevel(logging.DEBUG)
     logger.handlers.clear()
+    logger.reset_error_count()
 
     console_handler = logging.StreamHandler()
     if verbose:

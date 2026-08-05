@@ -29,11 +29,12 @@ def cli_parser() -> Namespace:
     )
 
     parser.add_argument(
-        "--bool-mode",
-        "-b",
+        "--raise",
+        "-R",
+        dest="raise_errors",
         action="store_true",
         default=False,
-        help="Return True if all files are valid, False if any file is invalid.",
+        help="Raise an exception when validation is unsuccessful.",
     )
 
     parser.add_argument(

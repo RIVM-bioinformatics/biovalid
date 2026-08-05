@@ -56,7 +56,9 @@ python3 -m biovalid --help
 ### Optional parameters
 * `-v, --verbose` Enable verbose logging
 * `-l, --log_file` Path to a log file
-* `-b, --bool_mode` Return True/False instead of raising exceptions
+* `-r, --recursive` Recursively validate files in directories
+* `-t, --threads` Number of threads to use for validation
+* `-R, --raise` Raise an exception when validation fails
 
 ### Example command
 ```bash
@@ -74,7 +76,7 @@ validator.validate_files("path/to/file")
 
 ## Output
 * **Logging:** Validation results and errors are printed to the console and optionally saved to a log file.
-* **Return values:** In bool mode, returns `True` if all files are valid, `False` otherwise.
+* **Return values:** Returns `True` if all files are valid, `False` otherwise.
 ---
 
 ## Issues

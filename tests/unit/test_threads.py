@@ -25,7 +25,7 @@ def test_run_cli_passes_threads_to_biovalidator(monkeypatch: Any) -> None:
         return Namespace(
             file_paths=["tests/data/fastq/happy.fastq"],
             recursive=False,
-            bool_mode=True,
+            raise_errors=False,
             threads=4,
             verbose=False,
             log_file=None,
@@ -81,7 +81,7 @@ class _RecordingExecutor:
 
 
 def test_validate_files_uses_thread_pool_when_threads_gt_one(monkeypatch: Any) -> None:
-    validator = biovalidator.BioValidator(bool_mode=True, threads=3)
+    validator = biovalidator.BioValidator(raise_errors=False, threads=3)
 
     file_paths = [Path("tests/data/fasta/happy.fasta"), Path("tests/data/fastq/happy.fastq")]
 

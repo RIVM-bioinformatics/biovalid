@@ -27,6 +27,9 @@ class BamValidator(BaseValidator):
         """
         with open(filename, "rb") as f:
             header = f.read(18)
+            if len(header) < 18:
+                raise ValueError("File is too small to contain a valid BGZF header")
+
             block_size = struct.unpack("<H", header[16:18])[0] + 1
             f.seek(0)
             block = f.read(block_size)
@@ -51,7 +54,12 @@ class BamValidator(BaseValidator):
         # gzip.decompress needs the entire BGZF block,
         # but we only know if it is compressed after reading the first 4 bytes
         # so we have to open it twice if we want to accept non-compressed BAM files
-        magic_num, eof_marker = self._first_and_last_uncompressed_bgzf_bytes(self.filename)
+        try:
+            magic_num, eof_marker = self._first_and_last_uncompressed_bgzf_bytes(self.filename)
+        except (OSError, struct.error, ValueError) as exc:
+            self.logger.error("File %s is not a valid BAM/BGZF stream: %s", self.filename, str(exc))
+            return
+
         if magic_num != MagicBytes.BAM.value:
             self.logger.error("File %s is not a valid BAM file, the magic number is incorrect: %s", self.filename, magic_num)
         if eof_marker != MagicBytes.BGZF_EOF.value:

@@ -9,8 +9,8 @@ Basic usage:
     >>> validator = BioValidator()
     >>> validator.validate_files("data.fasta")
 
-    # For programmatic use with boolean return
-    >>> validator = BioValidator(bool_mode=True)
+    # Programmatic use returns True/False by default
+    >>> validator = BioValidator()
     >>> is_valid = validator.validate_files("data.fasta")
 
 Supported file types:

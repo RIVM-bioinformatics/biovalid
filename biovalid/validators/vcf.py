@@ -143,6 +143,7 @@ class VcfValidator(BaseValidator):
 
         if len(normal_header) < 8:
             self.logger.error("VCF file %s column header has fewer than 8 required columns: %s", self.filename, normal_header)
+            return
 
         required_headers = [header.value for header in VCFHeaders][:8]
         for i, required_header in enumerate(required_headers):
@@ -191,11 +192,13 @@ class VcfValidator(BaseValidator):
                     f"File %s contains a data line with fewer than 9 columns at line {line_number}: {data_row}",
                     self.filename,
                 )
+                continue
             elif not include_format and len(clean_data_row) < 8:
                 self.logger.error(
                     f"File %s contains a data line with fewer than 8 columns at line {line_number}: {data_row}",
                     self.filename,
                 )
+                continue
 
             # Validate each required column by index
             self.validate_chrom(clean_data_row[0], line_number)

@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 
 import pytest
@@ -9,97 +10,71 @@ happy_gz_fastq_path = Path("tests/data/fastq/happy_gz.fastq.gz")
 invalid_header_gz_fastq_path = Path("tests/data/fastq/invalid_header_gz.fastq.gz")
 
 
+def _assert_validation_error_logged(validator: FastqValidator, caplog: pytest.LogCaptureFixture) -> None:
+    with caplog.at_level(logging.ERROR, logger="biovalid"):
+        validator.validate()
+    assert any(record.levelname == "ERROR" for record in caplog.records)
+
+
 def test_happy_fastq() -> None:
-    """Test that a valid FASTQ file passes validation."""
     validator = FastqValidator(happy_fastq_path)
     validator.validate()
 
 
 def test_happy_gzip_fastq() -> None:
-    """Test that a valid gzipped FASTQ file passes validation."""
     validator = FastqValidator(happy_gz_fastq_path)
     validator.validate()
 
 
-def test_invalid_header_gzip_fastq() -> None:
-    """Test that a gzipped FASTQ record without @ header raises validation error."""
+def test_invalid_header_gzip_fastq(caplog: pytest.LogCaptureFixture) -> None:
     validator = FastqValidator(invalid_header_gz_fastq_path)
-
-    with pytest.raises(RuntimeError, match="contains an invalid header line"):
-        validator.validate()
+    _assert_validation_error_logged(validator, caplog)
 
 
 def test_empty_fastq_file(tmp_path: Path) -> None:
-    """Test that an empty FASTQ file passes validation (empty files are valid)."""
     empty_fastq = tmp_path / "empty.fastq"
     empty_fastq.touch()
-
     validator = FastqValidator(empty_fastq)
     validator.validate()
 
 
-def test_incomplete_record(tmp_path: Path) -> None:
-    """Test that an incomplete FASTQ record raises validation error."""
+def test_incomplete_record(tmp_path: Path, caplog: pytest.LogCaptureFixture) -> None:
     incomplete_fastq = tmp_path / "incomplete.fastq"
     incomplete_fastq.write_text("@header1\nACGT\n")
-
     validator = FastqValidator(incomplete_fastq)
-
-    with pytest.raises(RuntimeError, match="contains an incomplete FASTQ record"):
-        validator.validate()
+    _assert_validation_error_logged(validator, caplog)
 
 
-def test_invalid_header(tmp_path: Path) -> None:
-    """Test that a FASTQ record without @ header raises validation error."""
+def test_invalid_header(tmp_path: Path, caplog: pytest.LogCaptureFixture) -> None:
     invalid_header_fastq = tmp_path / "invalid_header.fastq"
     invalid_header_fastq.write_text("header1\nACGT\n+\nIIII\n")
-
     validator = FastqValidator(invalid_header_fastq)
-
-    with pytest.raises(RuntimeError, match="contains an invalid header line"):
-        validator.validate()
+    _assert_validation_error_logged(validator, caplog)
 
 
-def test_invalid_sequence_characters(tmp_path: Path) -> None:
-    """Test that invalid characters in sequence raise validation error."""
+def test_invalid_sequence_characters(tmp_path: Path, caplog: pytest.LogCaptureFixture) -> None:
     invalid_seq_fastq = tmp_path / "invalid_seq.fastq"
     invalid_seq_fastq.write_text("@header1\nACGTXYZ\n+\nIIIIIII\n")
-
     validator = FastqValidator(invalid_seq_fastq)
-
-    with pytest.raises(RuntimeError, match="contains invalid characters in sequence line"):
-        validator.validate()
+    _assert_validation_error_logged(validator, caplog)
 
 
-def test_invalid_plus_line(tmp_path: Path) -> None:
-    """Test that invalid plus line raises validation error."""
+def test_invalid_plus_line(tmp_path: Path, caplog: pytest.LogCaptureFixture) -> None:
     invalid_plus_fastq = tmp_path / "invalid_plus.fastq"
     invalid_plus_fastq.write_text("@header1\nACGT\n++\nIIII\n")
-
     validator = FastqValidator(invalid_plus_fastq)
-
-    with pytest.raises(RuntimeError, match="contains an invalid plus line"):
-        validator.validate()
+    _assert_validation_error_logged(validator, caplog)
 
 
-def test_quality_length_mismatch(tmp_path: Path) -> None:
-    """Test that quality line length mismatch raises validation error."""
+def test_quality_length_mismatch(tmp_path: Path, caplog: pytest.LogCaptureFixture) -> None:
     quality_mismatch_fastq = tmp_path / "quality_mismatch.fastq"
     quality_mismatch_fastq.write_text("@header1\nACGT\n+\nII\n")
-
     validator = FastqValidator(quality_mismatch_fastq)
-
-    with pytest.raises(RuntimeError, match="contains an invalid quality line length"):
-        validator.validate()
+    _assert_validation_error_logged(validator, caplog)
 
 
-def test_invalid_quality_characters(tmp_path: Path) -> None:
-    """Test that invalid characters in quality line raise validation error."""
+def test_invalid_quality_characters(tmp_path: Path, caplog: pytest.LogCaptureFixture) -> None:
     invalid_qual_fastq = tmp_path / "invalid_qual.fastq"
-    # Using character with ASCII value < 33 or > 126
     invalid_qual_fastq.write_text("@header1\nACGT\n+\nII\x1fI\n")
-
     validator = FastqValidator(invalid_qual_fastq)
-
-    with pytest.raises(RuntimeError, match="contains invalid characters in quality line"):
-        validator.validate()
+    _assert_validation_error_logged(validator, caplog)

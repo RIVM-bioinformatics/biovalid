@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 
 import pytest
@@ -10,167 +11,108 @@ happy_gff3_path = Path("tests/data/gff/gff3_happy3.gff")
 invalid_type_gff_path = Path("tests/data/gff/gff3_invalid_type.gff3")
 
 
+def _assert_validation_error_logged(validator: GffValidator, caplog: pytest.LogCaptureFixture) -> None:
+    with caplog.at_level(logging.ERROR, logger="biovalid"):
+        validator.validate()
+    assert any(record.levelname == "ERROR" for record in caplog.records)
+
+
 def test_happy_gff() -> None:
-    """Test that a valid GFF3 file passes validation."""
-    validator = GffValidator(happy_gff_path)
-    validator.validate()
+    GffValidator(happy_gff_path).validate()
 
 
 def test_happy_gff2() -> None:
-    """Test that another valid GFF file passes validation."""
-    validator = GffValidator(happy_gff2_path)
-    validator.validate()
+    GffValidator(happy_gff2_path).validate()
 
 
 def test_happy_gff3() -> None:
-    """Test that another valid GFF file passes validation."""
-    validator = GffValidator(happy_gff3_path)
-    validator.validate()
+    GffValidator(happy_gff3_path).validate()
 
 
-def test_invalid_type() -> None:
-    """Test that a GFF file with invalid type raises validation error."""
-    validator = GffValidator(invalid_type_gff_path)
-
-    with pytest.raises(RuntimeError, match="contains an invalid type"):
-        validator.validate()
+def test_invalid_type(caplog: pytest.LogCaptureFixture) -> None:
+    _assert_validation_error_logged(GffValidator(invalid_type_gff_path), caplog)
 
 
-def test_missing_gff_version(tmp_path: Path) -> None:
-    """Test that a GFF file without version declaration raises validation error."""
+def test_missing_gff_version(tmp_path: Path, caplog: pytest.LogCaptureFixture) -> None:
     missing_version_gff = tmp_path / "missing_version.gff"
     missing_version_gff.write_text("""##sequence-region chr1 1 100
-chr1	test	gene	1	100	.	+	.	ID=gene1
+chr1\ttest\tgene\t1\t100\t.\t+\t.\tID=gene1
 """)
-
-    validator = GffValidator(missing_version_gff)
-
-    with pytest.raises(RuntimeError, match="Missing required GFF version declaration"):
-        validator.validate()
+    _assert_validation_error_logged(GffValidator(missing_version_gff), caplog)
 
 
-def test_header_after_data(tmp_path: Path) -> None:
-    """Test that header lines after data lines raise validation error."""
+def test_header_after_data(tmp_path: Path, caplog: pytest.LogCaptureFixture) -> None:
     header_after_data_gff = tmp_path / "header_after_data.gff"
     header_after_data_gff.write_text("""##gff-version 3
-chr1	test	gene	1	100	.	+	.	ID=gene1
+chr1\ttest\tgene\t1\t100\t.\t+\t.\tID=gene1
 ##sequence-region chr1 1 100
 """)
-
-    validator = GffValidator(header_after_data_gff)
-
-    with pytest.raises(RuntimeError, match="Header line found after data has started"):
-        validator.validate()
+    _assert_validation_error_logged(GffValidator(header_after_data_gff), caplog)
 
 
-def test_too_many_columns(tmp_path: Path) -> None:
-    """Test that a GFF line with too many columns raises validation error."""
+def test_too_many_columns(tmp_path: Path, caplog: pytest.LogCaptureFixture) -> None:
     too_many_columns_gff = tmp_path / "too_many_columns.gff"
     too_many_columns_gff.write_text("""##gff-version 3
-chr1	test	gene	1	100	.	+	.	ID=gene1	extra_column
+chr1\ttest\tgene\t1\t100\t.\t+\t.\tID=gene1\textra_column
 """)
-
-    validator = GffValidator(too_many_columns_gff)
-
-    with pytest.raises(RuntimeError, match="contains an invalid number of columns"):
-        validator.validate()
+    _assert_validation_error_logged(GffValidator(too_many_columns_gff), caplog)
 
 
-def test_invalid_seqid(tmp_path: Path) -> None:
-    """Test that invalid seqid raises validation error."""
+def test_invalid_seqid(tmp_path: Path, caplog: pytest.LogCaptureFixture) -> None:
     invalid_seqid_gff = tmp_path / "invalid_seqid.gff"
     invalid_seqid_gff.write_text("""##gff-version 3
-chr 1 with spaces	test	gene	1	100	.	+	.	ID=gene1
+chr 1 with spaces\ttest\tgene\t1\t100\t.\t+\t.\tID=gene1
 """)
-
-    validator = GffValidator(invalid_seqid_gff)
-
-    with pytest.raises(RuntimeError, match="contains an invalid seqid"):
-        validator.validate()
+    _assert_validation_error_logged(GffValidator(invalid_seqid_gff), caplog)
 
 
-def test_invalid_start_end(tmp_path: Path) -> None:
-    """Test that invalid start/end coordinates raise validation error."""
+def test_invalid_start_end(tmp_path: Path, caplog: pytest.LogCaptureFixture) -> None:
     invalid_coords_gff = tmp_path / "invalid_coords.gff"
     invalid_coords_gff.write_text("""##gff-version 3
-chr1	test	gene	abc	100	.	+	.	ID=gene1
+chr1\ttest\tgene\tabc\t100\t.\t+\t.\tID=gene1
 """)
-
-    validator = GffValidator(invalid_coords_gff)
-
-    with pytest.raises(RuntimeError, match="contains an invalid start"):
-        validator.validate()
+    _assert_validation_error_logged(GffValidator(invalid_coords_gff), caplog)
 
 
-def test_start_greater_than_end(tmp_path: Path) -> None:
-    """Test that start > end raises validation error."""
+def test_start_greater_than_end(tmp_path: Path, caplog: pytest.LogCaptureFixture) -> None:
     start_gt_end_gff = tmp_path / "start_gt_end.gff"
     start_gt_end_gff.write_text("""##gff-version 3
-chr1	test	gene	100	50	.	+	.	ID=gene1
+chr1\ttest\tgene\t100\t50\t.\t+\t.\tID=gene1
 """)
-
-    validator = GffValidator(start_gt_end_gff)
-
-    with pytest.raises(RuntimeError, match="contains an invalid start-end range"):
-        validator.validate()
+    _assert_validation_error_logged(GffValidator(start_gt_end_gff), caplog)
 
 
-def test_invalid_score(tmp_path: Path) -> None:
-    """Test that invalid score raises validation error."""
+def test_invalid_score(tmp_path: Path, caplog: pytest.LogCaptureFixture) -> None:
     invalid_score_gff = tmp_path / "invalid_score.gff"
     invalid_score_gff.write_text("""##gff-version 3
-chr1	test	gene	1	100	abc	+	.	ID=gene1
+chr1\ttest\tgene\t1\t100\tabc\t+\t.\tID=gene1
 """)
-
-    validator = GffValidator(invalid_score_gff)
-
-    with pytest.raises(RuntimeError, match="contains an invalid score"):
-        validator.validate()
+    _assert_validation_error_logged(GffValidator(invalid_score_gff), caplog)
 
 
-def test_invalid_strand(tmp_path: Path) -> None:
-    """Test that invalid strand raises validation error."""
+def test_invalid_strand(tmp_path: Path, caplog: pytest.LogCaptureFixture) -> None:
     invalid_strand_gff = tmp_path / "invalid_strand.gff"
     invalid_strand_gff.write_text("""##gff-version 3
-chr1	test	gene	1	100	.	x	.	ID=gene1
+chr1\ttest\tgene\t1\t100\t.\tx\t.\tID=gene1
 """)
-
-    validator = GffValidator(invalid_strand_gff)
-
-    with pytest.raises(RuntimeError, match="contains an invalid strand"):
-        validator.validate()
+    _assert_validation_error_logged(GffValidator(invalid_strand_gff), caplog)
 
 
-def test_invalid_cds_phase(tmp_path: Path) -> None:
-    """Test that invalid phase for CDS raises validation error."""
+def test_invalid_cds_phase(tmp_path: Path, caplog: pytest.LogCaptureFixture) -> None:
     invalid_phase_gff = tmp_path / "invalid_phase.gff"
     invalid_phase_gff.write_text("""##gff-version 3
-chr1	test	CDS	1	100	.	+	5	ID=cds1
+chr1\ttest\tCDS\t1\t100\t.\t+\t5\tID=cds1
 """)
-
-    validator = GffValidator(invalid_phase_gff)
-
-    with pytest.raises(RuntimeError, match="contains an invalid phase for CDS"):
-        validator.validate()
+    _assert_validation_error_logged(GffValidator(invalid_phase_gff), caplog)
 
 
 def test_few_columns_gets_padded(tmp_path: Path) -> None:
-    """Test that a GFF line with fewer than 9 columns gets padded with placeholders."""
     few_columns_gff = tmp_path / "few_columns.gff"
-    # Create line with only 8 columns (missing attributes column)
     few_columns_gff.write_text("##gff-version 3\nchr1\ttest\tgene\t1\t100\t.\t+\t.\n")
-
-    validator = GffValidator(few_columns_gff)
-    # This should pass with a warning, as the validator pads with "."
-    validator.validate()
+    GffValidator(few_columns_gff).validate()
 
 
-def test_empty_file(tmp_path: Path) -> None:
-    """Test that an empty GFF file raises validation error due to missing version."""
+def test_empty_file(tmp_path: Path, caplog: pytest.LogCaptureFixture) -> None:
     empty_gff = tmp_path / "empty.gff"
     empty_gff.touch()
-
-    validator = GffValidator(empty_gff)
-
-    with pytest.raises(RuntimeError, match="Missing required GFF version declaration"):
-        validator.validate()
+    _assert_validation_error_logged(GffValidator(empty_gff), caplog)

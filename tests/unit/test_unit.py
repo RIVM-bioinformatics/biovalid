@@ -9,6 +9,7 @@ The tests are parametrized to run for each validator type using test data in
 the corresponding subdirectories of tests/data/.
 """
 
+import logging
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Type
@@ -73,8 +74,11 @@ def test_happy(validator_info: ValidatorInfo) -> None:
     list_of_validators,
     ids=lambda v: v.validator_class.__name__,
 )
-def test_unhappy(validator_info: ValidatorInfo) -> None:
-    """Test that unhappy BAM, FASTA, and FASTQ files raise a RuntimeError."""
+def test_unhappy(validator_info: ValidatorInfo, caplog: pytest.LogCaptureFixture) -> None:
+    """Test that unhappy files are reported through logger errors."""
     for file_path in validator_info.unhappy_files:
-        with pytest.raises(RuntimeError):
-            validator_info.validator_class(file_path).validate()
+        caplog.clear()
+        validator = validator_info.validator_class(file_path)
+        with caplog.at_level(logging.ERROR, logger="biovalid"):
+            validator.validate()
+        assert any(record.levelname == "ERROR" for record in caplog.records)

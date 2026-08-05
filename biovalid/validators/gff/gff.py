@@ -141,7 +141,7 @@ class GffValidator(BaseValidator):
                 self.filename,
                 end,
             )
-        if int(start) > int(end):
+        if start.isdigit() and end.isdigit() and int(start) > int(end):
             self.logger.error(
                 "File %s contains an invalid start-end range: %s > %s. Start must be less than or equal to end.",
                 self.filename,
