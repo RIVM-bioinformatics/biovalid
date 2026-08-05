@@ -25,7 +25,7 @@ def cli_parser() -> Namespace:
         "-r",
         action="store_true",
         default=False,
-        help="Recursively validate all files in a directory.",
+        help="Recursively validate all files in a directory tree.",
     )
 
     parser.add_argument(
@@ -34,6 +34,14 @@ def cli_parser() -> Namespace:
         action="store_true",
         default=False,
         help="Return True if all files are valid, False if any file is invalid.",
+    )
+
+    parser.add_argument(
+        "--threads",
+        "-t",
+        type=int,
+        default=1,
+        help="Number of threads to use for validation. Default is 1.",
     )
 
     parser.add_argument(

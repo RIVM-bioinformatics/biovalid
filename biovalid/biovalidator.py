@@ -1,3 +1,4 @@
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import Type
 
@@ -22,6 +23,7 @@ class BioValidator:
     def __init__(
         self,
         bool_mode: bool = False,
+        threads: int = 1,
         verbose: bool = False,
         log_file: Path | str | None = None,
         display_version: bool = False,
@@ -32,6 +34,7 @@ class BioValidator:
             return
 
         self.bool_mode = bool_mode
+        self.threads = threads
         self.verbose = verbose
         self.log_file = log_file
         self.path_stabilizer = PathStabilizer()
@@ -79,21 +82,36 @@ class BioValidator:
         """Validate a list of file paths."""
         clean_paths = self.path_stabilizer.convert_file_paths_to_paths(paths, recursive=recursive)
 
-        def _validate_paths() -> None:
-            for path in clean_paths:
-                self.logger.debug("Validating file: %s", path)
-                validator_class = self.pick_validator(path)
-                file_type = FileType.from_path(path)
-                self._check_compression_support(path, file_type)
-                validator = validator_class(path, self.logger)
-                validator.general_validation()
-                if validator_class != BaseValidator:
-                    validator.validate()
-                self.logger.info("File %s validated successfully.", path)
+        def _validate_path(path: Path) -> None:
+            self.logger.debug("Validating file: %s", path)
+            validator_class = self.pick_validator(path)
+            file_type = FileType.from_path(path)
+            self._check_compression_support(path, file_type)
+            validator = validator_class(path, self.logger)
+            validator.general_validation()
+            if validator_class != BaseValidator:
+                validator.validate()
+            self.logger.info("File %s validated successfully.", path)
+
+        def _threading_wrapper() -> None:
+            worker_count = max(1, self.threads)
+            self.logger.debug("Using %d threads for validation.", worker_count)
+
+            if worker_count == 1 or len(clean_paths) < 2:
+                for path in clean_paths:
+                    _validate_path(path)
+                self.logger.info("All files validated successfully.")
+                return
+
+            with ThreadPoolExecutor(max_workers=worker_count) as executor:
+                futures = [executor.submit(_validate_path, path) for path in clean_paths]
+                for future in as_completed(futures):
+                    future.result()
+
             self.logger.info("All files validated successfully.")
 
         try:
-            _validate_paths()
+            _threading_wrapper()
         except RuntimeError as e:
             if self.bool_mode:
                 return False
@@ -104,7 +122,7 @@ class BioValidator:
 def run_cli() -> None:
     """Main function to run the validation."""
     args = cli_parser()
-    validator = BioValidator(bool_mode=args.bool_mode, verbose=args.verbose, log_file=args.log_file)
+    validator = BioValidator(bool_mode=args.bool_mode, threads=args.threads, verbose=args.verbose, log_file=args.log_file)
     try:
         validator.validate_files(args.file_paths, recursive=args.recursive)
     except Exception as e:
