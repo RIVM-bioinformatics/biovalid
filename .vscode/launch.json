@@ -81,6 +81,16 @@
             ]
         },
         {
+            "name": "test-compression",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "pytest",
+            "args": [
+                "-sv",
+                "tests/unit/test_compression_policy.py"
+            ]
+        },
+        {
             "name": "tool-pylint",
             "type": "debugpy",
             "request": "launch",

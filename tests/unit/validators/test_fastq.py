@@ -5,12 +5,28 @@ import pytest
 from biovalid.validators import FastqValidator
 
 happy_fastq_path = Path("tests/data/fastq/happy.fastq")
+happy_gz_fastq_path = Path("tests/data/fastq/happy_gz.fastq.gz")
+invalid_header_gz_fastq_path = Path("tests/data/fastq/invalid_header_gz.fastq.gz")
 
 
 def test_happy_fastq() -> None:
     """Test that a valid FASTQ file passes validation."""
     validator = FastqValidator(happy_fastq_path)
     validator.validate()
+
+
+def test_happy_gzip_fastq() -> None:
+    """Test that a valid gzipped FASTQ file passes validation."""
+    validator = FastqValidator(happy_gz_fastq_path)
+    validator.validate()
+
+
+def test_invalid_header_gzip_fastq() -> None:
+    """Test that a gzipped FASTQ record without @ header raises validation error."""
+    validator = FastqValidator(invalid_header_gz_fastq_path)
+
+    with pytest.raises(RuntimeError, match="contains an invalid header line"):
+        validator.validate()
 
 
 def test_empty_fastq_file(tmp_path: Path) -> None:

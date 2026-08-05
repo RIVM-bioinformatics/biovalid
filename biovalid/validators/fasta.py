@@ -62,7 +62,7 @@ class FastaValidator(BaseValidator):
             >>> validate_fasta("example.fasta")
             This will raise a RuntimeError if the file does not conform to FASTA format.
         """
-        with open(self.filename, "rb") as f:
+        with self.open_binary_stream() as f:
 
             line_num = 1
             pos_in_line = 0

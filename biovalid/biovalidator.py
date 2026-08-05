@@ -2,7 +2,7 @@ from pathlib import Path
 from typing import Type
 
 from biovalid.arg_parser import PathStabilizer, cli_parser
-from biovalid.domain.enum import FileType
+from biovalid.domain.enum import CompressionType, FileType
 from biovalid.logger import setup_logging
 from biovalid.validators import (
     BaiValidator,
@@ -54,33 +54,50 @@ class BioValidator:
 
         return BaseValidator
 
+    def _check_compression_support(self, file_path: Path, file_type: FileType) -> None:
+        """Ensure compression is only used for supported file type combinations."""
+        try:
+            compression_type = CompressionType.from_path(file_path)
+        except RuntimeError:
+            return
+
+        if compression_type != CompressionType.GZIP:
+            self.logger.error(
+                "File %s uses unsupported compression type '%s'. Only gzip compression is currently supported for FASTA and FASTQ.",
+                file_path,
+                compression_type.value,
+            )
+
+        if file_type not in (FileType.FASTA, FileType.FASTQ):
+            self.logger.error(
+                "File %s is a compressed %s file. Gzip compression is currently only supported for FASTA and FASTQ files.",
+                file_path,
+                file_type.name,
+            )
+
     def validate_files(self, paths: list[str | Path] | str | Path, recursive: bool = False) -> bool:
         """Validate a list of file paths."""
         clean_paths = self.path_stabilizer.convert_file_paths_to_paths(paths, recursive=recursive)
 
-        if not self.bool_mode:
-            try:
-                for path in clean_paths:
-                    validator_class = self.pick_validator(path)
-                    validator = validator_class(path, self.logger)
-                    validator.general_validation()
-                    if validator_class != BaseValidator:
-                        validator.validate()
-                self.logger.info("All files validated successfully.")
-            except RuntimeError as e:
-                self.logger.error("Validation failed: %s", e)
-                raise e
-
-        try:
+        def _validate_paths() -> None:
             for path in clean_paths:
+                self.logger.debug("Validating file: %s", path)
                 validator_class = self.pick_validator(path)
+                file_type = FileType.from_path(path)
+                self._check_compression_support(path, file_type)
                 validator = validator_class(path, self.logger)
                 validator.general_validation()
                 if validator_class != BaseValidator:
                     validator.validate()
+                self.logger.info("File %s validated successfully.", path)
             self.logger.info("All files validated successfully.")
-        except RuntimeError:
-            return False
+
+        try:
+            _validate_paths()
+        except RuntimeError as e:
+            if self.bool_mode:
+                return False
+            raise e
         return True
 
 

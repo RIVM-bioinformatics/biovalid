@@ -6,10 +6,13 @@ in the biovalid package. Subclasses should implement the `validate` method
 to provide file type-specific validation logic.
 """
 
+import gzip
 import os
 from logging import Logger
 from pathlib import Path
+from typing import BinaryIO, cast
 
+from biovalid.domain.enum import CompressionType
 from biovalid.logger import setup_logging
 
 
@@ -50,6 +53,22 @@ class BaseValidator:
             self.logger.error("File %s is empty.", self.filename)
         if not os.access(self.filename, os.R_OK):
             self.logger.error("File %s is not readable.", self.filename)
+
+    def open_binary_stream(self) -> BinaryIO:
+        """
+        Open the input file as a binary stream.
+
+        GZIP-compressed files are opened through gzip in streamed mode,
+        all other files are opened directly.
+        """
+        try:
+            compression_type = CompressionType.from_path(self.filename)
+        except RuntimeError:
+            compression_type = None
+
+        if compression_type == CompressionType.GZIP:
+            return cast(BinaryIO, gzip.open(self.filename, "rb"))
+        return self.filename.open("rb")
 
     def validate(self) -> None:
         """
