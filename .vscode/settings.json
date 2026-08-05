@@ -15,5 +15,11 @@
     ],
     "pylint.args": [
         "--max-line-length=150",
-    ]
+    ],
+    "sonarlint.connectedMode.project": {
+        "connectionId": "rivm-bioinformatics",
+        "projectKey": "RIVM-bioinformatics_biovalid"
+    },
+    "python-envs.defaultEnvManager": "ms-python.python:conda",
+    "python-envs.defaultPackageManager": "ms-python.python:conda"
 }

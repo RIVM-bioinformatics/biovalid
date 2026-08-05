@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Type
 
-from biovalid.arg_parser import cli_parser
+from biovalid.arg_parser import PathStabilizer, cli_parser
 from biovalid.domain.enum import FileType
 from biovalid.logger import setup_logging
 from biovalid.validators import (
@@ -19,38 +19,6 @@ from biovalid.version import __version__
 class BioValidator:
     """Validator class to encapsulate validation logic."""
 
-    def convert_file_paths_to_paths(self, file_paths: list[str | Path] | str | Path, recursive: bool) -> list[Path]:
-        """Convert input file paths to a list of Path objects."""
-
-        # The ignores are because this is user input and I want to make sure it's validated properly
-        if isinstance(file_paths, (str, Path)):
-            file_paths = [file_paths]
-        elif not isinstance(file_paths, list):  # pyright: ignore[reportUnnecessaryIsInstance]
-            raise RuntimeError("file_paths must be a string, Path, or list of strings/Paths")
-        elif any(not isinstance(fp, (str, Path)) for fp in file_paths):  # pyright: ignore[reportUnnecessaryIsInstance]
-            raise RuntimeError("All elements in file_paths list must be strings or Path objects")
-        files: list[Path] = []
-        dirs: list[Path] = []
-        for fp in file_paths:
-            p = Path(fp)
-            if p.is_file():
-                files.append(p)
-            elif p.is_dir():
-                dirs.append(p)
-            else:
-                raise RuntimeError(f"Path {p} is neither a file nor a directory.")
-        # now handle directories
-        for d in dirs:
-            if recursive:
-                for path in d.rglob("*"):
-                    if path.is_file() and FileType.from_path(path) != FileType.UNKNOWN:
-                        files.append(path)
-            else:
-                for path in d.iterdir():
-                    if path.is_file() and FileType.from_path(path) != FileType.UNKNOWN:
-                        files.append(path)
-        return files
-
     def __init__(
         self,
         bool_mode: bool = False,
@@ -66,6 +34,7 @@ class BioValidator:
         self.bool_mode = bool_mode
         self.verbose = verbose
         self.log_file = log_file
+        self.path_stabilizer = PathStabilizer()
         self.logger = setup_logging(self.verbose, self.log_file)
 
     def pick_validator(self, file_path: Path) -> Type[BaseValidator]:
@@ -87,7 +56,7 @@ class BioValidator:
 
     def validate_files(self, paths: list[str | Path] | str | Path, recursive: bool = False) -> bool:
         """Validate a list of file paths."""
-        clean_paths = self.convert_file_paths_to_paths(paths, recursive=recursive)
+        clean_paths = self.path_stabilizer.convert_file_paths_to_paths(paths, recursive=recursive)
 
         if not self.bool_mode:
             try:
